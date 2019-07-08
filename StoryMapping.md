@@ -15,7 +15,8 @@ You are Pacman stuck in a maze being chased by four ghosts, while collecting as 
 
 ## Sprints Chart
 
-![Link to Sprint Chart](https://raw.githubusercontent.com/ecs160ss12019/Subhunters/master/StoryMappingTable.png)
+![Link to Sprint Chart](https://github.com/ecs160ss12019/Subhunters/blob/master/StoryMappingTable.PNG)
+
 
 ## CRC
 
