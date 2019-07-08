@@ -15,11 +15,7 @@ You are Pacman stuck in a maze being chased by four ghosts, while collecting as 
 
 ## Sprints Chart
 
-| Epic Stories |
-|  :---:       |
-| Sprint 1     |
-| Sprint 2     |
-| Sprint 3     |
+![Link to Sprint Chart](https://raw.githubusercontent.com/ecs160ss12019/Subhunters/master/StoryMappingTable.png)
 
 ## CRC
 
