@@ -21,3 +21,7 @@ You are Pacman stuck in a maze being chased by four ghosts, while collecting as 
 ## CRC
 
 ![Link to CRC Chart](https://github.com/ecs160ss12019/Subhunters/blob/master/CRC.PNG)
+
+## Acceptance Criteria
+
+![Link to Acceptance Criteria Chart](https://github.com/ecs160ss12019/Subhunters/blob/master/AcceptanceCriteriaTable.png)
