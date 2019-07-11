@@ -20,15 +20,4 @@ You are Pacman stuck in a maze being chased by four ghosts, while collecting as 
 
 ## CRC
 
-* PacmanActivity/MainActivity: overall game lifecycle
-* Grid: builds the maze for the game/activity to create paths for movement
-* Blocks: individual block pieces of the maze (can be split up into more if needed)
-* Pellets: add points to the score of pacman when eaten/collected. Parent of SuperPellet
-* SuperPellet: add points to the score of pacman and make him super for a time
-* BonusFruit: add points to the score of pacman when eaten/collected (can be split into more if needed)
-* Pacman: Pacman movement and interaction with other objects in the game
-* Ghost: Basic ghost parent class with movement and interaction
-* Blinky: ghost that follows Pacman to location he is at
-* Pinky: ghost that ambushes Pacman by cutting him off and getting in front of him
-* Inky: target is same distance from Pacman as Blinky but at opposite offset to Blinky's offset from PacMan
-* Clyde: Clyde goes to scatter location unless within certain distance from Pacman. Within this distance Clyde behaves like Blinky
+![Link to CRC Chart](https://github.com/ecs160ss12019/Subhunters/blob/master/CRC.PNG)
