@@ -7,12 +7,9 @@ public class Ghost
 
 
 	//pixel(maze) coords
-	private int x_maze;
-	private int y_maze;
+	protected Location loc;
 
 	//ghost coords//directions
-	int x;
-	int y;
 	private int direction;
 	private int next_direction;
 

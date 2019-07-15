@@ -9,13 +9,8 @@ package com.ecs160group.pacman;
  */
 
 public class Pacman {
-    //pixel(maze) coords
-    private int x_maze;
-    private int y_maze;
-
     //pacman coords//directions
-    int x;
-    int y;
+    Location loc;
     private int direction;
     private int next_direction;
 
@@ -37,5 +32,4 @@ public class Pacman {
 
 
     }
-
 }
