@@ -61,7 +61,7 @@ public class PacmanGame extends SurfaceView implements Runnable {
             mScreenY = y;
 
 
-            mFontSize = mScreenX / 20; //5%(1/20) of screen width
+            mFontSize = mScreenX / 30; //5%(1/20) of screen width
             mFontMargin = mScreenX / 75; //1.5%(1/75) of scren width
 
             mOurHolder = getHolder();
@@ -83,7 +83,6 @@ public class PacmanGame extends SurfaceView implements Runnable {
                 mScore = 0;
                 mLives = 3;
 
-                draw();
 
         }
         // When we start the thread with:
@@ -94,9 +93,40 @@ public class PacmanGame extends SurfaceView implements Runnable {
         // will stop the thread
         @Override
         public void run(){
+                while (mPlaying) {
+                        //time at start of loop
+                        long frameStartTime = System.currentTimeMillis();
+
+                        if(!mPaused){
+                                update();
+                                detectCollisions();
+
+                        }
+
+                        //redraw grid/ghosts/pacman/pellets
+                        draw();
+
+                        //time of loop/frame
+                        long frameTime = System.currentTimeMillis() - frameStartTime;
+
+                        //>0 condition to prevent divide by zero crashes
+                        if(frameTime > 0) {
+                                //store in mFPS to pass to update methods of pacman/ghosts
+                        }
+                }
+        }
+
+        //updates pacman/ghosts/pellets/maze
+        private void update() {
+                //TODO: add update methods to pacman/ghost/maze classes OR do it here
 
         }
 
+        //detects if pacman hit a pellet/ghost/wall
+        private void detectCollisions(){
+                //TODO: separate detection collision methods within pacman/ghost/maze classes OR do it here
+                //don't need to worry about this for now
+        }
         //called by PacmanActivity when player quits game
         public void pause() {
                 mPlaying = false;
@@ -124,9 +154,9 @@ public class PacmanGame extends SurfaceView implements Runnable {
                         mCanvas = mOurHolder.lockCanvas();
 
                         //fill screen with solid color
-                        mCanvas.drawColor(Color.argb(255, 26, 128, 182));
+                        mCanvas.drawColor(Color.argb(255, 0, 0, 0));
 
-                        mPaint.setColor(Color.argb(255, 255, 255, 255));
+                        mPaint.setColor(Color.argb(255, 255, 255, 0));
 
                         //draw pacman/ghosts/maze/dpad
 
