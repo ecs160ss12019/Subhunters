@@ -1,4 +1,4 @@
-package com.example.pacman;
+package com.ecs160group.pacman;
 
 import android.graphics.Color;
 import android.util.Log;
