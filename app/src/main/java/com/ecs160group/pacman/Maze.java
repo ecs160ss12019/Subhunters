@@ -14,9 +14,9 @@ class Maze {
 
     //maze set up
     void draw() {
-        pacmanActivity.gameView.setImageBitmap(pacmanActivity.blankBitmap);
+      //  pacmanActivity.gameView.setImageBitmap(pacmanActivity.blankBitmap);
         //print the whole graph
-        pacmanActivity.canvas.drawColor(Color.argb(255, 255, 255, 255));
+        //pacmanActivity.canvas.drawColor(Color.argb(255, 255, 255, 255));
 
         //print the wall
 

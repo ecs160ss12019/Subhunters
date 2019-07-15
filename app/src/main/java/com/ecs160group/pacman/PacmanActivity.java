@@ -17,15 +17,6 @@ import java.util.Random;
 
 public class PacmanActivity extends AppCompatActivity {
 
-	ImageView gameView;
-	Bitmap blankBitmap;
-	Canvas canvas;
-	//Paint paint;
-
-	//variables to initialize
-	int numHorizonPix;
-	int numVerticPix;
-
 	private PacmanGame mPacmanGame;
 
 
@@ -34,22 +25,14 @@ public class PacmanActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		Display display = getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
-		numHorizonPix = size.x;
-		numVerticPix = size.y;
-
-		blankBitmap = Bitmap.createBitmap(numHorizonPix,
-				numVerticPix,
-				Bitmap.Config.ARGB_8888);
-		canvas = new Canvas(blankBitmap);
-		gameView = new ImageView(this);
-		//paint = new Paint();
 
 		mPacmanGame = new PacmanGame(this, size.x, size.y);
 		setContentView(mPacmanGame);
-		Log.d("Debugging", "In onCreate");
+		//Log.d("Debugging", "In onCreate");
 		//maze.draw();
 	}
 
