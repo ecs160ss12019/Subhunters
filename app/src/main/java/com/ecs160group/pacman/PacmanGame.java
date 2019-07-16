@@ -80,8 +80,8 @@ public class PacmanGame extends SurfaceView implements Runnable {
                 //reset maze level
 
                 //initialize the position of pacman and ghosts
-                mPacman.initialize(mScreenX,mScreenY);
-                mGhost.initialize(mScreenX,mScreenY);
+                mPacman.initialize(1000,700);
+                mGhost.initialize(800,400);
                 //resetting score/lives
                 mScore = 0;
                 mLives = 3;
@@ -170,16 +170,16 @@ public class PacmanGame extends SurfaceView implements Runnable {
                                 mFontMargin, mFontSize, mPaint);
 
                         //draw pacman/ghosts/maze/dpad
-                        // white color for pacman
-                        mPaint.setColor(Color.argb(255,255,255,255));
+                        // yellow color for pacman
+                        mPaint.setColor(Color.argb(255,255,255,0));
                         // draw pacman as circle
                         mCanvas.drawCircle(mPacman.loc.getX(),mPacman.loc.getY()
-                                ,(mScreenX+mScreenY)/200, mPaint);
+                                ,(float)((mScreenX+mScreenY)/150), mPaint);
                         // blue color for ghosts
                         mPaint.setColor(Color.argb(255,0,0,255));
                         // draw ghosts as circle
                         mCanvas.drawCircle(mGhost.loc.getX(),mGhost.loc.getY()
-                                ,(mScreenX+mScreenY)/200, mPaint);
+                                ,(float)((mScreenX+mScreenY)/150), mPaint);
 
                         if (DEBUGGING) {
                                 printDebuggingText();
@@ -195,7 +195,12 @@ public class PacmanGame extends SurfaceView implements Runnable {
                         int debugStart = 150;
                         mPaint.setTextSize(debugSize);
                         mCanvas.drawText("FPS: " + mFPS ,
-                                10, debugStart + debugSize, mPaint);
+                                mScreenX/3, debugStart + debugSize + 30, mPaint);
+                        mCanvas.drawText("mScreenX: " + mScreenX ,
+                                mScreenX/4, debugStart + debugSize + 60, mPaint);
+                        mCanvas.drawText("mScreenY: " + mScreenY ,
+                                mScreenX/2, debugStart + debugSize + 90, mPaint);
+
                 }
 
 

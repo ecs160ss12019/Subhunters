@@ -21,10 +21,10 @@ public class Pacman {
 
     //initialize the position of Pacman at the beginning of the game
     void initialize(int sX, int sY){
-        Random random = new Random();
-        int xVal = random.nextInt(sX/100);
-        int yVal = random.nextInt(sY/100);
-        loc = new Location(xVal, yVal, pacImage);
+        /*Random random = new Random();
+        int xVal = random.nextInt((sX - sX/3) + 1) + sX/3;
+        int yVal = random.nextInt((sY - sY/3) + 1) + sY/3;*/
+        loc = new Location(sX, sY, pacImage);
     }
 
     //function to check if pacman is within bounds (same function as in ghost class)
