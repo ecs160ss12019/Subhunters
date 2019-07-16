@@ -13,36 +13,48 @@ import java.util.Random;
 public class Pacman {
     //pacman coords//directions
     Location loc;
-    private int direction;
-    private int next_direction;
+    private char direction;
+    private char next_direction;
     // use an integer to temporarily replace the draw of Pacman
     // this will be modified under the draw function
     int pacImage = 1;
 
-    //initialize the position of Pacman at the beginning of the game
-    void initialize(int sX, int sY){
-        /*Random random = new Random();
-        int xVal = random.nextInt((sX - sX/3) + 1) + sX/3;
-        int yVal = random.nextInt((sY - sY/3) + 1) + sY/3;*/
-        loc = new Location(sX, sY, pacImage);
+	/**
+	 * Initialize the position of Pacman at the beginning of the game
+	 * @param sX
+	 * @param sY
+	 */
+	void initialize(int sX, int sY){
+        loc = new Location(sX, sY, this);
+        direction = 'l';
+        next_direction = 'l';
     }
 
-    //function to check if pacman is within bounds (same function as in ghost class)
+    //function to
+
+	/**
+	 * Checks if pacman is within bounds of maze
+	 */
     void checkBounds() {
 
     }
 
-    //draws pacman on screen
-    //will use variable direction later on for image purposes
-    //circle for now
+    //TODO: will use variable direction later on for image purposes
+
+	//circle for now, may need to be modified
+	/**
+	 * Draws Pacman on screen
+	 */
     public void draw(){
 
     }
 
-    //will read user input from our dPad(left, right, up, or down) to update pacmans direction
-    //will take in value from dpad.java
-    void checkDirection(){
-
+	/**
+	 * Reads user input from dpad listener to update Pacman's next direction
+	 * @param xPercent
+	 * @param yPercent
+	 */
+    void updateNextDirection(float xPercent, float yPercent){
 
     }
 }
