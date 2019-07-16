@@ -8,11 +8,24 @@ package com.ecs160group.pacman;
     must eat all pellets to complete level
  */
 
+import java.util.Random;
+
 public class Pacman {
     //pacman coords//directions
     Location loc;
     private int direction;
     private int next_direction;
+    // use an integer to temporarily replace the draw of Pacman
+    // this will be modified under the draw function
+    int pacImage = 1;
+
+    //initialize the position of Pacman at the beginning of the game
+    void initialize(int sX, int sY){
+        Random random = new Random();
+        int xVal = random.nextInt(sX/100);
+        int yVal = random.nextInt(sY/100);
+        loc = new Location(xVal, yVal, pacImage);
+    }
 
     //function to check if pacman is within bounds (same function as in ghost class)
     void checkBounds() {

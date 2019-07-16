@@ -28,8 +28,8 @@ public class PacmanGame extends SurfaceView implements Runnable {
         private int mFontMargin;
 
         //game objects
-        private Pacman mPacman;
-        private Ghost mGhost;
+        private Pacman mPacman = new Pacman();
+        private Ghost mGhost = new Ghost();
         private Maze mMaze;
         private Dpad mDpad;
 /*        private Inky mInky;
@@ -79,6 +79,9 @@ public class PacmanGame extends SurfaceView implements Runnable {
         private void startNewGame() {
                 //reset maze level
 
+                //initialize the position of pacman and ghosts
+                mPacman.initialize(mScreenX,mScreenY);
+                mGhost.initialize(mScreenX,mScreenY);
                 //resetting score/lives
                 mScore = 0;
                 mLives = 3;
@@ -158,8 +161,6 @@ public class PacmanGame extends SurfaceView implements Runnable {
 
                         mPaint.setColor(Color.argb(255, 255, 255, 0));
 
-                        //draw pacman/ghosts/maze/dpad
-
                         //font size
                         mPaint.setTextSize(mFontSize);
 
@@ -167,6 +168,18 @@ public class PacmanGame extends SurfaceView implements Runnable {
                         mCanvas.drawText("Score:  " + mScore +
                                         "  Lives: " + mLives,
                                 mFontMargin, mFontSize, mPaint);
+
+                        //draw pacman/ghosts/maze/dpad
+                        // white color for pacman
+                        mPaint.setColor(Color.argb(255,255,255,255));
+                        // draw pacman as circle
+                        mCanvas.drawCircle(mPacman.loc.getX(),mPacman.loc.getY()
+                                ,(mScreenX+mScreenY)/200, mPaint);
+                        // blue color for ghosts
+                        mPaint.setColor(Color.argb(255,0,0,255));
+                        // draw ghosts as circle
+                        mCanvas.drawCircle(mGhost.loc.getX(),mGhost.loc.getY()
+                                ,(mScreenX+mScreenY)/200, mPaint);
 
                         if (DEBUGGING) {
                                 printDebuggingText();

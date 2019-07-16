@@ -1,5 +1,7 @@
 package com.ecs160group.pacman;
 
+import java.util.Random;
+
 public class Ghost
 {
 	//used to interact to kill pacman or be eaten
@@ -12,6 +14,17 @@ public class Ghost
 	//ghost coords//directions
 	private int direction;
 	private int next_direction;
+
+	//the draw image of ghost
+	int ghostImage = 1;
+
+	//initialize the position of Ghost at the beginning of the game
+	void initialize(int sX, int sY){
+		Random random = new Random();
+		int xVal = random.nextInt(sX/100);
+		int yVal = random.nextInt(sY/100);
+		loc = new Location(xVal, yVal, ghostImage);
+	}
 
 
 	//function to check if ghost is within the bounds of the maze
