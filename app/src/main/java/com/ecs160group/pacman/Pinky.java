@@ -5,4 +5,5 @@ package com.ecs160group.pacman;
  */
 public class Pinky extends Ghost
 {
+
 }

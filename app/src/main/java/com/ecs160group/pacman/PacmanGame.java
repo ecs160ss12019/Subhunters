@@ -28,8 +28,8 @@ public class PacmanGame extends SurfaceView implements Runnable {
         private int mFontMargin;
 
         //game objects
-        private Pacman mPacman = new Pacman();
-        private Ghost mGhost = new Ghost();
+        private Pacman mPacman;
+        private Ghost mGhost;
         private Maze mMaze;
         private Dpad mDpad;
 /*        private Inky mInky;
@@ -67,6 +67,10 @@ public class PacmanGame extends SurfaceView implements Runnable {
             mOurHolder = getHolder();
             mPaint = new Paint();
 
+            mPacman = new Pacman(mScreenX, 1000, 700);
+            mGhost = new Ghost(mScreenX, 800, 400);
+
+
             //Initialize objects(maze, pacman, ghost);
 
             //start the game LETS GET PACCING
@@ -79,10 +83,8 @@ public class PacmanGame extends SurfaceView implements Runnable {
         private void startNewGame() {
                 //reset maze level
 
-                //initialize the position of pacman and ghosts
-                mPacman.initialize(1000,700);
-                mGhost.initialize(800,400);
-                //resetting score/lives
+                mPacman.reset(mScreenX, mScreenY);
+                mGhost.reset(mScreenX, mScreenY);
                 mScore = 0;
                 mLives = 3;
 
@@ -122,6 +124,8 @@ public class PacmanGame extends SurfaceView implements Runnable {
         //updates pacman/ghosts/pellets/maze
         private void update() {
                 //TODO: add update methods to pacman/ghost/maze classes OR do it here
+                mPacman.update(mFPS);
+                mGhost.update(mFPS);
 
         }
 
@@ -175,6 +179,8 @@ public class PacmanGame extends SurfaceView implements Runnable {
                         // draw pacman as circle
                         mCanvas.drawCircle(mPacman.loc.getX(),mPacman.loc.getY()
                                 ,(float)((mScreenX+mScreenY)/150), mPaint);
+
+
                         // blue color for ghosts
                         mPaint.setColor(Color.argb(255,0,0,255));
                         // draw ghosts as circle
