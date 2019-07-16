@@ -32,7 +32,7 @@ public class PacmanActivity extends AppCompatActivity implements Dpad.DpadListen
 
 		mPacmanGame = new PacmanGame(this, size.x, size.y);
 		setContentView(mPacmanGame);
-		//setContentView(userController); // displays touch controller on screen. 
+		//setContentView(userController); // displays touch controller on screen.
 
 		//Log.d("Debugging", "In onCreate");
 		//maze.draw();
