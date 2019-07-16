@@ -20,6 +20,16 @@ public class Pacman {
     int pacImage = 1;
 
     //initialize the position of Pacman at the beginning of the game
+
+	Pacman (int sX, int sY) {
+		initialize(sX, sY);
+	}
+
+	/**
+	 * Initializes the position of Pacman at the beginning of the game
+	 * @param sX
+	 * @param sY
+	 */
     void initialize(int sX, int sY){
         /*Random random = new Random();
         int xVal = random.nextInt((sX - sX/3) + 1) + sX/3;
@@ -39,8 +49,10 @@ public class Pacman {
 
     }
 
-    //will read user input from our dPad(left, right, up, or down) to update pacmans direction
-    //will take in value from dpad.java
+    /**
+     * will read user input from our dPad(left, right, up, or down) to update pacmans direction
+     * will take in value from dpad.java
+     */
     void checkDirection(){
 
 
