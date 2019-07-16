@@ -1,9 +1,5 @@
 package com.ecs160group.pacman;
 
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.RectF;
-
 import java.util.Random;
 
 public class Ghost
@@ -22,60 +18,12 @@ public class Ghost
 	//the draw image of ghost
 	int ghostImage = 1;
 
-	//RectF has four values (left, top, right, bottom)
-
-	float mXVelocity;
-	float mYVelocity;
-	float mGhostWidth;
-	float mGhostHeight;
-	Paint paint = new Paint();
-
-	public Ghost() {
-
-	}
-
-	public Ghost (int screenX, int locX, int locY) {
-
-		paint.setColor(Color.argb(255, 0,0,255));
-		//pacman width/height 1% of screen (change later if needed)
-		mGhostWidth = (float)screenX/100;
-		mGhostHeight = (float)screenX/100;
-
-
-
-		loc = new Location(locX, locY, ghostImage);
-
-	}
-
-
-	/**
-	 * updates the ball position
-	 * called each frame/loop from PacmanGame update() method
-	 * moves ball based on x/y velocities and fps
-	 */
-	void update(long fps) {
-
-	}
-
-	void reverseXVel(){
-		mXVelocity = -mXVelocity;
-	}
-
-	void reverseYVel(){
-		mYVelocity = -mYVelocity;
-	}
-
-	/**
-	 * Initializes four points of mRect(defines pacman)
-	 * Initializes x and y velocities (can change later)
-	 */
-	void reset(int x, int y) {
-
-
-		mXVelocity = (float)(y / 3);
-		mYVelocity = (float)-(y / 3);
-
-
+	//initialize the position of Ghost at the beginning of the game
+	void initialize(int sX, int sY){
+		/*Random random = new Random();
+		int xVal = random.nextInt((sX - sX/3) + 1) + sX/3;
+		int yVal = random.nextInt((sY - sY/3) + 1) + sY/3;*/
+		loc = new Location(sX, sY, ghostImage);
 	}
 
 
