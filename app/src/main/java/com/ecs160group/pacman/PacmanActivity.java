@@ -1,21 +1,12 @@
 package com.ecs160group.pacman;
 
 //import android.appcompat.app;
-import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MotionEvent;
 import android.util.Log;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.view.Display;
-import android.view.Window;
-import android.widget.ImageView;
-import java.util.Random;
 
 public class PacmanActivity extends AppCompatActivity implements Dpad.DpadListener{
 
@@ -64,9 +55,7 @@ public class PacmanActivity extends AppCompatActivity implements Dpad.DpadListen
 	@Override
 	public void DpadPressed(float xPercent, float yPercent) { // id needed if more than 1 player.
 		Log.d("User-Controller: ", "X percent: " + xPercent + " Y percent: " + yPercent);
+		mPacmanGame.getPacman().updateNextDirection(xPercent, yPercent);
 	}
-
-
-
 
 }
