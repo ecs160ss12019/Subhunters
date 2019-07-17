@@ -1,6 +1,9 @@
 package com.ecs160group.pacman;
+
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
+
 /*
     protagonist of Pacman game
     can eat pellets
