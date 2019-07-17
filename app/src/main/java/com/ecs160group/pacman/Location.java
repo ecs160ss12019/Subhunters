@@ -12,31 +12,56 @@ public class Location
 	private int x;
 	private int y;
 	// object containing what is at this position
-	Object obj;
+	Block block;
+
+	/**
+	 * Default ctor
+	 */
+	Location()
+	{
+		x = -1;
+		y = -1;
+		block = Block.EMPTY;
+	}
+
+	/**
+	 * Copy constructor
+	 * @param l Location to be copied
+	 */
+	Location (Location l) {
+		this.x = l.x;
+		this.y = l.y;
+		this.block = l.block;
+	}
+
 
 	/**
 	 * Constructor that takes in an object and a coordinate
+	 *
 	 * @param x x axis coordinate
 	 * @param y y axis coordinate
-	 * @param o object at the xy-coordinate
+	 * @param block object at the xy-coordinate
 	 */
-	Location (int x, int y, Object o)
+	Location(int x, int y, Block block)
 	{
 		this.x = x;
 		this.y = y;
-		obj = o;
+		this.block = block;
 	}
 
 	/**
 	 * Gets the x coordinate of the location
+	 *
 	 * @return x coordinate of location
 	 */
-	public int getX() {
+	public int getX()
+	{
 		return x;
 	}
 
 	/**
 	 * Gets the y coordinate of the location
+	 *
 	 * @return y coordinate of location
 	 */
 	public int getY()
@@ -46,20 +71,23 @@ public class Location
 
 	/**
 	 * Gets the object in the location
+	 *
 	 * @return object located at the point
 	 */
-	public Object getObj()
+	public Block getObj()
 	{
-		return obj;
+		return block;
 	}
 
 	/**
 	 * Gets the manhattan distance between the location passed in and the
 	 * current location
+	 *
 	 * @param loc location to find distance away from
 	 * @return manhattan distance from loc
 	 */
-	public int dist(Location loc) {
+	public int dist(Location loc)
+	{
 		return Math.abs(loc.x - x) + Math.abs(loc.y - y);
 	}
 }
