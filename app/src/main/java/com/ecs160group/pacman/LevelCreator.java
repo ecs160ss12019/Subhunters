@@ -3,7 +3,6 @@ package com.ecs160group.pacman;
 import android.content.res.Resources;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -16,28 +15,39 @@ public class LevelCreator
 	// File needed to read
 	String fileName = "raw/lvl1.txt";
 	// maze object instance needed to create the maze
-	Maze maze;
+	Location[][] maze;
 	// Objects needed to read a file
 	Resources res;
 
-	LevelCreator(Maze maze)
+	/**
+	 * Constructor for LevelCreator
+	 * @param m maze to be updated
+	 */
+	LevelCreator(Maze m)
 	{
-		this.maze = maze;
+		this.maze = m.getMaze();
 		res = Resources.getSystem();
-		readFile();
+		readAndProcessFile();
 	}
 
-	void readFile()
+	/**
+	 * Reads the file and process the file to make a maze
+	 */
+	void readAndProcessFile()
 	{
 		InputStream is = res.openRawResource(R.raw.lvl1);
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
 		try {
 			String eachLine = br.readLine();
-			while (eachLine != null) {
+			int i = 0;
+			while (eachLine != null) { // process file line at a time
 				// the pieces of the maze in the file are separated by spaces, so to get each piece,
 				// each is a single character
 				String[] mazePieces = eachLine.split(" ");
-				processLine(mazePieces);
+				processLine(mazePieces, i);
+				// process next line of buffer after processing the line
+				eachLine = br.readLine();
+				i++;
 			}
 		} catch (Exception e) {
 			// TODO: handle exception and check which exception and make better
@@ -45,14 +55,27 @@ public class LevelCreator
 		}
 	}
 
-	void processLine(String[] pieces)
+	/**
+	 * Processes a line of the text file to create a horizontal line of the maze
+	 * @param pieces A line of pieces of the maze
+	 * @param xcoord X coordinate of the block to process
+	 */
+	void processLine(String[] pieces, int xcoord)
 	{
-		for (int i = 0; i < pieces.length; i++) {
-			processBlock(pieces[i]);
+		for (int i = 0; i < pieces.length && pieces[i] != null; i++) {
+			processBlock(pieces[i], xcoord, i);
 		}
 	}
 
-	void processBlock(String s)
+	//TODO: make a wall class or introduce some other way to instantiate a location
+
+	/**
+	 * Processes a block of the text file to put in the starting maze
+	 * @param s string/char to process
+	 * @param x x coordinate of the block to process
+	 * @param y y coordinate of the block to process
+	 */
+	void processBlock(String s, int x, int y)
 	{
 		char c = s.charAt(0); // convert to character before processing
 		switch(c) {
@@ -60,26 +83,40 @@ public class LevelCreator
 			case '-': // horizontal wall
 			case '/': // bottom right or top left corner wall
 			case '\\': // bottom left or top right corner wall
+				maze[x][y] = new Location(x, y, ); // TODO: make a wall class?
 				break;
 			case '.': // pellet
+				maze[x][y] = new Location(x, y, ); // TODO: make a pellet class?
 				break;
 			case '*': // power pellet
-				break;
-			case 'o': // empty space
+				maze[x][y] = new Location(x, y, );
 				break;
 			case '1': // warp space
+				maze[x][y] = new Location(x, y, ); // TODO: make a warp space
 				break;
 			case 's': // pacman start space
+				// start space is basically null space, nothing there except pacman when game starts
+				maze[x][y] = new Location(x, y, null);
 			case 't': // bonus fruit drop space
+				// is null except when fruit is placed
+				maze[x][y] = new Location(x, y, ); // TODO: make conditional space?
 				break;
 			case 'x': // ghost drop in space
+				// is null space except when ghost drops in from waiting room
+				maze[x][y] = new Location(x, y, ); // TODO: make conditional space?
 				break;
 			case 'g': // ghost entrance gate to waiting room left
 			case 'h': // ghost entrance gate to waiting room right
+				maze[x][y] = new Location(x,y, ); // TODO: create ghost entrance space/class
 				break;
 			case 'a': // ghost waiting room space
+				// is empty space except when ghost is moving around in it
+				maze[x][y] = new Location(x,y, ); // TODO: null or conditional space
 				break;
+			case 'o': // empty space
 			default:
+				maze[x][y] = new Location(x, y, null);
+				break;
 				break;
 		}
 	}
