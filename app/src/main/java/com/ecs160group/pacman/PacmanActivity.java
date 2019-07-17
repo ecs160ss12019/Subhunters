@@ -1,14 +1,23 @@
 package com.ecs160group.pacman;
 
 //import android.appcompat.app;
+import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.util.Log;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.view.Display;
+import android.view.Window;
+import android.widget.ImageView;
+import java.util.Random;
 
-public class PacmanActivity extends AppCompatActivity implements Dpad.DpadListener{
+public class PacmanActivity extends AppCompatActivity implements Joystick.JoystickListener{
 
 	private PacmanGame mPacmanGame;
 
@@ -18,8 +27,8 @@ public class PacmanActivity extends AppCompatActivity implements Dpad.DpadListen
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		Dpad dpad = new Dpad(this); // User Touch Controller 
+
+		Joystick userController = new Joystick(this); // User Touch Controller
 
 		//set landscape mode, take out "Pacman" title
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -31,10 +40,10 @@ public class PacmanActivity extends AppCompatActivity implements Dpad.DpadListen
 
 
 		mPacmanGame = new PacmanGame(this, size.x, size.y);
-		setContentView(mPacmanGame);
+		//setContentView(mPacmanGame);
 		//setContentView(userController); // displays touch controller on screen.
-
-		//Log.d("Debugging", "In onCreate");
+		setContentView(R.layout.main_layout);
+		Log.d("Debugging", "In onCreate");
 		//maze.draw();
 	}
 
@@ -52,10 +61,12 @@ public class PacmanActivity extends AppCompatActivity implements Dpad.DpadListen
 		mPacmanGame.pause();
 	}
 
-	@Override
-	public void DpadPressed(float xPercent, float yPercent) { // id needed if more than 1 player.
+	@Override // When controller touched this will be called.
+	public void JoystickMoved(float xPercent, float yPercent) {
 		Log.d("User-Controller: ", "X percent: " + xPercent + " Y percent: " + yPercent);
+		// include pacman controls here, Must convert percent values into directional values up,down,left,right
 		mPacmanGame.getPacman().updateNextDirection(xPercent, yPercent);
 	}
+
 
 }
