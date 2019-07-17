@@ -98,8 +98,9 @@ public class Pacman {
 
 	/**
 	 * Reads user input from dpad listener to update Pacman's next direction
-	 * @param xPercent
-	 * @param yPercent
+	 * @param xPercent percent movement in the x-axis of total, (-) is left, (+) is right
+	 * @param yPercent percent movement in the y-axis of total, (-) is up, (+) is down
+	 *                 inverted values are then inverted again to give the proper vertical direction
 	 */
     void updateNextDirection(float xPercent, float yPercent){
 	    

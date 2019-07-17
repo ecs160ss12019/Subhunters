@@ -12,10 +12,7 @@ public class Location
 	private int x;
 	private int y;
 	// object containing what is at this position
-	// TODO: rename and refactor this to something more appropriate for its purpose
 	Object obj;
-
-	// TODO: potentially add more functions and functionality such as if there is more than one object at  a location
 
 	/**
 	 * Constructor that takes in an object and a coordinate
