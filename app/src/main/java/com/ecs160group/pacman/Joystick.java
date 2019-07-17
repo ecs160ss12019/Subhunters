@@ -17,13 +17,13 @@ import android.graphics.PorterDuff;
     Will be located on bottom-left side of screen
 */
 
-public class Dpad extends SurfaceView implements SurfaceHolder.Callback, View.OnTouchListener{
+public class Joystick extends SurfaceView implements SurfaceHolder.Callback, View.OnTouchListener{
 
     private float centerX;
     private float centerY;
     private float baseRadius;
     private float hatRadius;
-    private DpadListener DpadCallback;
+    private JoystickListener JoystickCallback;
     private final int ratio = 2; // The smaller, the more shading will occur
 
     // Uses Device's screen dimensions to scale the controller.
@@ -35,34 +35,34 @@ public class Dpad extends SurfaceView implements SurfaceHolder.Callback, View.On
         hatRadius = Math.min(getWidth(), getHeight()) / 14; // Size of hat, "balltop"
     }
 
-    public Dpad(Context context)
+    public Joystick(Context context)
     {
         super(context);
         getHolder().addCallback(this); // Set the callback methods in this class to be the ones to be called when those events happen
         setOnTouchListener(this); // SurfaceView to use onTouch method to handle user touch inputs,
-        if(context instanceof DpadListener)
-            DpadCallback = (DpadListener) context; // Allows us to call DpadPressed in class representing the activity at any time.
+        if(context instanceof JoystickListener)
+            JoystickCallback = (JoystickListener) context; // Allows us to call JoystickPressed in class representing the activity at any time.
     }
 
-    public Dpad(Context context, AttributeSet attributes, int style)
+    public Joystick(Context context, AttributeSet attributes, int style)
     {
         super(context, attributes, style);
         getHolder().addCallback(this);
         setOnTouchListener(this);
-        if(context instanceof DpadListener)
-            DpadCallback = (DpadListener) context;
+        if(context instanceof JoystickListener)
+            JoystickCallback = (JoystickListener) context;
     }
 
-    public Dpad (Context context, AttributeSet attributes)
+    public Joystick (Context context, AttributeSet attributes)
     {
         super(context, attributes);
         getHolder().addCallback(this);
         setOnTouchListener(this);
-        if(context instanceof DpadListener)
-            DpadCallback = (DpadListener) context;
+        if(context instanceof JoystickListener)
+            JoystickCallback = (JoystickListener) context;
     }
 
-    private void drawDpad(float newX, float newY)
+    private void drawJoystick(float newX, float newY)
     {
         if(getHolder().getSurface().isValid()) // Prevents exceptions at runtime.
         {
@@ -99,7 +99,7 @@ public class Dpad extends SurfaceView implements SurfaceHolder.Callback, View.On
     public void surfaceCreated(SurfaceHolder holder)
     {
         setupDimensions();
-        drawDpad(centerX, centerY);
+        drawJoystick(centerX, centerY);
     }
 
     @Override
@@ -122,29 +122,30 @@ public class Dpad extends SurfaceView implements SurfaceHolder.Callback, View.On
                 float displacement = (float) Math.sqrt((Math.pow(e.getX() - centerX, 2)) + Math.pow(e.getY() - centerY, 2));
                 if(displacement < baseRadius) // Valid input, no need to constrain the balltop.
                 {
-                    drawDpad(e.getX(), e.getY()); // Coordinates in pixels, Sends hat to be drawn at that location
-                    DpadCallback.DpadPressed((e.getX() - centerX)/baseRadius, (e.getY() - centerY)/baseRadius);
+                    drawJoystick(e.getX(), e.getY()); // Coordinates in pixels, Sends hat to be drawn at that location
+                    JoystickCallback.JoystickMoved((e.getX() - centerX)/baseRadius, (e.getY() - centerY)/baseRadius);
                 }
                 else // When controller is not in use. Reset to center.
                 {
                     float ratio = baseRadius / displacement;
                     float constrainedX = centerX + (e.getX() - centerX) * ratio;
                     float constrainedY = centerY + (e.getY() - centerY) * ratio;
-                    drawDpad(constrainedX, constrainedY);
-                    DpadCallback.DpadPressed((constrainedX-centerX)/baseRadius, (constrainedY-centerY)/baseRadius);
+                    drawJoystick(constrainedX, constrainedY);
+                    JoystickCallback.JoystickMoved((constrainedX-centerX)/baseRadius, (constrainedY-centerY)/baseRadius);
                 }
             }
             else // Nothing happens, draw at center.
-                drawDpad(centerX, centerY);
-            DpadCallback.DpadPressed(0,0);
+                drawJoystick(centerX, centerY);
+            JoystickCallback.JoystickMoved(0,0);
         }
         return true;
     }
 
-    public interface DpadListener // Used to communicate position of balltop.
+    public interface JoystickListener // Used to communicate position of balltop.
     {
         // Any info needed can be returned, Add as an argument.
-        void DpadPressed(float xPercent, float yPercent); // int id only needed to express more than 1 player. CAN remove later..
+        void JoystickMoved(float xPercent, float yPercent);
+
     }
 
 }
