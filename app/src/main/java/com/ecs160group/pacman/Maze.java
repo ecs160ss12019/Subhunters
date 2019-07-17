@@ -1,7 +1,11 @@
 package com.ecs160group.pacman;
 
-import android.graphics.Color;
 import android.util.Log;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.view.SurfaceHolder;
+
 
 class Maze
 {
@@ -11,6 +15,13 @@ class Maze
 
 	private PacmanActivity pacmanActivity;
 	private Location[][] grid; // holds all the objects/pieces currently in the maze
+
+	//variables to handle drawing
+	private SurfaceHolder mOurHolder;
+	private Canvas mCanvas;
+	private Paint mPaint;
+
+
 
 
 	/**
@@ -44,6 +55,26 @@ class Maze
 
 		//debugging
 		Log.d("Debugging", "In draw");
+
+		if (mOurHolder.getSurface().isValid()) {
+			mCanvas = mOurHolder.lockCanvas();
+			mCanvas.drawColor(Color.argb(255, 0, 0, 0));
+			mPaint.setColor(Color.argb(255, 255, 255, 255));
+
+			//getMaze();
+			for (int i = 0; i < grid.length; i++) {
+
+				for (int j = 0; j < grid[j].length; j++) {
+					//grid[i][j] // Draw what is at the location.
+					mCanvas.drawCircle(i, j, 1, mPaint);
+					Log.d("getMaze: ", "coord: " + i + "," + j);
+
+				}
+
+			}
+		}
+		mOurHolder.unlockCanvasAndPost(mCanvas);
+
 	}
 
 	/**
@@ -51,6 +82,10 @@ class Maze
 	 * @return array of maze locations
 	 */
 	Location[][] getMaze() {
+
 		return grid;
+	}
+	void setMaze(Location[][] m){
+		grid = m;
 	}
 }
