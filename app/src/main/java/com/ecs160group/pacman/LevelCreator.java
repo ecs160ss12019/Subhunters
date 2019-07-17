@@ -96,7 +96,7 @@ public class LevelCreator
 				break;
 			case 's': // pacman start space
 				// start space is basically null space, nothing there except pacman when game starts
-				maze[x][y] = new Location(x, y, null);
+				maze[x][y] = new Location(x, y, );
 			case 't': // bonus fruit drop space
 				// is null except when fruit is placed
 				maze[x][y] = new Location(x, y, ); // TODO: make conditional space?
