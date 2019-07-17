@@ -32,7 +32,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 	private Pacman mPacman = new Pacman();
 	private Ghost mGhost = new Ghost();
 	private Maze mMaze;
-	private Dpad mDpad;
+	private Joystick mJoystick;
 /*        private Inky mInky;
         private Pinky mPinky;
         private Blinky mBlinky;
