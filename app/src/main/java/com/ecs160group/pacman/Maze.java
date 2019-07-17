@@ -17,6 +17,7 @@ class Maze
 	private Location[][] grid; // holds all the objects/pieces currently in the maze
 
 	//variables to handle drawing
+	private LevelCreator mlevelCreator;
 	private SurfaceHolder mOurHolder;
 	private Canvas mCanvas;
 	private Paint mPaint;
@@ -31,7 +32,9 @@ class Maze
 	public Maze(PacmanActivity pacmanActivity)
 	{
 		this.pacmanActivity = pacmanActivity;
-		// TODO: initialize the grid
+		// initializes the grid size
+		grid = new Location[MAZE_WIDTH][MAZE_HEIGHT];
+		mlevelCreator = new LevelCreator(grid);
 	}
 
 	/**
