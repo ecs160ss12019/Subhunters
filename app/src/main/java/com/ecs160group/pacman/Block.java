@@ -6,8 +6,8 @@ package com.ecs160group.pacman;
  */
 public enum Block
 {
-	PACMAN, GHOST, FRUIT, WALL, PELLET, POWER_PELLET, FRUIT_SPAWN, PAC_SPAWN,
-		GHOST_SPAWN, GHOST_WAIT, EMPTY
+	PACMAN, GHOST, FRUIT, WALL, PELLET, POWER_PELLET, WARP_SPACE, FRUIT_SPAWN, PAC_SPAWN,
+		GHOST_SPAWN, GHOST_WAIT, GHOST_GATE, EMPTY
 }
 
 // TODO: give a more appropriate name for the enum
