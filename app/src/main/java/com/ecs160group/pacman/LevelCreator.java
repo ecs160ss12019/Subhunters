@@ -12,8 +12,8 @@ import java.io.InputStreamReader;
  */
 public class LevelCreator
 {
-	// File needed to read
-	String fileName = "raw/lvl1.txt";
+//	// File needed to read
+//	String fileName = "raw/lvl1.txt";
 	// maze object instance needed to create the maze
 	Location[][] maze;
 	// Objects needed to read a file
@@ -23,9 +23,9 @@ public class LevelCreator
 	 * Constructor for LevelCreator
 	 * @param m maze to be updated
 	 */
-	LevelCreator(Maze m)
+	LevelCreator(Location[][] m)
 	{
-		this.maze = m.getMaze();
+		this.maze = m;
 		res = Resources.getSystem();
 		readAndProcessFile();
 	}
@@ -67,8 +67,6 @@ public class LevelCreator
 		}
 	}
 
-	//TODO: make a wall class or introduce some other way to instantiate a location
-
 	/**
 	 * Processes a block of the text file to put in the starting maze
 	 * @param s string/char to process
@@ -83,40 +81,39 @@ public class LevelCreator
 			case '-': // horizontal wall
 			case '/': // bottom right or top left corner wall
 			case '\\': // bottom left or top right corner wall
-				maze[x][y] = new Location(x, y, ); // TODO: make a wall class?
+				maze[x][y] = new Location(x, y, Block.WALL);
 				break;
 			case '.': // pellet
-				maze[x][y] = new Location(x, y, ); // TODO: make a pellet class?
+				maze[x][y] = new Location(x, y, Block.PELLET);
 				break;
 			case '*': // power pellet
-				maze[x][y] = new Location(x, y, );
+				maze[x][y] = new Location(x, y, Block.POWER_PELLET);
 				break;
 			case '1': // warp space
-				maze[x][y] = new Location(x, y, ); // TODO: make a warp space
+				maze[x][y] = new Location(x, y, Block.WARP_SPACE);
 				break;
 			case 's': // pacman start space
 				// start space is basically null space, nothing there except pacman when game starts
-				maze[x][y] = new Location(x, y, );
+				maze[x][y] = new Location(x, y, Block.PAC_SPAWN);
 			case 't': // bonus fruit drop space
 				// is null except when fruit is placed
-				maze[x][y] = new Location(x, y, ); // TODO: make conditional space?
+				maze[x][y] = new Location(x, y, Block.FRUIT_SPAWN);
 				break;
 			case 'x': // ghost drop in space
 				// is null space except when ghost drops in from waiting room
-				maze[x][y] = new Location(x, y, ); // TODO: make conditional space?
+				maze[x][y] = new Location(x, y, Block.GHOST_SPAWN);
 				break;
 			case 'g': // ghost entrance gate to waiting room left
 			case 'h': // ghost entrance gate to waiting room right
-				maze[x][y] = new Location(x,y, ); // TODO: create ghost entrance space/class
+				maze[x][y] = new Location(x,y, Block.GHOST_GATE);
 				break;
 			case 'a': // ghost waiting room space
 				// is empty space except when ghost is moving around in it
-				maze[x][y] = new Location(x,y, ); // TODO: null or conditional space
+				maze[x][y] = new Location(x,y, Block.GHOST_WAIT);
 				break;
 			case 'o': // empty space
 			default:
-				maze[x][y] = new Location(x, y, null);
-				break;
+				maze[x][y] = new Location(x, y, Block.EMPTY);
 				break;
 		}
 	}
