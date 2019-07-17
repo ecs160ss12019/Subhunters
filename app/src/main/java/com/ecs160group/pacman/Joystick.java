@@ -29,8 +29,8 @@ public class Joystick extends SurfaceView implements SurfaceHolder.Callback, Vie
     // Uses Device's screen dimensions to scale the controller.
     private void setupDimensions()
     {
-        centerX = getWidth() / 6;   // Set positioning for X, CURRENTLY at center, MOVE to bottom left.
-        centerY = getHeight() / 8;  // Set positioning for Y, SurfaceView methods getW, getH
+        centerX = getWidth() / 8;   // Set positioning for X, CURRENTLY at center, MOVE to bottom left.
+        centerY = getHeight() / 2 + 100;  // Set positioning for Y, SurfaceView methods getW, getH
         baseRadius = Math.min(getWidth(), getHeight()) / 8; // Size of base
         hatRadius = Math.min(getWidth(), getHeight()) / 14; // Size of hat, "balltop"
     }
