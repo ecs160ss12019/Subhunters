@@ -44,7 +44,7 @@ public class Ghost
 
 
 
-		loc = new Location(locX, locY, ghostImage);
+		loc = new Location(locX, locY, Block.GHOST);
 
 	}
 
