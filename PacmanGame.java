@@ -133,24 +133,21 @@ public class PacmanGame extends SurfaceView implements Runnable {
 
         }
 
-
-        /**
-         * detects collision between pacman and ghost, pacman and pellets, pacman and fruits
-         */
         //detects if pacman hit a pellet/ghost/wall
         private void detectCollisions() {
-                //ghost & pacman (TODO: add additional condition later if pacman is super
-                if (mPacman.loc.getX() == mGhost.loc.getX()
-                        && mPacman.loc.getY() == mGhost.loc.getY()) {
-                        //TODO: pacman dies, teleport back to starting spot
+                //TODO: separate detection collision methods within pacman/ghost/maze classes OR do it here
+                //pacman && ghost collision (add condition for super mode later)
+                if (mPacman.loc.getX() == mGhost.loc.getY()
+                && mPacman.loc.getY() == mGhost.loc.getY()) {
+                        //Pacman dies, respawns
                         mLives--;
                 }
-                //pacman & super fruit (previous condition already checks ghost)
 
-                // pacman & pellet
+                //pacman & pellet
+
+                //pacman & fruit
 
                 //pacman & wall / ghost & wall
-
 
         }
 
@@ -162,88 +159,70 @@ public class PacmanGame extends SurfaceView implements Runnable {
                         mGameThread.join();
                 } catch (InterruptedException e) {
                         Log.e("Error:", "joining thread");
+                }
+        }
+
+        //called by PacmanActivity when player starts game
+        public void resume() {
+                mPlaying = true;
+
+                //creates and starts a new game thread
+                mGameThread = new Thread(this);
+                mGameThread.start();
+
+        }
+
+        //draw game objects and HUD
+        private void draw() {
+                if (mOurHolder.getSurface().isValid()) {
+                        //Lock canvas (graphics memory) ready to draw
+                        mCanvas = mOurHolder.lockCanvas();
+
+                        //fill screen with solid color
+                        mCanvas.drawColor(Color.argb(255, 0, 0, 0));
+
+                        mPaint.setColor(Color.argb(255, 255, 255, 0));
+
+                        //font size
+                        mPaint.setTextSize(mFontSize);
+
+                        //HUD
+                        mCanvas.drawText("Score:  " + mScore +
+                                        "  Lives: " + mLives,
+                                mFontMargin, mFontSize, mPaint);
+
+                        //draw pacman/ghosts/maze/dpad
+                        // white color for pacman
+                        mPaint.setColor(Color.argb(255, 255, 255, 255));
+                        // draw pacman as circle
+                        mCanvas.drawCircle(mPacman.loc.getX(), mPacman.loc.getY()
+                                , (mScreenX + mScreenY) / 200, mPaint);
+                        // blue color for ghosts
+                        mPaint.setColor(Color.argb(255, 0, 0, 255));
+                        // draw ghosts as circle
+                        mCanvas.drawCircle(mGhost.loc.getX(), mGhost.loc.getY()
+                                , (mScreenX + mScreenY) / 200, mPaint);
+
+                        if (DEBUGGING) {
+                                printDebuggingText();
+                        }
+
+                        mOurHolder.unlockCanvasAndPost(mCanvas);
 
                 }
         }
 
-                //called by PacmanActivity when player starts game
-                public void resume () {
-                        mPlaying = true;
+        private void printDebuggingText() {
+                int debugSize = mFontSize / 2;
+                int debugStart = 150;
+                mPaint.setTextSize(debugSize);
+                mCanvas.drawText("FPS: " + mFPS,
+                        10, debugStart + debugSize, mPaint);
+        }
 
-                        //creates and starts a new game thread
-                        mGameThread = new Thread(this);
-                        mGameThread.start();
-
-                }
-
-
-                /**
-                 * Draws the object depending on what it is (Pacman, Ghost)
-                 */
-                private void drawObject () {
-
-
-                }
-
-
-                //draw game objects and HUD
-                private void draw () {
-                        if (mOurHolder.getSurface().isValid()) {
-                                //Lock canvas (graphics memory) ready to draw
-                                mCanvas = mOurHolder.lockCanvas();
-
-                                mCanvas.drawColor(Color.argb(255, 0, 0, 0));
-
-                                //mJoystick.drawJoystick(getWidth() / 12,getHeight() / (float)1.25);
-
-                                //fill screen with solid color
-                                //mCanvas.drawColor(Color.argb(255, 0, 0, 0));
-
-
-                                mPaint.setColor(Color.argb(255, 255, 255, 0));
-
-                                //font size
-                                mPaint.setTextSize(mFontSize);
-
-                                //HUD
-                                mCanvas.drawText("Score:  " + mScore +
-                                                "  Lives: " + mLives,
-                                        mFontMargin, mFontSize, mPaint);
-
-                                //draw pacman/ghosts/maze/dpad
-                                // yellow color for pacman
-                                mPaint.setColor(Color.argb(255, 255, 255, 0));
-
-                                // draw pacman as circle
-                                mCanvas.drawCircle(mPacman.loc.getX(), mPacman.loc.getY()
-                                        , (mScreenX + mScreenY) / 200, mPaint);
-                                // blue color for ghosts
-                                mPaint.setColor(Color.argb(255, 0, 0, 255));
-                                // draw ghosts as circle
-                                mCanvas.drawCircle(mGhost.loc.getX(), mGhost.loc.getY()
-                                        , (mScreenX + mScreenY) / 200, mPaint);
-
-                                if (DEBUGGING) {
-                                        printDebuggingText();
-                                }
-
-                                mOurHolder.unlockCanvasAndPost(mCanvas);
-
-                        }
-                }
-
-                private void printDebuggingText () {
-                        int debugSize = mFontSize / 2;
-                        int debugStart = 150;
-                        mPaint.setTextSize(debugSize);
-                        mCanvas.drawText("FPS: " + mFPS,
-                                10, debugStart + debugSize, mPaint);
-                }
-
-                Pacman getPacman () {
-                        return mPacman;
-                }
-
+        Pacman getPacman() {
+                return mPacman;
+        }
 
 }
 

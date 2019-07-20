@@ -1,11 +1,8 @@
 package com.ecs160group.pacman;
 
-
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
-import android.graphics.Canvas;
-
 
 /*
     protagonist of Pacman game
@@ -95,7 +92,7 @@ public class Pacman {
 	/**
 	 * Draws Pacman on screen
 	 */
-    public void draw(Paint paint, Canvas canvas){
+    public void draw(){
 
     }
 
