@@ -9,6 +9,34 @@ import android.util.Log;
     one iteration of the game
  */
 public class Move{
+
+	private Location loc;
+	private Pacman pacman;
+	private Ghost ghost;
+
+	/**
+	 * Constructor for Pacman's movement
+	 * @param p pacman's object
+	 * @param direction direction of movement
+	 */
+	public Move(Pacman p, int direction)
+    {
+		pacman = p;
+		// TODO: extend this to introduce movement based on the direction given
+    }
+
+	/**
+	 * Constructor for Ghost's movement
+	 * @param g singular ghost object
+	 * @param direction direction of movement
+	 */
+	public Move(Ghost g, int direction)
+    {
+		ghost = g;
+	    // TODO: extend this to introduce movement based on the direction given
+    }
+
+
     // function: Pacman_update
     // change the location of Pacman regarding to its current direction
     // and its velocity
