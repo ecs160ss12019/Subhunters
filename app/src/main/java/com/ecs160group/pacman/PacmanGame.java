@@ -4,7 +4,10 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PointF;
+import android.graphics.PorterDuff;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -14,7 +17,7 @@ import android.view.SurfaceView;
 
  */
 
-public class PacmanGame extends SurfaceView implements Runnable {
+public class PacmanGame extends SurfaceView implements Runnable{
         //for debugging purposes
         private final boolean DEBUGGING = false;
         private long mFPS; //frames per second
@@ -27,11 +30,15 @@ public class PacmanGame extends SurfaceView implements Runnable {
         private int mFontSize;
         private int mFontMargin;
 
+        private float joystickX;
+        private float joystickY;
+
         //game objects
         private Pacman mPacman;
         private Ghost mGhost;
         private Maze mMaze;
         private Joystick mJoystick;
+        private FakeJoy mFakeJoy;
 /*        private Inky mInky;
         private Pinky mPinky;
         private Blinky mBlinky;
@@ -45,6 +52,8 @@ public class PacmanGame extends SurfaceView implements Runnable {
         private SurfaceHolder mOurHolder;
         private Canvas mCanvas;
         private Paint mPaint;
+        private PointF blockSize;
+        final private PointF fakePosition;
 
         //thread + control variables to know when to stop/start the thread
         private Thread mGameThread = null;
@@ -55,8 +64,13 @@ public class PacmanGame extends SurfaceView implements Runnable {
         public PacmanGame(Context context, int x, int y) {
                 //Super... calls the parent class
                 //constructor of SurfaceView provided by Android
+
                 super(context);
 
+                fakePosition = new PointF(200, 700);
+                blockSize = new PointF();
+                blockSize.x = (float) x / 100;
+                blockSize.y = (float) x / 100;
                 mScreenX = x;
                 mScreenY = y;
 
@@ -66,10 +80,13 @@ public class PacmanGame extends SurfaceView implements Runnable {
 
                 mOurHolder = getHolder();
                 mPaint = new Paint();
+                joystickX = 0;
+                joystickY = 0;
 
                 mPacman = new Pacman(mScreenX, 1000, 700);
                 mGhost = new Ghost(mScreenX, 800, 400);
-                mJoystick = new Joystick(context);
+                //mJoystick = new Joystick(context);
+                mFakeJoy = new FakeJoy(200, 100, blockSize, fakePosition);
 
 
                 //Initialize objects(maze, pacman, ghost);
@@ -81,12 +98,13 @@ public class PacmanGame extends SurfaceView implements Runnable {
 
         //runs when a player lost all lives and restarts
         //or starting the first game
-        private void startNewGame() {
+        public void startNewGame() {
                 //reset maze level
 
                 //initialize the position of pacman and ghosts
                 mPacman.reset(mScreenX, mScreenY);
                 mGhost.reset(mScreenX, mScreenY);
+
                 //resetting score/lives
                 mScore = 0;
                 mLives = 3;
@@ -136,7 +154,19 @@ public class PacmanGame extends SurfaceView implements Runnable {
         //detects if pacman hit a pellet/ghost/wall
         private void detectCollisions() {
                 //TODO: separate detection collision methods within pacman/ghost/maze classes OR do it here
-                //don't need to worry about this for now
+                //pacman && ghost collision (add condition for super mode later)
+                if (mPacman.loc.getX() == mGhost.loc.getY()
+                && mPacman.loc.getY() == mGhost.loc.getY()) {
+                        //Pacman dies, respawns
+                        mLives--;
+                }
+
+                //pacman & pellet
+
+                //pacman & fruit
+
+                //pacman & wall / ghost & wall
+
         }
 
         //called by PacmanActivity when player quits game
@@ -191,6 +221,8 @@ public class PacmanGame extends SurfaceView implements Runnable {
                         mCanvas.drawCircle(mGhost.loc.getX(), mGhost.loc.getY()
                                 , (mScreenX + mScreenY) / 200, mPaint);
 
+                        mFakeJoy.draw(mCanvas, mFakeJoy.centerX, mFakeJoy.centerY);
+
                         if (DEBUGGING) {
                                 printDebuggingText();
                         }
@@ -208,8 +240,37 @@ public class PacmanGame extends SurfaceView implements Runnable {
                         10, debugStart + debugSize, mPaint);
         }
 
+
         Pacman getPacman() {
                 return mPacman;
+        }
+
+       /*  // When controller touched this will be called.
+        @Override
+        public void JoystickMoved(float xPercent, float yPercent) {
+                Log.d("User-Controller: ", "X percent: " + xPercent + " Y percent: " + yPercent);
+                // include pacman controls here, Must convert percent values into directional values up,down,left,right
+               // mPacmanGame.getPacman().updateNextDirection(xPercent, yPercent);
+                joystickX = xPercent;
+                joystickY = yPercent;
+        }*/
+
+        @Override
+        public boolean onTouchEvent(MotionEvent e) {
+
+//TODO: FIX UPDATE FUNCTIONS TO NOT USE CANVAS??
+                mPaused = false;
+                //Touch coordinates are scaled to be values between 0-100
+                float scaledX = e.getX() / blockSize.x;
+                float scaledY = e.getY() / blockSize.x;
+
+                if (e.getAction() == e.ACTION_MOVE || e.getAction() == e.ACTION_DOWN) {
+                        mFakeJoy.update(scaledX, scaledY, mCanvas);
+                } else {
+                        // mFakeJoy.reset();
+                }
+                return true;
+
         }
 
 }
