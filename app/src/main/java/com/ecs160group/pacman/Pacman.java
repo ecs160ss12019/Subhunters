@@ -40,7 +40,7 @@ public class Pacman {
         mPacWidth = (float)screenX/100;
         mPacHeight = (float)screenX/100;
 
-        loc = new Location(locX, locY, this);
+        loc = new Location(locX, locY, Block.PACMAN );
         direction = 'l';
         next_direction = 'l';
 
