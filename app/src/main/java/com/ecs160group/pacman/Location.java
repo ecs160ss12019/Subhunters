@@ -79,6 +79,12 @@ public class Location
 		return block;
 	}
 
+	public void setNewLoc(int newX, int newY){
+		x = newX;
+		y = newY;
+	}
+
+
 	/**
 	 * Gets the manhattan distance between the location passed in and the
 	 * current location

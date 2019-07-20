@@ -14,7 +14,7 @@ import android.util.Log;
 
 import java.util.Random;
 
-public class Pacman {
+public class Pacman extends Move{
     //pacman coords//directions
     Location loc;
     private char direction;
@@ -45,8 +45,6 @@ public class Pacman {
         next_direction = 'l';
 
     }
-
-
 
     /**
      * updates the ball position
@@ -103,9 +101,13 @@ public class Pacman {
 	 *                 inverted values are then inverted again to give the proper vertical direction
 	 */
     void updateNextDirection(float xPercent, float yPercent){
-	    
+
+
+        // After retrieving user input and After Updating direction check for Collision!
+        // Use MovePacman(Pacman p, char direction)
         if(yPercent <= -.35 && xPercent <= .75 && xPercent >= -.75){ // UP
             direction = 'u';
+            //Move(Pacman, direction); // Here?
             Log.d("Pacman-Direction: ", "Move: " + direction);
         }
         else if(yPercent >= .35 && xPercent <= .75 && xPercent >= -.75){ // DOWN
