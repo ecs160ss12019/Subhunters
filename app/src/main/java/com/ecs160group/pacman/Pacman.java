@@ -14,7 +14,7 @@ import android.util.Log;
 
 import java.util.Random;
 
-public class Pacman extends Move{
+public class Pacman {
     //pacman coords//directions
     Location loc;
     private char direction;
@@ -30,7 +30,6 @@ public class Pacman extends Move{
     float mPacWidth;
     float mPacHeight;
     final Paint paint = new Paint();
-
 
 
     Pacman (int screenX, int locX, int locY) {
@@ -123,5 +122,63 @@ public class Pacman extends Move{
             Log.d("Pacman-Direction: ", "Move: " + direction);
         }
     }
+
+    /**
+     * checking if the next move of Pacman is available
+     * @param x x coordinate of maze
+     * @param y y coordinate of maze
+     * @return true if doesn't collide with anything
+     */
+    public boolean checkCollisionPacman(int x, int y){
+        // should be false by default
+        // for now we set it true for testing
+        boolean b; // Unable to traverse by default?
+        b = true;
+		    /*
+		    If(loc[x][y].block == EMPTY) {
+			    return true;
+		    }
+	        */
+        // maze[x][y] != walkable space... to return True.
+        //if()
+        return b;
+    }
+
+    /**
+     * Constructor for Pacman's movement
+     * Depending on direction given and traversability, Pacman will attempt to move.
+     * Helper function checkCollision, checks next cell and deals with it. If pellet, ghost,fruit, ect..
+     */
+    public void Move() // Change direction to char? "Easier to Read" udlr
+    {
+        // TODO: extend this to introduce movement based on the direction given
+
+        int pacX = loc.getX();
+        int pacY = loc.getY();
+
+        // Check neighboring cell for collisions!!
+        if (direction == 'u' && checkCollisionPacman(pacX, pacY + 1)) { // GO to coordinate (x,y+1)
+            loc.setNewLoc(pacX, pacY - 1);
+            Log.d("Pacman-Moved: ", "Move: " + direction + "Location: " + pacX + "," + pacY);
+
+        }
+        if (direction == 'd' && checkCollisionPacman(pacX, pacY - 1)) {
+            loc.setNewLoc(pacX, pacY + 1);
+            Log.d("Pacman-Moved: ", "Move: " + direction + "Location: " + pacX + "," + pacY);
+
+        }
+        if (direction == 'l' && checkCollisionPacman(pacX - 1, pacY)) {
+            loc.setNewLoc(pacX - 1, pacY);
+            Log.d("Pacman-Moved: ", "Move: " + direction + "Location: " + pacX + "," + pacY);
+
+        }
+        if (direction == 'r' && checkCollisionPacman(pacX + 1, pacY)) {
+            loc.setNewLoc(pacX + 1, pacY);
+            Log.d("Pacman-Moved: ", "Move: " + direction + "Location: " + pacX + "," + pacY);
+
+        }
+    }
+
+
 	
 }

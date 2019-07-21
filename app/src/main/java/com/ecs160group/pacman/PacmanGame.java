@@ -129,7 +129,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                 detectCollisions();
 
                         }
-
+                        mPacman.Move();
                         //redraw grid/ghosts/pacman/pellets
                         draw();
 
