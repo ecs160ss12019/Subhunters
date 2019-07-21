@@ -28,9 +28,7 @@ public class PacmanActivity extends AppCompatActivity implements Joystick.Joysti
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-
-		//Joystick userController = new Joystick(this);
-
+		Joystick userController = new Joystick(this); // User Touch Controller
 
 		//set landscape mode, take out "Pacman" title
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -39,15 +37,12 @@ public class PacmanActivity extends AppCompatActivity implements Joystick.Joysti
 		Display display = getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
+
+
 		mPacmanGame = new PacmanGame(this, size.x, size.y);
-
-		//mPacmanGame.startNewGame();
-		//mPacmanGame = new PacmanGame(this, size.x, size.y);
-
-		setContentView(mPacmanGame);
-		//setContentView(userController); // displays touch controller on screen.
 		//setContentView(mPacmanGame);
-		//setContentView(userController);
+		//setContentView(userController); // displays touch controller on screen.
+		setContentView(R.layout.main_layout);
 		Log.d("Debugging", "In onCreate");
 		//maze.draw();
 	}
