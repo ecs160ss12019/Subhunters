@@ -17,7 +17,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import java.util.Random;
 
-public class PacmanActivity extends AppCompatActivity implements Joystick.JoystickListener{
+public class PacmanActivity extends AppCompatActivity{
 
 	private PacmanGame mPacmanGame;
 
@@ -28,7 +28,9 @@ public class PacmanActivity extends AppCompatActivity implements Joystick.Joysti
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		Joystick userController = new Joystick(this); // User Touch Controller
+
+		//Joystick userController = new Joystick(this);
+
 
 		//set landscape mode, take out "Pacman" title
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -37,12 +39,15 @@ public class PacmanActivity extends AppCompatActivity implements Joystick.Joysti
 		Display display = getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
-
-
 		mPacmanGame = new PacmanGame(this, size.x, size.y);
-		//setContentView(mPacmanGame);
+
+		//mPacmanGame.startNewGame();
+		//mPacmanGame = new PacmanGame(this, size.x, size.y);
+
+		setContentView(mPacmanGame);
 		//setContentView(userController); // displays touch controller on screen.
-		setContentView(R.layout.main_layout);
+		//setContentView(mPacmanGame);
+		//setContentView(userController);
 		Log.d("Debugging", "In onCreate");
 		//maze.draw();
 	}
@@ -61,12 +66,12 @@ public class PacmanActivity extends AppCompatActivity implements Joystick.Joysti
 		mPacmanGame.pause();
 	}
 
-	@Override // When controller touched this will be called.
+/*	@Override // When controller touched this will be called.
 	public void JoystickMoved(float xPercent, float yPercent) {
 		Log.d("User-Controller: ", "X percent: " + xPercent + " Y percent: " + yPercent);
 		// include pacman controls here, Must convert percent values into directional values up,down,left,right
 		mPacmanGame.getPacman().updateNextDirection(xPercent, yPercent);
-	}
+	}*/
 
 
 
