@@ -265,14 +265,28 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 //Touch coordinates are scaled to be values between 0-100
                 float scaledX = e.getX() / blockSize.x;
                 float scaledY = e.getY() / blockSize.x;
-               // float xPercent = (e.getX() - mFakeJoy.centerX)/ mFakeJoy.baseRadius ;
+                float displacement = (float) Math.sqrt((Math.pow(e.getX() - mFakeJoy.centerX, 2))
+                        + Math.pow(e.getY() - mFakeJoy.centerY, 2));
 
-                //if (e.getAction() == e.ACTION_MOVE || e.getAction() == e.ACTION_DOWN) {
-                if (e.getAction() != e.ACTION_UP) {
+
+
+                if (e.getAction() == e.ACTION_MOVE || e.getAction() == e.ACTION_DOWN) {
+                //if (e.getAction() != e.ACTION_UP) {
+                //if (e.getAction() == e.ACTION_DOWN) {
                         mFakeJoy.update(e.getX(), e.getY(), mCanvas);
-                        mPacman.updateNextDirection(scaledX, scaledY);
+                        if (displacement < mFakeJoy.baseRadius) {
+                                mPacman.updateNextDirection((e.getX() - mFakeJoy.centerX)/mFakeJoy.baseRadius,
+                                        (e.getY() - mFakeJoy.centerY) / mFakeJoy.baseRadius);
+                        }
+                        else {
+                                float ratio = mFakeJoy.baseRadius / displacement;
+                                float constrainedX = mFakeJoy.centerX + (e.getX() - mFakeJoy.centerX) * ratio;
+                                float constrainedY = mFakeJoy.centerY + (e.getY() - mFakeJoy.centerY) * ratio;
+                                mPacman.updateNextDirection((constrainedX - mFakeJoy.centerX)/mFakeJoy.baseRadius,
+                                        (constrainedY - mFakeJoy.centerY)/ mFakeJoy.baseRadius);
+                        }
                 } else {
-                        mFakeJoy.draw(mCanvas, mFakeJoy.centerX, mFakeJoy.centerY);
+                        mFakeJoy.drawStick(mCanvas, mFakeJoy.centerX, mFakeJoy.centerY);
                 }
                 mOurHolder.unlockCanvasAndPost(mCanvas);
                 Log.d("scales:" , "scaledX: " + scaledX + " scaledY: " + scaledY);

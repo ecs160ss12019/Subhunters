@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.PorterDuff;
 
 
 public class FakeJoy {
@@ -17,12 +18,14 @@ public class FakeJoy {
     private PointF baseCenter;
     private PointF stickPosition;
 
+    private Pacman pacman;
 
     private final int ratio = 2;
 
     public FakeJoy(float radius, float hRadius,
-                   PointF blockSize, PointF position ) {
+                   PointF block_size, PointF position ) {
 
+        blockSize = new PointF(block_size.x, block_size.y );
 
         baseRadius = radius;
         hatRadius = hRadius;
@@ -51,6 +54,7 @@ public class FakeJoy {
         Paint colors = new Paint(); // Prepare paint
         // First determine the sin and cos of the angle that the touched point is at relative to the center of the joystick
         // Prevent the balltop from coming off base*
+        //myCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         float hypotenuse = (float) Math.sqrt(Math.pow(newX - centerX, 2) + Math.pow(newY - centerY, 2));
         float sin = (newY - centerY) / hypotenuse; //sin = o/h
         float cos = (newX - centerX) / hypotenuse; //cos = a/h
@@ -68,26 +72,48 @@ public class FakeJoy {
         for(int i = 0; i <= (int) (hatRadius / ratio); i++) // Multiple layers fpr shading purposes
         {
             colors.setARGB(100, 255, (int) (i * (255 * ratio / hatRadius)), (int) (i * (255 * ratio / hatRadius))); // Change the joystick color for shading purposes
+            myCanvas.drawCircle(newX, newY, hatRadius - (float) i * (ratio) / 2, colors); // Draw the shading for the hat
+        }
+
+
+    }
+
+    public void drawStick(Canvas myCanvas, float newX, float newY) {
+        Paint colors = new Paint(); // Prepare paint
+        // First determine the sin and cos of the angle that the touched point is at relative to the center of the joystick
+        // Prevent the balltop from coming off base*
+        float hypotenuse = (float) Math.sqrt(Math.pow(newX - centerX, 2) + Math.pow(newY - centerY, 2));
+        float sin = (newY - centerY) / hypotenuse; //sin = o/h
+        float cos = (newX - centerX) / hypotenuse; //cos = a/h
+
+        //Drawing the joystick hat
+        for(int i = 0; i <= (int) (hatRadius / ratio); i++) // Multiple layers fpr shading purposes
+        {
+            colors.setARGB(100, 255, (int) (i * (255 * ratio / hatRadius)), (int) (i * (255 * ratio / hatRadius))); // Change the joystick color for shading purposes
             myCanvas.drawCircle(newX, newY, hatRadius - (float) i * (ratio) / 2 , colors); // Draw the shading for the hat
         }
 
     }
-
     public void update(float x, float y, Canvas canvas) {
             // Calculate displacement from resting position (center).
             float displacement = (float) Math.sqrt((Math.pow(x - centerX, 2)) + Math.pow(y - centerY, 2));
             if(displacement < baseRadius) // Valid input, no need to constrain the balltop.
             {
+                stickPosition.x = x;
+                stickPosition.y = y;
                 draw(canvas, x, y);
             }
-            else // When controller is not in use. Reset to center.
+            else // When we need to constrain stick, get over here BRUH
             {
                 float ratio = baseRadius / displacement;
                 float constrainedX = centerX + (x - centerX) * ratio;
                 float constrainedY = centerY + (y - centerY) * ratio;
+                stickPosition.x = constrainedX;
+                stickPosition.y = constrainedY;
                 draw(canvas, constrainedX, constrainedY);
+
             }
-            //draw(canvas, x, y);
+            //drawStick(canvas, stickPosition.x * blockSize.x, stickPosition.y*blockSize.y);
             /*Paint paint = new Paint();
             paint.setColor(Color.argb(255, 255, 255, 0));
             canvas.drawCircle(centerX, centerY, hatRadius, paint);*/
