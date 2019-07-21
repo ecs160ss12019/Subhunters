@@ -21,7 +21,7 @@ public class Move{
 	 * Depending on direction given and traversability, Pacman will attempt to move.
 	 * Helper function checkCollision, checks next cell and deals with it. If pellet, ghost,fruit, ect..
 	 */
-	public void MovePacman(Pacman p, char direction) // Change direction to char? "Easier to Read" udlr
+	public Move(Pacman p, char direction) // Change direction to char? "Easier to Read" udlr
     {
 		pacman = p;
 		// TODO: extend this to introduce movement based on the direction given
@@ -58,7 +58,7 @@ public class Move{
 	 * @param g singular ghost object
 	 * @param direction direction of movement
 	 */
-	public void MoveGhost(Ghost g, char direction)
+	public Move(Ghost g, char direction)
     {
 
     	// Because this code repeats, we can possibly do just within the previous function MovePacman?
@@ -118,9 +118,7 @@ public class Move{
 		//if()
 		return b;
 	}
-
-
-
+	
     // function: Pacman_update
     // change the location of Pacman regarding to its current direction
     // and its velocity
