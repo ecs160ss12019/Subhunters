@@ -265,14 +265,17 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 //Touch coordinates are scaled to be values between 0-100
                 float scaledX = e.getX() / blockSize.x;
                 float scaledY = e.getY() / blockSize.x;
+               // float xPercent = (e.getX() - mFakeJoy.centerX)/ mFakeJoy.baseRadius ;
 
                 //if (e.getAction() == e.ACTION_MOVE || e.getAction() == e.ACTION_DOWN) {
-                if ((e.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_UP) {
-                        mFakeJoy.update(scaledX, scaledY, mCanvas);
+                if (e.getAction() != e.ACTION_UP) {
+                        mFakeJoy.update(e.getX(), e.getY(), mCanvas);
+                        mPacman.updateNextDirection(scaledX, scaledY);
                 } else {
-                        // mFakeJoy.reset();
+                        mFakeJoy.draw(mCanvas, mFakeJoy.centerX, mFakeJoy.centerY);
                 }
-            mOurHolder.unlockCanvasAndPost(mCanvas);
+                mOurHolder.unlockCanvasAndPost(mCanvas);
+                Log.d("scales:" , "scaledX: " + scaledX + " scaledY: " + scaledY);
                 return true;
 
         }

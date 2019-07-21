@@ -78,18 +78,16 @@ public class FakeJoy {
             float displacement = (float) Math.sqrt((Math.pow(x - centerX, 2)) + Math.pow(y - centerY, 2));
             if(displacement < baseRadius) // Valid input, no need to constrain the balltop.
             {
-                stickPosition.x = x;
-                stickPosition.y = y;
+                draw(canvas, x, y);
             }
             else // When controller is not in use. Reset to center.
             {
                 float ratio = baseRadius / displacement;
                 float constrainedX = centerX + (x - centerX) * ratio;
                 float constrainedY = centerY + (y - centerY) * ratio;
-                stickPosition.x = constrainedX;
-                stickPosition.y = constrainedY;
+                draw(canvas, constrainedX, constrainedY);
             }
-            draw(canvas, x, y);
+            //draw(canvas, x, y);
             /*Paint paint = new Paint();
             paint.setColor(Color.argb(255, 255, 255, 0));
             canvas.drawCircle(centerX, centerY, hatRadius, paint);*/
