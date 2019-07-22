@@ -15,165 +15,153 @@ import android.util.Log;
 
 import java.util.Random;
 
-public class Pacman
-{
-	//pacman coords//directions
-	Location loc;
-	public char direction;
-	private char next_direction;
 
-	// Pacman's power-up state and timer.
-	private boolean powerState;
-	private int powerTimer;
+public class Pacman implements Collision {
+    //pacman coords//directions
+    Location loc;
+    public char direction;
+    private char next_direction;
 
-
-	// use an integer to temporarily replace the draw of Pacman
-	// this will be modified under the draw function
-	int pacImage = 1;
-
-	//RectF has four values (left, top, right, bottom)
-
-	float velocity;
-	float mPacWidth;
-	float mPacHeight;
-	final Paint paint = new Paint();
+    // Pacman's power-up state and timer.
+    private boolean powerState;
+    private int powerTimer;
 
 
-	public int getPowerTimer()
-	{
-		return powerTimer;
-	}
 
-	public boolean getPowerState()
-	{
-		return powerState;
-	}
+    // use an integer to temporarily replace the draw of Pacman
+    // this will be modified under the draw function
+    int pacImage = 1;
 
-	/**
-	 * @param pTimer
-	 * @param pState sets the timer and powerup state of pacman
-	 */
-	public void setPowerUpState(int pTimer, boolean pState)
-	{
-		powerTimer = pTimer;
-		powerState = pState;
-	}
+    //RectF has four values (left, top, right, bottom)
 
-	/**
-	 *
-	 */
-	public void checkPowerUpState()
-	{
-		if (powerState == true || powerTimer != 0) {
-			setPowerUpState(powerTimer - 1, true);
-			if (powerTimer <= 0) {
-				setPowerUpState(0, false);
-			}
-		}
-	}
-
-	// isSuper returns state of Pacmans power-up state
-	public boolean isSuper()
-	{
-		if (powerState == true && powerTimer > 0)
-			return powerState;
-		return false;
-	}
-
-	Pacman(int screenX, int locX, int locY)
-	{
-
-		paint.setColor(Color.argb(255, 255, 255, 0));
-		//pacman width/height 1% of screen (change later if needed)
-		mPacWidth = (float) screenX / 100;
-		mPacHeight = (float) screenX / 100;
-
-		loc = new Location(locX, locY, Block.PACMAN);
-		direction = 'l';
-		next_direction = 'l';
-		powerState = false;
-		powerTimer = 0;
-		velocity = screenX / 10;
-
-	}
-
-	/**
-	 * updates pacman's position
-	 * called each frame/loop from PacmanGame update() method
-	 * moves ball based on fps and the direction user is moving joystick
-	 */
-	void update(long fps)
-	{
-		// Move();
-
-		if (direction == 'l') {
-			loc.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
-		}
-		else if (direction == 'r') {
-			loc.setNewLoc((int) (loc.getX() + (velocity / fps)), loc.getY());
-		}
-		else if (direction == 'u') {
-			loc.setNewLoc(loc.getX(), (int) (loc.getY() - (velocity / fps)));
-		}
-		else if (direction == 'd') {
-			loc.setNewLoc(loc.getX(), (int) (loc.getY() + (velocity / fps)));
-		}
-	}
-
-	void reverseVel()
-	{
-		velocity = -velocity;
-	}
-
-	/**
-	 * detects the collisions of pacman with ghost, pellets, fruits,
-	 * TODO: TESTING TO CHECK WALL DETECTION HERE
-	 */
-	public void detectCollision(int mScreenX, int mScreenY)
-	{
-		float radius = (mScreenX + mScreenY) / 200;
-
-		//if pacman hits the right screen wall, stop
-		if ((loc.getX() + radius) > mScreenX) {
-			Log.d("pacman has hit a wall:", "direction:" + direction);
-			loc.setNewLoc((int) (mScreenX - radius), loc.getY());
-		}
-
-		//if pacman hits the left screen wall, stop
-		// TODO: CHANGE IT TO IF HE HITS THE MAZE's LEFT WALL
-		if ((loc.getX() - radius) < 0) {
-			Log.d("pacman has hit a wall:", "direction:" + direction);
-			loc.setNewLoc((int) (0 + radius), loc.getY());
-
-		}
-		//if pacman hits the bottom screen wall
-		if ((loc.getY() + radius) > mScreenY) {
-			Log.d("pacman hit the bottom:", "direction:" + direction);
-			loc.setNewLoc(loc.getX(), (int) (mScreenY - radius));
-		}
-
-		if ((loc.getY() - radius) < 0)  //up
-		{
-			Log.d("pacman hit upper wall:", "direction:" + direction);
-			loc.setNewLoc(loc.getX(), (int) (0 + radius));
-		}
+    float velocity;
+    float mPacWidth;
+    float mPacHeight;
+    final Paint paint = new Paint();
 
 
-	}
 
-	/**
-	 * Initializes four points of mRect(defines pacman)
-	 * Initializes x and y velocities (can change later)
-	 */
-	void reset(int x, int y)
-	{
+    public int getPowerTimer() { return powerTimer; }
+    public boolean getPowerState() { return powerState; }
 
-		velocity = (float) (x / 3);
+    /**
+     *
+     * @param pTimer
+     * @param pState
+     * sets the timer and powerup state of pacman
+     */
+    public void setPowerUpState(int pTimer, boolean pState) {
+        powerTimer = pTimer;
+        powerState = pState;
+    }
+
+    /**
+     *
+     */
+    public void checkPowerUpState(){
+        if(powerState == true || powerTimer != 0){
+            setPowerUpState(powerTimer - 1, true);
+            if (powerTimer <= 0) {
+                setPowerUpState(0, false);
+            }
+        }
+    }
+    // isSuper returns state of Pacmans power-up state
+    public boolean isSuper(){
+        if(powerState == true && powerTimer > 0)
+            return powerState;
+        return false;
+    }
+
+    Pacman (int screenX, int locX, int locY) {
+
+        paint.setColor(Color.argb(255,255,255,0));
+        //pacman width/height 1% of screen (change later if needed)
+        mPacWidth = (float)screenX/100;
+        mPacHeight = (float)screenX/100;
+
+        loc = new Location(locX, locY, Block.PACMAN );
+        direction = 'l';
+        next_direction = 'l';
+        powerState = false;
+        powerTimer = 0;
+        velocity  = screenX / 10;
+
+    }
+
+    /**
+     * updates pacman's position
+     * called each frame/loop from PacmanGame update() method
+     * moves ball based on fps and the direction user is moving joystick
+     */
+    void update(long fps) {
+        // Move();
+
+        if (direction == 'l') {
+            loc.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
+        }
+        else if (direction == 'r') {
+            loc.setNewLoc((int) (loc.getX() + (velocity / fps)), loc.getY());
+        }
+        else if (direction == 'u') {
+            loc.setNewLoc(loc.getX(), (int) (loc.getY() - (velocity / fps)));
+        }
+        else if (direction == 'd') {
+            loc.setNewLoc(loc.getX(), (int) (loc.getY() + (velocity / fps)));
+        }
+    }
+
+    void reverseVel(){
+        velocity = - velocity;
+    }
+
+    /**
+     * detects the collisions of pacman with ghost, pellets, fruits,
+     * TODO: TESTING TO CHECK WALL DETECTION HERE
+     *
+     */
+    public void isInBounds(int mScreenX, int mScreenY) {
+        float radius = (mScreenX + mScreenY) / 200;
+
+        //if pacman hits the right screen wall, stop
+        if ( (loc.getX() + radius) > mScreenX) {
+            Log.d("pacman has hit a wall:", "direction:" + direction);
+            loc.setNewLoc((int) (mScreenX - radius), loc.getY());
+        }
+
+        //if pacman hits the left screen wall, stop
+        // TODO: CHANGE IT TO IF HE HITS THE MAZE's LEFT WALL
+     if ( (loc.getX() - radius) < 0) {
+            Log.d("pacman has hit a wall:", "direction:" + direction);
+            loc.setNewLoc( (int) (0 + radius) , loc.getY());
+
+        }
+        //if pacman hits the bottom screen wall
+    if  ( (loc.getY() + radius) > mScreenY) {
+            Log.d("pacman hit the bottom:", "direction:" + direction);
+            loc.setNewLoc(loc.getX(), (int)(mScreenY - radius));
+        }
+
+    if  ( (loc.getY() - radius) < 0)  //up
+        {
+            Log.d("pacman hit upper wall:", "direction:" + direction);
+            loc.setNewLoc(loc.getX(), (int)(0 + radius) );
+        }
 
 
-	}
-	//function to check if pacman is within bounds (same function as in ghost class)
-	//function to
+
+    }
+
+    /**
+     * Initializes four points of mRect(defines pacman)
+     * Initializes x and y velocities (can change later)
+     */
+    void reset(int x, int y) {
+
+        velocity = (float)(x / 3) ;
+
+
+    }
 
 	/**
 	 * Checks if pacman is within bounds of maze

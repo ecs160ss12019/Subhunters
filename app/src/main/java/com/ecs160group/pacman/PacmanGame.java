@@ -191,7 +191,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                 //mghost.moveTowardsTarget();
                         }
                 }
-                mPacman.detectCollision(mScreenX, mScreenY);
+                mPacman.isInBounds(mScreenX, mScreenY);
                 //pacman & pellet
 
                 //pacman & fruit
@@ -312,6 +312,18 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         mFakeJoy.setCenter();
                 }
                 return true;
+        }
+
+        /**
+         * to detect if Pacman lost the game
+         * when all the 3 lives were used (lives = 0)
+         * @return if Pacman lost
+         */
+        public boolean hasLost()
+        {
+                if (mLives == 0)
+                        return true;
+                return false;
         }
 }
 
