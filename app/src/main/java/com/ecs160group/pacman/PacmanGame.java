@@ -159,6 +159,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
 
                         //>0 condition to prevent divide by zero crashes
                         if (frameTime > 0) {
+                                mFPS = MILLIS_IN_SECOND / frameTime;
                                 //store in mFPS to pass to update methods of pacman/ghosts
                         }
                 }
@@ -190,7 +191,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                 //mghost.moveTowardsTarget();
                         }
                 }
-
+                mPacman.detectCollision(mScreenX, mScreenY);
                 //pacman & pellet
 
                 //pacman & fruit
@@ -281,6 +282,14 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         10,debugStart + debugSize + 150, mPaint);
                 mCanvas.drawText("basebaseCenter.y: " + mFakeJoy.baseCenter.y,
                         10,debugStart + debugSize + 180, mPaint);
+                mCanvas.drawText("mPacman.loc.x: " + mPacman.loc.getX(),
+                        10,debugStart + debugSize + 210, mPaint);
+                mCanvas.drawText("mPacman.loc.y: " + mPacman.loc.getY(),
+                        10,debugStart + debugSize + 240, mPaint);
+                mCanvas.drawText("mPacman.direction: " + mPacman.direction,
+                        10,debugStart + debugSize + 270, mPaint);
+                mCanvas.drawText("mFakeJoy.direction: " + mFakeJoy.direction,
+                        10,debugStart + debugSize + 300, mPaint);
 
 
         }
@@ -297,11 +306,10 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 float x = e.getX();
                 float y = e.getY();
                 if (e.getAction() == e.ACTION_MOVE || e.getAction() == e.ACTION_DOWN) {
-                        mFakeJoy.drawStick(x, y);
+                        mFakeJoy.updateStick(x, y);
+                        mPacman.updateNextDirection(mFakeJoy.direction);
                 } else {
-
                         mFakeJoy.setCenter();
-
                 }
                 return true;
         }

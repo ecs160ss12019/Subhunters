@@ -2,6 +2,7 @@ package com.ecs160group.pacman;
 
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.util.Log;
 
 /*
@@ -17,7 +18,7 @@ import java.util.Random;
 public class Pacman {
     //pacman coords//directions
     Location loc;
-    private char direction;
+    public char direction;
     private char next_direction;
 
     // Pacman's power-up state and timer.
@@ -32,8 +33,7 @@ public class Pacman {
 
     //RectF has four values (left, top, right, bottom)
 
-    float mXVelocity;
-    float mYVelocity;
+    float velocity;
     float mPacWidth;
     float mPacHeight;
     final Paint paint = new Paint();
@@ -79,24 +79,71 @@ public class Pacman {
         next_direction = 'l';
         powerState = false;
         powerTimer = 0;
+        velocity  = screenX / 10;
+
     }
 
     /**
-     * updates the ball position
+     * updates pacman's position
      * called each frame/loop from PacmanGame update() method
-     * moves ball based on x/y velocities and fps
+     * moves ball based on fps and the direction user is moving joystick
      */
     void update(long fps) {
         // Move();
 
+        if (direction == 'l') {
+            loc.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
+        }
+        else if (direction == 'r') {
+            loc.setNewLoc((int) (loc.getX() + (velocity / fps)), loc.getY());
+        }
+        else if (direction == 'u') {
+            loc.setNewLoc(loc.getX(), (int) (loc.getY() - (velocity / fps)));
+        }
+        else if (direction == 'd') {
+            loc.setNewLoc(loc.getX(), (int) (loc.getY() + (velocity / fps)));
+        }
     }
 
-    void reverseXVel(){
-        mXVelocity = -mXVelocity;
+    void reverseVel(){
+        velocity = - velocity;
     }
 
-    void reverseYVel(){
-        mYVelocity = -mYVelocity;
+    /**
+     * detects the collisions of pacman with ghost, pellets, fruits,
+     * TODO: TESTING TO CHECK WALL DETECTION HERE
+     *
+     */
+    public void detectCollision(int mScreenX, int mScreenY) {
+        float radius = (mScreenX + mScreenY) / 200;
+
+        //if pacman hits the right screen wall, stop
+        if ( (loc.getX() + radius) > mScreenX) {
+            Log.d("pacman has hit a wall:", "direction:" + direction);
+            loc.setNewLoc((int) (mScreenX - radius), loc.getY());
+        }
+
+        //if pacman hits the left screen wall, stop
+        // TODO: CHANGE IT TO IF HE HITS THE MAZE's LEFT WALL
+     if ( (loc.getX() - radius) < 0) {
+            Log.d("pacman has hit a wall:", "direction:" + direction);
+            loc.setNewLoc( (int) (0 + radius) , loc.getY());
+
+        }
+        //if pacman hits the bottom screen wall
+    if  ( (loc.getY() + radius) > mScreenY) {
+            Log.d("pacman hit the bottom:", "direction:" + direction);
+            loc.setNewLoc(loc.getX(), (int)(mScreenY - radius));
+        }
+
+    if  ( (loc.getY() - radius) < 0)  //up
+        {
+            Log.d("pacman hit upper wall:", "direction:" + direction);
+            loc.setNewLoc(loc.getX(), (int)(0 + radius) );
+        }
+
+
+
     }
 
     /**
@@ -105,8 +152,7 @@ public class Pacman {
      */
     void reset(int x, int y) {
 
-        mXVelocity = (float)(y / 3);
-        mYVelocity = (float)-(y / 3);
+        velocity = (float)(x / 3) ;
 
 
     }
@@ -130,33 +176,27 @@ public class Pacman {
 
     }
 
+
 	/**
-	 * Reads user input from dpad listener to update Pacman's next direction
-	 * @param xPercent percent movement in the x-axis of total, (-) is left, (+) is right
-	 * @param yPercent percent movement in the y-axis of total, (-) is up, (+) is down
-	 *                 inverted values are then inverted again to give the proper vertical direction
+     * called by onTouchEvent in PacmanGame once user moves the stick
+	 * takes in the current direction of the joystick to update Pacman's next direction
+	 * @param joyDirection - read in from the joystick's direction variable
+     *
 	 */
-    void updateNextDirection(float xPercent, float yPercent){
-
-
-        // After retrieving user input and After Updating direction check for Collision!
-        // Use MovePacman(Pacman p, char direction)
-        if(yPercent <= -.35 && xPercent <= .75 && xPercent >= -.75){ // UP
-            direction = 'u';
-            //Move(Pacman, direction); // Here?
-            Log.d("Pacman-Direction: ", "Move: " + direction);
-        }
-        else if(yPercent >= .35 && xPercent <= .75 && xPercent >= -.75){ // DOWN
-            direction = 'd';
-            Log.d("Pacman-Direction: ", "Move: " + direction);
-        }
-        else if(xPercent <= -.35 && yPercent < .75 && yPercent > -.75){ // LEFT
+    void updateNextDirection(char joyDirection){
+        if (joyDirection == 'l') {
             direction = 'l';
-            Log.d("Pacman-Direction: ", "Move: " + direction);
         }
-        else if(xPercent >= .35 && yPercent < .75 && yPercent > -.75){ // RIGHT
+        else if (joyDirection == 'r') {
             direction = 'r';
-            Log.d("Pacman-Direction: ", "Move: " + direction);
+        }
+
+        else if (joyDirection == 'u') {
+            direction = 'u';
+        }
+
+        else if (joyDirection == 'd') {
+            direction = 'd';
         }
     }
 
