@@ -95,54 +95,26 @@ public class Pacman {
     }
 
 
-    /**
-     * called by ontouchEvent in PacmanGame once user moves joystick
-     * calls updateNextDirection to update pacman's direction
-     *
-     * @param baseX the center x coordinate of the base of the joystick
-     * @param baseY the center y coordinate of the base of the joystick
-     * @param radius radius of the base of the joystick
-     *
-     */
-    public void updatePacman(float baseX, float baseY, float radius, float x, float y) {
-        float displacement = (float) Math.sqrt((Math.pow(x - baseX, 2))
-                + Math.pow(y - baseY, 2));
-        if (displacement < radius) {
-            updateNextDirection((x - baseX) / radius, (y - baseY) / radius);
-        } else {
-            float ratio = radius / displacement;
-            float constrainedX = baseX + (x - baseX) * ratio;
-            float constrainedY = baseY + (y - baseY) * ratio;
-            updateNextDirection((constrainedX - baseX)/radius, (constrainedY - baseY)/radius);
-        }
-    }
 	/**
-	 * Reads user input from dpad listener to update Pacman's next direction
-	 * @param xPercent percent movement in the x-axis of total, (-) is left, (+) is right
-	 * @param yPercent percent movement in the y-axis of total, (-) is up, (+) is down
-	 *                 inverted values are then inverted again to give the proper vertical direction
+     * called by onTouchEvent in PacmanGame once user moves the stick
+	 * takes in the current direction of the joystick to update Pacman's next direction
+	 * @param joyDirection - read in from the joystick's direction variable
+     *
 	 */
-    void updateNextDirection(float xPercent, float yPercent){
-
-
-        // After retrieving user input and After Updating direction check for Collision!
-        // Use MovePacman(Pacman p, char direction)
-        if(yPercent <= -.35 && xPercent <= .75 && xPercent >= -.75){ // UP
-            direction = 'u';
-            //Move(Pacman, direction); // Here?
-            Log.d("Pacman-Direction: ", "Move: " + direction);
-        }
-        else if(yPercent >= .35 && xPercent <= .75 && xPercent >= -.75){ // DOWN
-            direction = 'd';
-            Log.d("Pacman-Direction: ", "Move: " + direction);
-        }
-        else if(xPercent <= -.35 && yPercent < .75 && yPercent > -.75){ // LEFT
+    void updateNextDirection(char joyDirection){
+        if (joyDirection == 'l') {
             direction = 'l';
-            Log.d("Pacman-Direction: ", "Move: " + direction);
         }
-        else if(xPercent >= .35 && yPercent < .75 && yPercent > -.75){ // RIGHT
+        else if (joyDirection == 'r') {
             direction = 'r';
-            Log.d("Pacman-Direction: ", "Move: " + direction);
+        }
+
+        else if (joyDirection == 'u') {
+            direction = 'u';
+        }
+
+        else if (joyDirection == 'd') {
+            direction = 'd';
         }
     }
 

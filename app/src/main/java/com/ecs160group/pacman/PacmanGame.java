@@ -267,10 +267,9 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 float x = e.getX();
                 float y = e.getY();
                 if (e.getAction() == e.ACTION_MOVE || e.getAction() == e.ACTION_DOWN) {
-                        mFakeJoy.drawStick(x, y);
-                        mPacman.updatePacman(mFakeJoy.baseCenter.x, mFakeJoy.baseCenter.y, mFakeJoy.baseRadius, x, y);
+                        mFakeJoy.updateStick(x, y);
+                        mPacman.updateNextDirection(mFakeJoy.direction);
                 } else {
-
                         mFakeJoy.setCenter();
                 }
                 return true;

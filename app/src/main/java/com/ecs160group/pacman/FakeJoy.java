@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
+import android.util.Log;
 import android.view.MotionEvent;
 
 
@@ -24,6 +25,14 @@ public class FakeJoy {
 
     public Path base;
     public Path stick;
+
+    public char direction;
+
+
+
+    /**
+     * CONSTRUCTOR
+     */
 
     public FakeJoy(float radius, float hRadius,
                    PointF block_size, PointF position) {
@@ -44,6 +53,8 @@ public class FakeJoy {
         stick.addCircle(baseCenter.x, baseCenter.y,
                 stickRadius, Path.Direction.CW);
 
+        direction = 'l'; //initialize as left, doesn't matter since pacman wont move until user touches joystick
+
 
     }
 
@@ -61,16 +72,17 @@ public class FakeJoy {
     /**
      * called when user touches the joystick
      * updates/draws the stick as user moves it around
-     *
+     * calls updateNextDirection - updates the direction of the stick, which will be read into pacman's direction
      * @param x - new x coordinate
      * @param y - new y coordinate
      */
-    public void drawStick(float x, float y) {
+    public void updateStick(float x, float y) {
         float displacement = (float) Math.sqrt((Math.pow(x - baseCenter.x, 2))
                 + Math.pow(y - baseCenter.y, 2));
         if (displacement < baseRadius) {
             stickPosition.x = x;
             stickPosition.y = y;
+            updateNextDirection((x - baseCenter.x) / baseRadius, (y - baseCenter.y) / baseRadius);
         } else { //to prevent stick from going out of bounds (too far away from base)
 
             float ratio = baseRadius / displacement;
@@ -78,7 +90,8 @@ public class FakeJoy {
             float constrainedY = baseCenter.y + (y - baseCenter.y) * ratio;
             stickPosition.x = constrainedX;
             stickPosition.y = constrainedY;
-
+            updateNextDirection((constrainedX - baseCenter.x) / baseRadius,
+                    (constrainedY - baseCenter.y)/ baseRadius);
         }
         //draw new position of stick
         stick.rewind();
@@ -101,8 +114,28 @@ public class FakeJoy {
         paint.setColor(Color.argb(255, 255, 0 , 0));
         paint.setStyle(Paint.Style.FILL);
         canvas.drawPath(stick, paint);
+    }
 
-
+    void updateNextDirection(float xPercent, float yPercent){
+        // After retrieving user input and After Updating direction check for Collision!
+        // Use MovePacman(Pacman p, char direction)
+        if(yPercent <= -.35 && xPercent <= .75 && xPercent >= -.75){ // UP
+            direction = 'u';
+            //Move(Pacman, direction); // Here?
+            Log.d("Pacman-Direction: ", "Move: " + direction);
+        }
+        else if(yPercent >= .35 && xPercent <= .75 && xPercent >= -.75){ // DOWN
+            direction = 'd';
+            Log.d("Pacman-Direction: ", "Move: " + direction);
+        }
+        else if(xPercent <= -.35 && yPercent < .75 && yPercent > -.75){ // LEFT
+            direction = 'l';
+            Log.d("Pacman-Direction: ", "Move: " + direction);
+        }
+        else if(xPercent >= .35 && yPercent < .75 && yPercent > -.75){ // RIGHT
+            direction = 'r';
+            Log.d("Pacman-Direction: ", "Move: " + direction);
+        }
     }
 
 }
