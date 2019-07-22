@@ -4,6 +4,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.Log;
+import java.lang.Math;
+import java.util.Random;
 
 /*
     protagonist of Pacman game
@@ -13,7 +15,7 @@ import android.util.Log;
     must eat all pellets to complete level
  */
 
-import java.util.Random;
+
 
 
 public class Pacman implements Collision {
@@ -119,6 +121,21 @@ public class Pacman implements Collision {
      * detects the collisions of pacman with ghost, pellets, fruits,
      * TODO: TESTING TO CHECK WALL DETECTION HERE
      *
+     */
+    // currently used for Pacman and ghost collision detection
+    public boolean detectCollision(Location loc, int mScreenX, int mScreenY)
+    {
+        boolean collided = false;
+        float radius = (mScreenX + mScreenY) / 200;
+        if (Math.abs(this.loc.getX() - loc.getY()) <= radius * 2
+                && Math.abs(this.loc.getY() - loc.getY()) <= radius * 2) {
+            collided = true;
+        }
+        return collided;
+    }
+
+    /**
+     * check if Pacman is inside the screen
      */
     public void isInBounds(int mScreenX, int mScreenY) {
         float radius = (mScreenX + mScreenY) / 200;

@@ -219,4 +219,16 @@ public class Ghost implements Collision
 		}
 
 	}
+
+	/**
+	 * check if there is a collision for ghost at the given location
+	 * @param loc
+	 * @param mScreenX
+	 * @param mScreenY
+	 * @return
+	 */
+	public boolean detectCollision(Location loc, int mScreenX, int mScreenY)
+	{
+		return false;
+	}
 }

@@ -175,11 +175,13 @@ public class PacmanGame extends SurfaceView implements Runnable{
 
         //detects if pacman hit a pellet/ghost/wall
         private void detectCollisions() {
+                //first check if characters are in the maze
+                mPacman.isInBounds(mScreenX, mScreenY);
+
                 //TODO: separate detection collision methods within pacman/ghost/maze classes OR do it here
                 //pacman && ghost collision (add condition for super mode later)
-                if (mPacman.loc.getX() == mGhost.loc.getY()
-                && mPacman.loc.getY() == mGhost.loc.getY()) {
-                        //Pacman dies, respawns
+                if (mPacman.detectCollision(mGhost.loc, mScreenX, mScreenY)) {
+                        //Pacman dies, respawns without super mode
                         if(mPacman.getPowerState() == false && mPacman.getPowerTimer() >= 0){
                                 deathRestart();
                         }
@@ -191,7 +193,6 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                 //mghost.moveTowardsTarget();
                         }
                 }
-                mPacman.isInBounds(mScreenX, mScreenY);
                 //pacman & pellet
 
                 //pacman & fruit
