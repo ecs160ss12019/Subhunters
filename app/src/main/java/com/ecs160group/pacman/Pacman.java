@@ -15,7 +15,7 @@ import android.util.Log;
 
 import java.util.Random;
 
-public class Pacman {
+public class Pacman implements Collision {
     //pacman coords//directions
     Location loc;
     public char direction;

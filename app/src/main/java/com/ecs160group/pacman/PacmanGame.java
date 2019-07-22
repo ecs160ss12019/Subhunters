@@ -18,7 +18,7 @@ import android.view.SurfaceView;
 
  */
 
-public class PacmanGame extends SurfaceView implements Runnable, Collision{
+public class PacmanGame extends SurfaceView implements Runnable{
         //for debugging purposes
         private final boolean DEBUGGING = true;
         private long mFPS; //frames per second
