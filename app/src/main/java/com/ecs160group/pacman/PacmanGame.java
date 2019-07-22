@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.util.Log;
@@ -19,7 +20,7 @@ import android.view.SurfaceView;
 
 public class PacmanGame extends SurfaceView implements Runnable{
         //for debugging purposes
-        private final boolean DEBUGGING = false;
+        private final boolean DEBUGGING = true;
         private long mFPS; //frames per second
         private final int MILLIS_IN_SECOND = 1000;
 
@@ -88,7 +89,6 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 //mJoystick = new Joystick(context);
                 mFakeJoy = new FakeJoy(200, 100, blockSize, fakePosition);
 
-
                 //Initialize objects(maze, pacman, ghost);
 
                 //start the game LETS GET PACCING
@@ -129,7 +129,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                 detectCollisions();
 
                         }
-                        mPacman.Move();
+
                         //redraw grid/ghosts/pacman/pellets
                         draw();
 
@@ -196,9 +196,11 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         //Lock canvas (graphics memory) ready to draw
                         mCanvas = mOurHolder.lockCanvas();
 
+                        mPaint.setAntiAlias(true);
                         //fill screen with solid color
                         mCanvas.drawColor(Color.argb(255, 0, 0, 0));
 
+                        mPaint.setStyle(Paint.Style.FILL);
                         mPaint.setColor(Color.argb(255, 255, 255, 0));
 
                         //font size
@@ -209,9 +211,8 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                         "  Lives: " + mLives,
                                 mFontMargin, mFontSize, mPaint);
 
-                        //draw pacman/ghosts/maze/dpad
                         // white color for pacman
-                        mPaint.setColor(Color.argb(255, 255, 255, 255));
+                        mPaint.setColor(Color.argb(255, 255, 255, 0));
                         // draw pacman as circle
                         mCanvas.drawCircle(mPacman.loc.getX(), mPacman.loc.getY()
                                 , (mScreenX + mScreenY) / 200, mPaint);
@@ -221,7 +222,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         mCanvas.drawCircle(mGhost.loc.getX(), mGhost.loc.getY()
                                 , (mScreenX + mScreenY) / 200, mPaint);
 
-                        mFakeJoy.draw(mCanvas, mFakeJoy.centerX, mFakeJoy.centerY);
+                        mFakeJoy.draw(mCanvas, mPaint);
 
                         if (DEBUGGING) {
                                 printDebuggingText();
@@ -238,6 +239,20 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 mPaint.setTextSize(debugSize);
                 mCanvas.drawText("FPS: " + mFPS,
                         10, debugStart + debugSize, mPaint);
+                mCanvas.drawText("baseradius.x: " + mFakeJoy.baseRadius,
+                        10,debugStart + debugSize + 30, mPaint);
+                mCanvas.drawText("stickRadius.x: " + mFakeJoy.stickRadius,
+                        10,debugStart + debugSize + 60, mPaint);
+                mCanvas.drawText("baseCenter.x: " + mFakeJoy.baseCenter.x,
+                        10,debugStart + debugSize + 90, mPaint);
+                mCanvas.drawText("baseCenter.y: " + mFakeJoy.baseCenter.y,
+                        10,debugStart + debugSize + 120, mPaint);
+                mCanvas.drawText("basebaseCenter.x: " + mFakeJoy.baseCenter.x,
+                        10,debugStart + debugSize + 150, mPaint);
+                mCanvas.drawText("basebaseCenter.y: " + mFakeJoy.baseCenter.y,
+                        10,debugStart + debugSize + 180, mPaint);
+
+
         }
 
 
@@ -245,55 +260,21 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 return mPacman;
         }
 
-       /*  // When controller touched this will be called.
-        @Override
-        public void JoystickMoved(float xPercent, float yPercent) {
-                Log.d("User-Controller: ", "X percent: " + xPercent + " Y percent: " + yPercent);
-                // include pacman controls here, Must convert percent values into directional values up,down,left,right
-               // mPacmanGame.getPacman().updateNextDirection(xPercent, yPercent);
-                joystickX = xPercent;
-                joystickY = yPercent;
-        }*/
 
         @Override
         public boolean onTouchEvent(MotionEvent e) {
-
-
-//TODO: FIX UPDATE FUNCTIONS TO NOT USE CANVAS??
-            mCanvas = mOurHolder.lockCanvas();
                 mPaused = false;
-                //Touch coordinates are scaled to be values between 0-100
-                float scaledX = e.getX() / blockSize.x;
-                float scaledY = e.getY() / blockSize.x;
-                float displacement = (float) Math.sqrt((Math.pow(e.getX() - mFakeJoy.centerX, 2))
-                        + Math.pow(e.getY() - mFakeJoy.centerY, 2));
-
-
-
+                float x = e.getX();
+                float y = e.getY();
                 if (e.getAction() == e.ACTION_MOVE || e.getAction() == e.ACTION_DOWN) {
-                //if (e.getAction() != e.ACTION_UP) {
-                //if (e.getAction() == e.ACTION_DOWN) {
-                        mFakeJoy.update(e.getX(), e.getY(), mCanvas);
-                        if (displacement < mFakeJoy.baseRadius) {
-                                mPacman.updateNextDirection((e.getX() - mFakeJoy.centerX)/mFakeJoy.baseRadius,
-                                        (e.getY() - mFakeJoy.centerY) / mFakeJoy.baseRadius);
-                        }
-                        else {
-                                float ratio = mFakeJoy.baseRadius / displacement;
-                                float constrainedX = mFakeJoy.centerX + (e.getX() - mFakeJoy.centerX) * ratio;
-                                float constrainedY = mFakeJoy.centerY + (e.getY() - mFakeJoy.centerY) * ratio;
-                                mPacman.updateNextDirection((constrainedX - mFakeJoy.centerX)/mFakeJoy.baseRadius,
-                                        (constrainedY - mFakeJoy.centerY)/ mFakeJoy.baseRadius);
-                        }
+                        mFakeJoy.drawStick(x, y);
                 } else {
-                        mFakeJoy.drawStick(mCanvas, mFakeJoy.centerX, mFakeJoy.centerY);
+
+                        mFakeJoy.setCenter();
+
                 }
-                mOurHolder.unlockCanvasAndPost(mCanvas);
-                Log.d("scales:" , "scaledX: " + scaledX + " scaledY: " + scaledY);
                 return true;
-
         }
-
 }
 
 
