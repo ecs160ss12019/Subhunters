@@ -180,5 +180,13 @@ public class Pacman {
     }
 
 
-	
+	/**
+	 * Stub of function to determine if Pacman has won
+	 * Pacman wins when all the pellets and super pellets have been eaten
+	 * @return if Pacman has won
+	 */
+	public boolean hasWon()
+	{
+		return false;
+	}
 }
