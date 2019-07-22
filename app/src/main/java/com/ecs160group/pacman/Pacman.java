@@ -2,6 +2,7 @@ package com.ecs160group.pacman;
 
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.util.Log;
 
 /*
@@ -93,6 +94,28 @@ public class Pacman {
 
     }
 
+
+    /**
+     * called by ontouchEvent in PacmanGame once user moves joystick
+     * calls updateNextDirection to update pacman's direction
+     *
+     * @param baseX the center x coordinate of the base of the joystick
+     * @param baseY the center y coordinate of the base of the joystick
+     * @param radius radius of the base of the joystick
+     *
+     */
+    public void updatePacman(float baseX, float baseY, float radius, float x, float y) {
+        float displacement = (float) Math.sqrt((Math.pow(x - baseX, 2))
+                + Math.pow(y - baseY, 2));
+        if (displacement < radius) {
+            updateNextDirection((x - baseX) / radius, (y - baseY) / radius);
+        } else {
+            float ratio = radius / displacement;
+            float constrainedX = baseX + (x - baseX) * ratio;
+            float constrainedY = baseY + (y - baseY) * ratio;
+            updateNextDirection((constrainedX - baseX)/radius, (constrainedY - baseY)/radius);
+        }
+    }
 	/**
 	 * Reads user input from dpad listener to update Pacman's next direction
 	 * @param xPercent percent movement in the x-axis of total, (-) is left, (+) is right
