@@ -45,18 +45,18 @@ public class Ghost
 
 	//public int getdeathTimer() { return deathTimer; }
 	//public int getisDead() { return isDead; }
-	public int setDeathState(int dTimer, boolean dState) {
+	public void setDeathState(int dTimer, boolean dState) {
 		deathTimer = dTimer;
 		isDead = dState;
 	}
-	private void checkDeathTimer{
-	if(isDead == true || deathTimer != 0){
+	public void checkDeathTimer(){
+		if(isDead == true || deathTimer != 0){
 		setDeathState(deathTimer - 1, true);
-		if (deathTimer() <= 0) {
-			setDeathState(0, false);
+			if (deathTimer <= 0) {
+				setDeathState(0, false);
+			}
 		}
 	}
-}
 
 	public Ghost()
 	{

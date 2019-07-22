@@ -40,8 +40,8 @@ public class Pacman {
 
 
 
-    private int getPowerTimer() { return powerTimer; }
-    private int getPowerState() { return powerState; }
+    public int getPowerTimer() { return powerTimer; }
+    public boolean getPowerState() { return powerState; }
 
     /**
      *
@@ -49,7 +49,7 @@ public class Pacman {
      * @param pState
      * sets the timer and powerup state of pacman
      */
-    private int setPowerUpState(int pTimer, boolean pState) {
+    public void setPowerUpState(int pTimer, boolean pState) {
         powerTimer = pTimer;
         powerState = pState;
     }
@@ -57,15 +57,20 @@ public class Pacman {
     /**
      *
      */
-     private void checkPowerUpState{
+    public void checkPowerUpState(){
         if(powerState == true || powerTimer != 0){
             setPowerUpState(powerTimer - 1, true);
-            if (powerTimer() <= 0) {
+            if (powerTimer <= 0) {
                 setPowerUpState(0, false);
             }
         }
     }
-
+    // isSuper returns state of Pacmans power-up state
+    public boolean isSuper(){
+        if(powerState == true && powerTimer > 0)
+            return powerState;
+        return false;
+    }
 
     Pacman (int screenX, int locX, int locY) {
 
