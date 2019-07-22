@@ -11,6 +11,7 @@ import java.util.Random;
  * Ghost's movement will check for closest space to target but will not choose
  * behind the ghost, since a ghost cannot make 180 degree turns and will insteda
  * turn left or right since one will be closer to target if forward is not possible
+ * Only time a Ghost will turn 180 degrees is when pacman initially turns super
  */
 public class Ghost
 {
@@ -18,11 +19,13 @@ public class Ghost
 	//pixel(maze) coords
 	protected Pacman pacman;
 	protected Location loc;
+	protected Location scatterLoc;
 
 	//ghost coords//directions
 	private int direction;
 	private int next_direction;
 
+	// TODO: add explenations for these two vars here
 	private int deathTimer = 0;
 	private boolean isDead = false;
 
@@ -42,40 +45,57 @@ public class Ghost
 	Paint paint = new Paint();
 
 
+	/**
+	 * Non-parameterized Ghost ctor
+	 */
+	public Ghost()
+	{
 
-	//public int getdeathTimer() { return deathTimer; }
-	//public int getisDead() { return isDead; }
+	}
+
+	/**
+	 * Parameterized Ghost ctor
+	 * @param screenX
+	 * @param locX
+	 * @param locY
+	 */
+	public Ghost(int screenX, int locX, int locY)
+	{
+		paint.setColor(Color.argb(255, 0, 0, 255));
+		//pacman width/height 1% of screen (change later if needed)
+		mGhostWidth = (float) screenX / 100;
+		mGhostHeight = (float) screenX / 100;
+
+		loc = new Location(locX, locY, Block.GHOST);
+
+	}
+
+	/**
+	 *
+	 * @param dTimer
+	 * @param dState
+	 */
 	public void setDeathState(int dTimer, boolean dState) {
 		deathTimer = dTimer;
 		isDead = dState;
 	}
+
+	/**
+	 *
+	 */
 	public void checkDeathTimer(){
 		if(isDead == true || deathTimer != 0){
-		setDeathState(deathTimer - 1, true);
+			setDeathState(deathTimer - 1, true);
 			if (deathTimer <= 0) {
 				setDeathState(0, false);
 			}
 		}
 	}
 
-	public Ghost()
-	{
-
-	}
-
-	public Ghost(int screenX, int locX, int locY)
-	{
-
-		paint.setColor(Color.argb(255, 0, 0, 255));
-		//pacman width/height 1% of screen (change later if needed)
-		mGhostWidth = (float) screenX / 100;
-		mGhostHeight = (float) screenX / 100;
-
-
-		loc = new Location(locX, locY, Block.GHOST);
-
-	}
-
+	/**
+	 * Checks if the ghost has been spawned in the grid
+	 * @return if the ghost has been spawned
+	 */
 	private boolean isInGrid()
 	{
 		return started;
@@ -109,12 +129,8 @@ public class Ghost
 	// TODO: not sure if we needs this
 	void reset(int x, int y)
 	{
-
-
 		mXVelocity = (float) (y / 3);
 		mYVelocity = (float) -(y / 3);
-
-
 	}
 
 
