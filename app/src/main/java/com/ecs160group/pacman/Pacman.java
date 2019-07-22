@@ -176,7 +176,7 @@ public class Pacman implements Collision {
     void reset(int x, int y) {
 
         velocity = (float)(x / 3) ;
-
+        loc.setNewLoc(1000,700);
 
     }
 
