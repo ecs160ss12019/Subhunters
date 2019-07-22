@@ -127,7 +127,7 @@ public class Pacman implements Collision {
     {
         boolean collided = false;
         float radius = (mScreenX + mScreenY) / 200;
-        if (Math.abs(this.loc.getX() - loc.getY()) <= radius * 2
+        if (Math.abs(this.loc.getX() - loc.getX()) <= radius * 2
                 && Math.abs(this.loc.getY() - loc.getY()) <= radius * 2) {
             collided = true;
         }
