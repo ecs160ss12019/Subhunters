@@ -43,7 +43,7 @@ public class Pacman {
         direction = 'l';
         next_direction = 'l';
 
-        velocity  = screenX / 3;
+        velocity  = screenX / 10;
 
     }
 
@@ -78,30 +78,31 @@ public class Pacman {
      *
      */
     public void detectCollision(int mScreenX, int mScreenY) {
+        float radius = (mScreenX + mScreenY) / 200;
 
         //if pacman hits the right screen wall, stop
-        if ( (loc.getX() + ((mScreenX + mScreenY) / 200)) > mScreenX) {
+        if ( (loc.getX() + radius) > mScreenX) {
             Log.d("pacman has hit a wall:", "direction:" + direction);
-            loc.setNewLoc((mScreenX - ((mScreenX + mScreenY) / 200)), loc.getY());
+            loc.setNewLoc((int) (mScreenX - radius), loc.getY());
         }
 
         //if pacman hits the left screen wall, stop
         // TODO: CHANGE IT TO IF HE HITS THE MAZE's LEFT WALL
-     if ( (loc.getX() + ((mScreenX + mScreenY) / 200)) < 0) {
+     if ( (loc.getX() - radius) < 0) {
             Log.d("pacman has hit a wall:", "direction:" + direction);
-            loc.setNewLoc( 0, loc.getY());
+            loc.setNewLoc( (int) (0 + radius) , loc.getY());
 
         }
         //if pacman hits the bottom screen wall
-    if  ( (loc.getY() + ((mScreenX + mScreenY) / 200)) > mScreenY) {
+    if  ( (loc.getY() + radius) > mScreenY) {
             Log.d("pacman hit the bottom:", "direction:" + direction);
-            loc.setNewLoc(loc.getX(), (mScreenY - ((mScreenX + mScreenY) / 200)));
+            loc.setNewLoc(loc.getX(), (int)(mScreenY - radius));
         }
 
-    if  ( (loc.getY() + ((mScreenX + mScreenY) / 200)) < 0)  //up
+    if  ( (loc.getY() - radius) < 0)  //up
         {
             Log.d("pacman hit upper wall:", "direction:" + direction);
-            loc.setNewLoc(loc.getX(), 0);
+            loc.setNewLoc(loc.getX(), (int)(0 + radius) );
         }
 
 
