@@ -3,6 +3,7 @@ package com.ecs160group.pacman;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.util.Log;
 
 import java.util.Random;
 
@@ -13,7 +14,7 @@ import java.util.Random;
  * turn left or right since one will be closer to target if forward is not possible
  * Only time a Ghost will turn 180 degrees is when pacman initially turns super
  */
-public class Ghost
+public class Ghost implements Collision
 {
 
 	//pixel(maze) coords
@@ -181,5 +182,41 @@ public class Ghost
 
 			}
 		}
+	}
+
+	/*
+    check if ghost is in bounds
+    the function will later be used to check collision
+    between ghost and wall probably
+ */
+	public void isInBounds(int mScreenX, int mScreenY) {
+		float radius = (mScreenX + mScreenY) / 200;
+
+		//if ghost hits the right screen wall, stop
+		if ( (loc.getX() + radius) > mScreenX) {
+			Log.d("ghost has hit a wall:", "direction:" + direction);
+			loc.setNewLoc((int) (mScreenX - radius), loc.getY());
+		}
+
+		//if ghost hits the left screen wall, stop
+		// TODO: CHANGE IT TO IF HE HITS THE MAZE's LEFT WALL
+		if ( (loc.getX() - radius) < 0) {
+			Log.d("ghost has hit a wall:", "direction:" + direction);
+			loc.setNewLoc( (int) (0 + radius) , loc.getY());
+
+		}
+		//if ghost hits the bottom screen wall
+		if  ( (loc.getY() + radius) > mScreenY) {
+			Log.d("ghost hit the bottom:", "direction:" + direction);
+			loc.setNewLoc(loc.getX(), (int)(mScreenY - radius));
+		}
+
+		//if ghost hits the top screen wall
+		if  ( (loc.getY() - radius) < 0)  //up
+		{
+			Log.d("ghost hit upper wall:", "direction:" + direction);
+			loc.setNewLoc(loc.getX(), (int)(0 + radius) );
+		}
+
 	}
 }
