@@ -18,7 +18,7 @@ import android.view.SurfaceView;
 
  */
 
-public class PacmanGame extends SurfaceView implements Runnable{
+public class PacmanGame extends SurfaceView implements Runnable, Collision{
         //for debugging purposes
         private final boolean DEBUGGING = true;
         private long mFPS; //frames per second
@@ -282,6 +282,18 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         mFakeJoy.setCenter();
                 }
                 return true;
+        }
+
+        /**
+         * to detect if Pacman lost the game
+         * when all the 3 lives were used (lives = 0)
+         * @return if Pacman lost
+         */
+        public boolean hasLost()
+        {
+                if (mLives == 0)
+                        return true;
+                return false;
         }
 }
 
