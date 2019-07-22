@@ -119,7 +119,7 @@ public class Pacman implements Collision {
      * TODO: TESTING TO CHECK WALL DETECTION HERE
      *
      */
-    public void detectCollision(int mScreenX, int mScreenY) {
+    public void isInBounds(int mScreenX, int mScreenY) {
         float radius = (mScreenX + mScreenY) / 200;
 
         //if pacman hits the right screen wall, stop

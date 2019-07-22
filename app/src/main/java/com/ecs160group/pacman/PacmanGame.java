@@ -191,7 +191,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                 //mghost.moveTowardsTarget();
                         }
                 }
-                mPacman.detectCollision(mScreenX, mScreenY);
+                mPacman.isInBounds(mScreenX, mScreenY);
                 //pacman & pellet
 
                 //pacman & fruit
