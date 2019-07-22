@@ -18,7 +18,7 @@ import java.util.Random;
 public class Pacman {
     //pacman coords//directions
     Location loc;
-    private char direction;
+    public char direction;
     private char next_direction;
     // use an integer to temporarily replace the draw of Pacman
     // this will be modified under the draw function
@@ -26,8 +26,7 @@ public class Pacman {
 
     //RectF has four values (left, top, right, bottom)
 
-    float mXVelocity;
-    float mYVelocity;
+    float velocity;
     float mPacWidth;
     float mPacHeight;
     final Paint paint = new Paint();
@@ -44,23 +43,69 @@ public class Pacman {
         direction = 'l';
         next_direction = 'l';
 
+        velocity  = screenX / 3;
+
     }
 
     /**
-     * updates the ball position
+     * updates pacman's position
      * called each frame/loop from PacmanGame update() method
-     * moves ball based on x/y velocities and fps
+     * moves ball based on fps and the direction user is moving joystick
      */
     void update(long fps) {
 
+        if (direction == 'l') {
+            loc.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
+        }
+        else if (direction == 'r') {
+            loc.setNewLoc((int) (loc.getX() + (velocity / fps)), loc.getY());
+        }
+        else if (direction == 'u') {
+            loc.setNewLoc(loc.getX(), (int) (loc.getY() - (velocity / fps)));
+        }
+        else if (direction == 'd') {
+            loc.setNewLoc(loc.getX(), (int) (loc.getY() + (velocity / fps)));
+        }
     }
 
-    void reverseXVel(){
-        mXVelocity = -mXVelocity;
+    void reverseVel(){
+        velocity = - velocity;
     }
 
-    void reverseYVel(){
-        mYVelocity = -mYVelocity;
+    /**
+     * detects the collisions of pacman with ghost, pellets, fruits,
+     * TODO: TESTING TO CHECK WALL DETECTION HERE
+     *
+     */
+    public void detectCollision(int mScreenX, int mScreenY) {
+
+        //if pacman hits the right screen wall, stop
+        if ( (loc.getX() + ((mScreenX + mScreenY) / 200)) > mScreenX) {
+            Log.d("pacman has hit a wall:", "direction:" + direction);
+            loc.setNewLoc((mScreenX - ((mScreenX + mScreenY) / 200)), loc.getY());
+        }
+
+        //if pacman hits the left screen wall, stop
+        // TODO: CHANGE IT TO IF HE HITS THE MAZE's LEFT WALL
+     if ( (loc.getX() + ((mScreenX + mScreenY) / 200)) < 0) {
+            Log.d("pacman has hit a wall:", "direction:" + direction);
+            loc.setNewLoc( 0, loc.getY());
+
+        }
+        //if pacman hits the bottom screen wall
+    if  ( (loc.getY() + ((mScreenX + mScreenY) / 200)) > mScreenY) {
+            Log.d("pacman hit the bottom:", "direction:" + direction);
+            loc.setNewLoc(loc.getX(), (mScreenY - ((mScreenX + mScreenY) / 200)));
+        }
+
+    if  ( (loc.getY() + ((mScreenX + mScreenY) / 200)) < 0)  //up
+        {
+            Log.d("pacman hit upper wall:", "direction:" + direction);
+            loc.setNewLoc(loc.getX(), 0);
+        }
+
+
+
     }
 
     /**
@@ -69,8 +114,7 @@ public class Pacman {
      */
     void reset(int x, int y) {
 
-        mXVelocity = (float)(y / 3);
-        mYVelocity = (float)-(y / 3);
+        velocity = (float)(x / 3) ;
 
 
     }

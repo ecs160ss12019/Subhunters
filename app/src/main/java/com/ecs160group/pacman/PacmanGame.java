@@ -138,6 +138,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
 
                         //>0 condition to prevent divide by zero crashes
                         if (frameTime > 0) {
+                                mFPS = MILLIS_IN_SECOND / frameTime;
                                 //store in mFPS to pass to update methods of pacman/ghosts
                         }
                 }
@@ -160,7 +161,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         //Pacman dies, respawns
                         mLives--;
                 }
-
+                mPacman.detectCollision(mScreenX, mScreenY);
                 //pacman & pellet
 
                 //pacman & fruit
@@ -251,6 +252,14 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         10,debugStart + debugSize + 150, mPaint);
                 mCanvas.drawText("basebaseCenter.y: " + mFakeJoy.baseCenter.y,
                         10,debugStart + debugSize + 180, mPaint);
+                mCanvas.drawText("mPacman.loc.x: " + mPacman.loc.getX(),
+                        10,debugStart + debugSize + 210, mPaint);
+                mCanvas.drawText("mPacman.loc.y: " + mPacman.loc.getY(),
+                        10,debugStart + debugSize + 240, mPaint);
+                mCanvas.drawText("mPacman.direction: " + mPacman.direction,
+                        10,debugStart + debugSize + 270, mPaint);
+                mCanvas.drawText("mFakeJoy.direction: " + mFakeJoy.direction,
+                        10,debugStart + debugSize + 300, mPaint);
 
 
         }
