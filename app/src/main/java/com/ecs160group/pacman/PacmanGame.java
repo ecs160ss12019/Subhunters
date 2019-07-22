@@ -113,6 +113,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
         public void deathRestart(){
                 //reset maze level
 
+                mPaused = true;
                 //initialize the position of pacman and ghosts
                 mPacman.reset(mScreenX, mScreenY);
                 mGhost.reset(mScreenX, mScreenY);
