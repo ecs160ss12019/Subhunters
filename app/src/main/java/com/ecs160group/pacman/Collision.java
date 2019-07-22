@@ -4,4 +4,5 @@ package com.ecs160group.pacman;
 // ghosts, fruit, pullets, and wall
 public interface Collision {
     public void isInBounds(int mScreenX, int mScreenY);
+    public boolean detectCollision(Location loc, int mScreenX, int mScreenY);
 }
