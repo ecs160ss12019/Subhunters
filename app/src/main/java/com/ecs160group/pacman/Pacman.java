@@ -20,6 +20,13 @@ public class Pacman {
     Location loc;
     public char direction;
     private char next_direction;
+
+    // Pacman's power-up state and timer.
+    private boolean powerState;
+    private int powerTimer;
+
+
+
     // use an integer to temporarily replace the draw of Pacman
     // this will be modified under the draw function
     int pacImage = 1;
@@ -32,6 +39,39 @@ public class Pacman {
     final Paint paint = new Paint();
 
 
+
+    public int getPowerTimer() { return powerTimer; }
+    public boolean getPowerState() { return powerState; }
+
+    /**
+     *
+     * @param pTimer
+     * @param pState
+     * sets the timer and powerup state of pacman
+     */
+    public void setPowerUpState(int pTimer, boolean pState) {
+        powerTimer = pTimer;
+        powerState = pState;
+    }
+
+    /**
+     *
+     */
+    public void checkPowerUpState(){
+        if(powerState == true || powerTimer != 0){
+            setPowerUpState(powerTimer - 1, true);
+            if (powerTimer <= 0) {
+                setPowerUpState(0, false);
+            }
+        }
+    }
+    // isSuper returns state of Pacmans power-up state
+    public boolean isSuper(){
+        if(powerState == true && powerTimer > 0)
+            return powerState;
+        return false;
+    }
+
     Pacman (int screenX, int locX, int locY) {
 
         paint.setColor(Color.argb(255,255,255,0));
@@ -42,7 +82,8 @@ public class Pacman {
         loc = new Location(locX, locY, Block.PACMAN );
         direction = 'l';
         next_direction = 'l';
-
+        powerState = false;
+        powerTimer = 0;
         velocity  = screenX / 10;
 
     }
@@ -53,6 +94,7 @@ public class Pacman {
      * moves ball based on fps and the direction user is moving joystick
      */
     void update(long fps) {
+        // Move();
 
         if (direction == 'l') {
             loc.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());

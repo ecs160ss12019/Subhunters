@@ -86,7 +86,6 @@ public class PacmanGame extends SurfaceView implements Runnable, Collision{
 
                 mPacman = new Pacman(mScreenX, 1000, 700);
                 mGhost = new Ghost(mScreenX, 800, 400);
-                //mJoystick = new Joystick(context);
                 mFakeJoy = new FakeJoy(200, 100, blockSize, fakePosition);
 
                 //Initialize objects(maze, pacman, ghost);
@@ -109,8 +108,26 @@ public class PacmanGame extends SurfaceView implements Runnable, Collision{
                 mScore = 0;
                 mLives = 3;
 
-
         }
+
+        public void deathRestart(){
+                //reset maze level
+
+                //initialize the position of pacman and ghosts
+                mPacman.reset(mScreenX, mScreenY);
+                mGhost.reset(mScreenX, mScreenY);
+
+                //resetting score/lives/States
+                mScore = 0;
+                mLives--;
+                mPacman.setPowerUpState(0, false);
+                mGhost.setDeathState(0, false);
+                //mGhost.setDeathState(0, false); // add other ghosts later.
+
+                //TODO: Pause the game and resume
+
+        };
+
 
         // When we start the thread with:
         // mGameThread.start();
@@ -128,6 +145,10 @@ public class PacmanGame extends SurfaceView implements Runnable, Collision{
                                 update();
                                 detectCollisions();
 
+
+                                 //Determines powerup state of pacman powerTimer decrements on every frame.
+                                mPacman.checkPowerUpState();
+                                mGhost.checkDeathTimer();
                         }
 
                         //redraw grid/ghosts/pacman/pellets
@@ -159,7 +180,16 @@ public class PacmanGame extends SurfaceView implements Runnable, Collision{
                 if (mPacman.loc.getX() == mGhost.loc.getY()
                 && mPacman.loc.getY() == mGhost.loc.getY()) {
                         //Pacman dies, respawns
-                        mLives--;
+                        if(mPacman.getPowerState() == false && mPacman.getPowerTimer() >= 0){
+                                deathRestart();
+                        }
+                        else{
+                                // Set timer as ghost touches Graveyard?
+                                mGhost.setDeathState(0, true);
+                                //Pacman is able to eat ghosts
+                                //Deal with ghost returning to graveyard.
+                                //mghost.moveTowardsTarget();
+                        }
                 }
                 mPacman.detectCollision(mScreenX, mScreenY);
                 //pacman & pellet
