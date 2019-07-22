@@ -23,6 +23,9 @@ public class Ghost
 	private int direction;
 	private int next_direction;
 
+	private int deathTimer = 0;
+	private boolean isDead = false;
+
 	// tells if ghost has been initialized into the grid and is not in waiting room
 	private boolean started;
 
@@ -38,6 +41,22 @@ public class Ghost
 	float mGhostHeight;
 	Paint paint = new Paint();
 
+
+
+	//public int getdeathTimer() { return deathTimer; }
+	//public int getisDead() { return isDead; }
+	public int setDeathState(int dTimer, boolean dState) {
+		deathTimer = dTimer;
+		isDead = dState;
+	}
+	private void checkDeathTimer{
+	if(isDead == true || deathTimer != 0){
+		setDeathState(deathTimer - 1, true);
+		if (deathTimer() <= 0) {
+			setDeathState(0, false);
+		}
+	}
+}
 
 	public Ghost()
 	{

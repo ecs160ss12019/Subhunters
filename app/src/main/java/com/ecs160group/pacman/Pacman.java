@@ -19,6 +19,13 @@ public class Pacman {
     Location loc;
     private char direction;
     private char next_direction;
+
+    // Pacman's power-up state and timer.
+    private boolean powerState;
+    private int powerTimer;
+
+
+
     // use an integer to temporarily replace the draw of Pacman
     // this will be modified under the draw function
     int pacImage = 1;
@@ -32,6 +39,34 @@ public class Pacman {
     final Paint paint = new Paint();
 
 
+
+    private int getPowerTimer() { return powerTimer; }
+    private int getPowerState() { return powerState; }
+
+    /**
+     *
+     * @param pTimer
+     * @param pState
+     * sets the timer and powerup state of pacman
+     */
+    private int setPowerUpState(int pTimer, boolean pState) {
+        powerTimer = pTimer;
+        powerState = pState;
+    }
+
+    /**
+     *
+     */
+     private void checkPowerUpState{
+        if(powerState == true || powerTimer != 0){
+            setPowerUpState(powerTimer - 1, true);
+            if (powerTimer() <= 0) {
+                setPowerUpState(0, false);
+            }
+        }
+    }
+
+
     Pacman (int screenX, int locX, int locY) {
 
         paint.setColor(Color.argb(255,255,255,0));
@@ -42,7 +77,8 @@ public class Pacman {
         loc = new Location(locX, locY, Block.PACMAN );
         direction = 'l';
         next_direction = 'l';
-
+        powerState = false;
+        powerTimer = 0;
     }
 
     /**
@@ -51,6 +87,7 @@ public class Pacman {
      * moves ball based on x/y velocities and fps
      */
     void update(long fps) {
+        // Move();
 
     }
 
