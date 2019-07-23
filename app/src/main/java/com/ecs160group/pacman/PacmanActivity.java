@@ -2,6 +2,7 @@ package com.ecs160group.pacman;
 
 //import android.appcompat.app;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,9 +21,9 @@ import java.util.Random;
 public class PacmanActivity extends AppCompatActivity{
 
 	private PacmanGame mPacmanGame;
-
-
 	//Maze maze = new Maze(this);
+
+	public Context returnContext(){return this;}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +41,7 @@ public class PacmanActivity extends AppCompatActivity{
 		Point size = new Point();
 		display.getSize(size);
 		mPacmanGame = new PacmanGame(this, size.x, size.y);
-
-		//mPacmanGame.startNewGame();
-		//mPacmanGame = new PacmanGame(this, size.x, size.y);
-
 		setContentView(mPacmanGame);
-		//setContentView(userController); // displays touch controller on screen.
-		//setContentView(mPacmanGame);
-		//setContentView(userController);
 		Log.d("Debugging", "In onCreate");
 		//maze.draw();
 	}

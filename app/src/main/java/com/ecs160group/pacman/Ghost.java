@@ -4,8 +4,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.Log;
-
 import java.util.Random;
+
 
 /**
  * Ghost class for movement and interaction with Pacman and the maze
@@ -39,6 +39,7 @@ public class Ghost implements Collision
 
 	//RectF has four values (left, top, right, bottom)
 
+	float velocity;
 	float mXVelocity;
 	float mYVelocity;
 	float mGhostWidth;
@@ -66,6 +67,7 @@ public class Ghost implements Collision
 		//pacman width/height 1% of screen (change later if needed)
 		mGhostWidth = (float) screenX / 100;
 		mGhostHeight = (float) screenX / 100;
+		velocity  = screenX / 10;
 
 		loc = new Location(locX, locY, Block.GHOST);
 
@@ -108,9 +110,54 @@ public class Ghost implements Collision
 	 * called each frame/loop from PacmanGame update() method
 	 * moves ghost based on x/y velocities and fps
 	 */
+	Random rand = new Random();
+	int randDirection = rand.nextInt(4);
+	int newRandDir = rand.nextInt(35);
+
+	int directionCount = 15;
+	boolean newDir = false;
 	void update(long fps)
 	{
+		Log.d("ghost update:", "Random:" + randDirection);
+		if (randDirection == 0) {
+			loc.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
+			directionCount++;
+			if(directionCount > newRandDir){
+				randDirection = rand.nextInt(4);
+				directionCount = 0;
+			}
+		}
+		else if (randDirection == 1) {
+			loc.setNewLoc((int) (loc.getX() + (velocity / fps)), loc.getY());
+			directionCount++;
+			if(directionCount > newRandDir){
+				randDirection = rand.nextInt(4);
+				directionCount = 0;
+			}
 
+		}
+		else if (randDirection == 2) {
+			loc.setNewLoc(loc.getX(), (int) (loc.getY() - (velocity / fps)));
+			directionCount++;
+			if(directionCount > newRandDir){
+				randDirection = rand.nextInt(4);
+				directionCount = 0;
+			}
+
+		}
+		else if (randDirection == 3) {
+			loc.setNewLoc(loc.getX(), (int) (loc.getY() + (velocity / fps)));
+			directionCount++;
+			if(directionCount > newRandDir){
+				randDirection = rand.nextInt(4);
+				directionCount = 0;
+			}
+
+		}
+		else{
+			Log.d("ghost update:", "No Direction:");
+
+		}
 	}
 
 	void reverseXVel()
@@ -130,8 +177,11 @@ public class Ghost implements Collision
 	// TODO: not sure if we needs this
 	void reset(int x, int y)
 	{
-		mXVelocity = (float) (y / 3);
-		mYVelocity = (float) -(y / 3);
+		velocity = (float)(x / 3) ;
+		loc.setNewLoc(800,400);
+
+		//mXVelocity = (float) (y / 3);
+		//mYVelocity = (float) -(y / 3);
 	}
 
 

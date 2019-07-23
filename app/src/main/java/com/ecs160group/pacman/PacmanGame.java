@@ -7,10 +7,12 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 /*
 
@@ -38,9 +40,8 @@ public class PacmanGame extends SurfaceView implements Runnable{
         private Pacman mPacman;
         private Ghost mGhost;
         private Maze mMaze;
-        private Joystick mJoystick;
         private FakeJoy mFakeJoy;
-/*        private Inky mInky;
+/*      private Inky mInky;
         private Pinky mPinky;
         private Blinky mBlinky;
         private Clyde mClyde;*/
@@ -56,25 +57,29 @@ public class PacmanGame extends SurfaceView implements Runnable{
         private PointF blockSize;
         final private PointF fakePosition;
 
+        //Sounds to be played during gameplay.
+        private sound PacmanSounds;
         //thread + control variables to know when to stop/start the thread
         private Thread mGameThread = null;
         private volatile boolean mPlaying;
         private boolean mPaused = true;
-
+        public Context activityContext;
+        public MediaPlayer PacmanGameStart;
         //constructor
         public PacmanGame(Context context, int x, int y) {
                 //Super... calls the parent class
                 //constructor of SurfaceView provided by Android
 
                 super(context);
+                activityContext = context;
 
+                //PacmanSounds.setContext(context);
                 fakePosition = new PointF(200, 700);
                 blockSize = new PointF();
                 blockSize.x = (float) x / 100;
                 blockSize.y = (float) x / 100;
                 mScreenX = x;
                 mScreenY = y;
-
 
                 mFontSize = mScreenX / 30; //5%(1/20) of screen width
                 mFontMargin = mScreenX / 75; //1.5%(1/75) of scren width
@@ -91,6 +96,8 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 //Initialize objects(maze, pacman, ghost);
 
                 //start the game LETS GET PACCING
+                update();
+                draw();
                 startNewGame();
 
         }
@@ -99,32 +106,45 @@ public class PacmanGame extends SurfaceView implements Runnable{
         //or starting the first game
         public void startNewGame() {
                 //reset maze level
+                //PacmanGameStart.start();
+
 
                 //initialize the position of pacman and ghosts
                 mPacman.reset(mScreenX, mScreenY);
                 mGhost.reset(mScreenX, mScreenY);
 
-                //resetting score/lives
+                //resetting score/lives/direction
                 mScore = 0;
                 mLives = 3;
-
+                mFakeJoy.setCenter();
+                mPacman.updateNextDirection('l');
+                // Play intro music..
+                //pauseStartDeath(2000);
+                PacmanGameStart = MediaPlayer.create(activityContext, R.raw.pacman_beginning);
+                PacmanGameStart.start();
+                //pauseStartDeath(4000);
         }
 
         public void deathRestart(){
                 //reset maze level
-
+                //PacmanSounds.pacmanBeginning();
                 mPaused = true;
                 //initialize the position of pacman and ghosts
                 mPacman.reset(mScreenX, mScreenY);
                 mGhost.reset(mScreenX, mScreenY);
 
-                //resetting score/lives/States
-                mScore = 0;
+                //resetting score/lives/States/Direction
+                //mScore = 0;
                 mLives--;
                 mPacman.setPowerUpState(0, false);
                 mGhost.setDeathState(0, false);
+                mPacman.updateNextDirection('l');
+
                 //mGhost.setDeathState(0, false); // add other ghosts later.
 
+                //Reset game if 0 lives.
+                if(mLives == 0){ startNewGame(); }
+                //pauseStartDeath(2000); // In milliseconds
                 //TODO: Pause the game and resume
 
         };
@@ -184,7 +204,14 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 if (mPacman.detectCollision(mGhost.loc, mScreenX, mScreenY)) {
                         //Pacman dies, respawns without super mode
                         if(mPacman.getPowerState() == false && mPacman.getPowerTimer() >= 0){
+                                PacmanGameStart = MediaPlayer.create(activityContext, R.raw.pacman_death);
+                                PacmanGameStart.start();
+                                draw();
+                                pauseStartDeath(3000);
+                                mFakeJoy.setCenter();
+                                draw();
                                 deathRestart();
+
                         }
                         else{
                                 // Set timer as ghost touches Graveyard?
@@ -272,6 +299,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 mPaint.setTextSize(debugSize);
                 mCanvas.drawText("FPS: " + mFPS,
                         10, debugStart + debugSize, mPaint);
+                /*
                 mCanvas.drawText("baseradius.x: " + mFakeJoy.baseRadius,
                         10,debugStart + debugSize + 30, mPaint);
                 mCanvas.drawText("stickRadius.x: " + mFakeJoy.stickRadius,
@@ -284,6 +312,11 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         10,debugStart + debugSize + 150, mPaint);
                 mCanvas.drawText("basebaseCenter.y: " + mFakeJoy.baseCenter.y,
                         10,debugStart + debugSize + 180, mPaint);
+                */
+                mCanvas.drawText("mGhost.loc.x: " + mGhost.loc.getX(),
+                        10,debugStart + debugSize + 30, mPaint);
+                mCanvas.drawText("mGhost.loc.y: " + mGhost.loc.getY(),
+                        10,debugStart + debugSize + 60, mPaint);
                 mCanvas.drawText("mPacman.loc.x: " + mPacman.loc.getX(),
                         10,debugStart + debugSize + 210, mPaint);
                 mCanvas.drawText("mPacman.loc.y: " + mPacman.loc.getY(),
@@ -295,12 +328,6 @@ public class PacmanGame extends SurfaceView implements Runnable{
 
 
         }
-
-
-        Pacman getPacman() {
-                return mPacman;
-        }
-
 
         @Override
         public boolean onTouchEvent(MotionEvent e) {
@@ -326,6 +353,31 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 if (mLives == 0)
                         return true;
                 return false;
+        }
+
+        void playSong(MediaPlayer mp){
+                mp.start();
+        }
+
+        void pauseSong(MediaPlayer mp) {
+                mp.pause();
+        }
+
+        void stopSong(MediaPlayer mp) {
+                mp.stop();
+                //PacmanSounds=MediaPlayer.create(activityContext, R.raw.abcd);
+        }
+        // In milliseconds..
+        void pauseStartDeath(int t){
+                try {
+                        mPaused = true;
+                        Thread.sleep(t);
+                } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                }
+                mPaused = false;
+
         }
 }
 
