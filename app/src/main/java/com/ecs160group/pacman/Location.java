@@ -12,7 +12,7 @@ public class Location
 	private int x;
 	private int y;
 	// object containing what is at this position
-	Block block;
+	private Block block;
 
 	/**
 	 * Default ctor
