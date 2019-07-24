@@ -1,5 +1,6 @@
 package com.ecs160group.pacman;
 
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
@@ -193,9 +194,10 @@ public class Ghost implements Collision
 
 	//function to draw the ghosts
 	//can draw all four at once here or can implement functions for each of the four
-	public void draw()
+	public void draw(Canvas canvas, Paint mPaint, float radius)
 	{
-
+		mPaint.setColor(Color.argb(255, 0, 0, 255));
+		canvas.drawCircle(loc.getX(), loc.getY(), radius, mPaint);
 	}
 
 	/**

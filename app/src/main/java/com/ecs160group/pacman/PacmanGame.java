@@ -106,8 +106,6 @@ public class PacmanGame extends SurfaceView implements Runnable{
         //or starting the first game
         public void startNewGame() {
                 //reset maze level
-                //PacmanGameStart.start();
-
 
                 //initialize the position of pacman and ghosts
                 mPacman.reset(mScreenX, mScreenY);
@@ -118,11 +116,10 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 mLives = 3;
                 mFakeJoy.setCenter();
                 mPacman.updateNextDirection('l');
-                // Play intro music..
-                //pauseStartDeath(2000);
+
                 PacmanGameStart = MediaPlayer.create(activityContext, R.raw.pacman_beginning);
                 PacmanGameStart.start();
-                //pauseStartDeath(4000);
+
         }
 
         public void deathRestart(){
@@ -271,17 +268,9 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                         "  Lives: " + mLives,
                                 mFontMargin, mFontSize, mPaint);
 
-                        // white color for pacman
-                        mPaint.setColor(Color.argb(255, 255, 255, 0));
                         // draw pacman as circle
-                        mCanvas.drawCircle(mPacman.loc.getX(), mPacman.loc.getY()
-                                , (mScreenX + mScreenY) / 200, mPaint);
-                        // blue color for ghosts
-                        mPaint.setColor(Color.argb(255, 0, 0, 255));
-                        // draw ghosts as circle
-                        mCanvas.drawCircle(mGhost.loc.getX(), mGhost.loc.getY()
-                                , (mScreenX + mScreenY) / 200, mPaint);
-
+                        mPacman.draw(mCanvas, mPaint, (mScreenX + mScreenY) / 200);
+                        mGhost.draw(mCanvas, mPaint, (mScreenX + mScreenY) / 200);
                         mFakeJoy.draw(mCanvas, mPaint);
 
                         if (DEBUGGING) {

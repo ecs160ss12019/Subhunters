@@ -1,5 +1,6 @@
 package com.ecs160group.pacman;
 
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -90,6 +91,7 @@ public class Pacman implements Collision {
         velocity  = screenX / 10;
 
     }
+
 
     /**
      * updates pacman's position
@@ -195,9 +197,10 @@ public class Pacman implements Collision {
 	/**
 	 * Draws Pacman on screen
 	 */
-	public void draw()
+	public void draw(Canvas canvas, Paint mPaint, float radius)
 	{
-
+        mPaint.setColor(Color.argb(255, 255, 255, 0));
+	    canvas.drawCircle(loc.getX(), loc.getY(), radius, mPaint);
 	}
 
 
