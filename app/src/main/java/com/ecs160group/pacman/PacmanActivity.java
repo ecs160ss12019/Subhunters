@@ -4,6 +4,7 @@ package com.ecs160group.pacman;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
@@ -28,10 +29,6 @@ public class PacmanActivity extends AppCompatActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-
-		//Joystick userController = new Joystick(this);
-
 
 		//set landscape mode, take out "Pacman" title
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -59,15 +56,5 @@ public class PacmanActivity extends AppCompatActivity{
 
 		mPacmanGame.pause();
 	}
-
-/*	@Override // When controller touched this will be called.
-	public void JoystickMoved(float xPercent, float yPercent) {
-		Log.d("User-Controller: ", "X percent: " + xPercent + " Y percent: " + yPercent);
-		// include pacman controls here, Must convert percent values into directional values up,down,left,right
-		mPacmanGame.getPacman().updateNextDirection(xPercent, yPercent);
-	}*/
-
-
-
 
 }

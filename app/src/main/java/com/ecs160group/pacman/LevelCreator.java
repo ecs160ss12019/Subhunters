@@ -1,6 +1,7 @@
 package com.ecs160group.pacman;
 
 import android.content.res.Resources;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -19,6 +20,7 @@ public class LevelCreator
 	// Objects needed to read a file
 	Resources res;
 
+
 	/**
 	 * Constructor for LevelCreator
 	 * @param m maze to be updated
@@ -26,7 +28,7 @@ public class LevelCreator
 	LevelCreator(Location[][] m)
 	{
 		this.maze = m;
-		res = Resources.getSystem();
+
 		readAndProcessFile();
 	}
 
@@ -35,8 +37,12 @@ public class LevelCreator
 	 */
 	void readAndProcessFile()
 	{
+		Log.d("Debugging", "readAndProcessFile");
+
+		Resources res = Resources.getSystem();
 		InputStream is = res.openRawResource(R.raw.lvl1);
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+
 		try {
 			String eachLine = br.readLine();
 			int i = 0;

@@ -97,7 +97,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 mPacman = new Pacman(mScreenX, 1000, 700);
                 mGhost = new Ghost(mScreenX, 800, 400);
                 mFakeJoy = new FakeJoy(200, 100, blockSize, fakePosition);
-
+                //Maze mMaze = new Maze();
 
                 //bitmap
                 bitmap = Bitmap.createBitmap(mScreenX, mScreenY, Bitmap.Config.ARGB_8888);
@@ -275,6 +275,8 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         mCanvas.drawText("Score:  " + mScore +
                                         "  Lives: " + mLives,
                                 mFontMargin, mFontSize, mPaint);
+
+                        //mMaze.draw(mCanvas, mPaint);
 
                         // draw pacman as circle
                         mPacman.draw(mCanvas, mPaint, (mScreenX + mScreenY) / 200);

@@ -30,7 +30,8 @@ class Maze
 	 *
 	 * @param blockSize
 	 */
-	public Maze(PointF blockSize,  Canvas mCanvas)
+	//	public Maze(PointF blockSize,  Canvas mCanvas)
+	public Maze()
 	{
 		//this.pacmanActivity = pacmanActivity;
 		// initializes the grid size
@@ -46,12 +47,15 @@ class Maze
 	{
 		//TODO: EDIT THIS
 		//print the whole graph
+
+		/*
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
 				// print the grid piece on the canvas
 				drawSpace(grid[i][j], mCanvas);
 			}
 		}
+		*/
 
 		//print the wall
 
@@ -67,8 +71,9 @@ class Maze
 
 		Log.d("Debugging", "In draw");
 
-			mCanvas.drawColor(Color.argb(255, 0, 0, 0));
-			mPaint.setColor(Color.argb(255, 255, 255, 255));
+		/*
+			//mCanvas.drawColor(Color.argb(255, 0, 0, 0));
+			//mPaint.setColor(Color.argb(255, 255, 255, 255));
 
 			//getMaze();
 			for (int i = 0; i < grid.length; i++) {
@@ -80,15 +85,16 @@ class Maze
 
 				}
 			}
-		}
+		*/
+	}
+
 
 	/**
 	 * Gets the array of maze locations
 	 *
 	 * @return array of maze locations
 	 */
-	Location[][] getMaze()
-	{
+	Location[][] getMaze() {
 
 		return grid;
 	}
@@ -153,7 +159,7 @@ class Maze
 	void drawImage(Bitmap bm, Location l, Canvas mCanvas) {
 		// TODO: make this commented out thing with location plus the sizing we need
 		// bitmap width and height are predetermined widths and heights for items in the maze
-//		canvas.drawBitmap(bm, l.getX() - bitmapWidth/2, l.getY() - bitmapHeight/2, null);
+		//mCanvas.drawBitmap(bm, l.getX() - bitmapWidth/2, l.getY() - bitmapHeight/2, null);
 	}
 
 /*
