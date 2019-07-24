@@ -49,8 +49,8 @@ public class LevelCreator
 
 
 		//InputStream is = classloader.getResourceAsStream("lvl1");
-        //InputStream is = res.openRawResource(R.raw.lvl1);
-        InputStream is = (InputStream) LevelCreator.class.getResourcesAsStream(R.raw.lvl1));
+        InputStream is = res.openRawResource(R.raw.lvl1);
+        //InputStream is = (InputStream) LevelCreator.class.getResourcesAsStream(R.raw.lvl1);
 
         BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 
