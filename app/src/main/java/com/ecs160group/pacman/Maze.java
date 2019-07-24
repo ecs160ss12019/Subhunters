@@ -1,5 +1,6 @@
 package com.ecs160group.pacman;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,20 +24,21 @@ class Maze
 	private LevelCreator mlevelCreator;
 	public Bitmap bitmap;
 	public PointF blockSize;
+	private Context context;
 
 
 	/**
-	 * Constructor for the Maze
-	 *
-	 * @param blockSize
+	 * Constructor for Maze
+	 * @param context context from PacmanActivity
 	 */
-	//	public Maze(PointF blockSize,  Canvas mCanvas)
-	public Maze()
+//	public Maze(PointF blockSize,  Canvas mCanvas, Context context)
+	public Maze(Context context)
 	{
+		this.context = context;
 		//this.pacmanActivity = pacmanActivity;
 		// initializes the grid size
 		grid = new Location[MAZE_WIDTH][MAZE_HEIGHT];
-		mlevelCreator = new LevelCreator(grid);
+		mlevelCreator = new LevelCreator(grid, context);
 
 	}
 
