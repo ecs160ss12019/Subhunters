@@ -1,5 +1,9 @@
 package com.ecs160group.pacman;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -23,10 +27,9 @@ class Maze
 	private Paint mPaint;
 
 
-
-
 	/**
 	 * Constructor for the Maze
+	 *
 	 * @param pacmanActivity
 	 */
 	public Maze(PacmanActivity pacmanActivity)
@@ -42,9 +45,13 @@ class Maze
 	 */
 	void draw()
 	{
-		//  pacmanActivity.gameView.setImageBitmap(pacmanActivity.blankBitmap);
 		//print the whole graph
-		//pacmanActivity.canvas.drawColor(Color.argb(255, 255, 255, 255));
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid[i].length; j++) {
+				// print the grid piece on the canvas
+				drawSpace(grid[i][j]);
+			}
+		}
 
 		//print the wall
 
@@ -82,13 +89,75 @@ class Maze
 
 	/**
 	 * Gets the array of maze locations
+	 *
 	 * @return array of maze locations
 	 */
-	Location[][] getMaze() {
+	Location[][] getMaze()
+	{
 
 		return grid;
 	}
-	void setMaze(Location[][] m){
+
+	void setMaze(Location[][] m)
+	{
 		grid = m;
+	}
+
+	/**
+	 * Draws a single object in the designated space in the maze
+	 * @param l location of the object to draw
+	 */
+	private void drawSpace(Location l)
+	{
+		Resources res = Resources.getSystem();
+		int img = -1;
+		// TODO: draw each image in the location and put them in res/drawable
+		switch(l.getObj()) {
+			case PACMAN:
+				img = R.drawable.pacman;
+				break;
+			case GHOST: // TODO: extend and change the ghosts to input for each NAMED ghost
+				img = R.drawable.blinky;
+				break;
+			case WALL:
+				img = R.drawable.wall; // TODO: extend to input different wall type pieces
+				break;
+			case PELLET:
+				img = R.drawable.pellet;
+				break;
+			case POWER_PELLET:
+				img = R.drawable.power_pellet;
+				break;
+			case WARP_SPACE:
+				img = R.drawable.warp;
+				break;
+			case GHOST_GATE:
+				img = R.drawable.ghost_gate;
+				break;
+			case PAC_SPAWN:
+			case GHOST_SPAWN:
+			case EMPTY: // empty space, no need to draw anything
+			default:
+				img = 0;
+				break;
+		}
+		if (img != -1) {// not an empty space, print image
+			// TODO: draw image at the space
+			Bitmap unsizedObjBM = BitmapFactory.decodeResource(res, img);
+			// TODO: get the optimal size needed for each obj in the maze and then put it here
+			Bitmap sizedBm = Bitmap.createScaledBitmap(unsizedObjBM, /*optimal size */);
+			drawImage(sizedBm, l);
+		}
+	}
+
+	/**
+	 * Draws an image to the location based on the
+	 * @param bm correctly sized bitmap of the image to draw
+	 * @param l location to draw the image at
+	 */
+	void drawImage(Bitmap bm, Location l) {
+		// TODO: make this commented out thing with location plus the sizing we need
+		// bitmap width and height are predetermined widths and heights for items in the maze
+//		canvas.drawBitmap(bm, l.getX() - bitmapWidth/2, l.getY() - bitmapHeight/2, null);
 	}
 }
