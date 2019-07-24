@@ -41,16 +41,16 @@ public class LevelCreator
 		Log.d("Debugging", "readAndProcessFile");
 
 		Resources res = Resources.getSystem();
-        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        //ClassLoader classloader = Thread.currentThread().getContextClassLoader();
 
 		//InputStream inputStream = ClassLoaderUtil.getResourceAsStream("lvl1", LevelCreator.class);
 		//InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
 		//BufferedReader reader = new BufferedReader(streamReader);
 
 
-		InputStream is = classloader.getResourceAsStream("lvl1");
+		//InputStream is = classloader.getResourceAsStream("lvl1");
         //InputStream is = res.openRawResource(R.raw.lvl1);
-        //InputStream is = (InputStream) LevelCreator.class.getResourcesAsStream(R.raw.lvl1));
+        InputStream is = (InputStream) LevelCreator.class.getResourcesAsStream(R.raw.lvl1));
 
         BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 
