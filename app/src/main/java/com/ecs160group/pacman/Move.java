@@ -126,7 +126,7 @@ public class Move{
     {
         // read the location to a temp location
         Location loc;
-        loc = new Location(pac.loc.getX(), pac.loc.getY(), pac.loc.block);
+        loc = new Location(pac.loc.getX(), pac.loc.getY(), pac.loc.getObj());
         // use the velocity to update x and y coordinates
         // read the velocity floats of x and y
         // add value to each for next step in location
