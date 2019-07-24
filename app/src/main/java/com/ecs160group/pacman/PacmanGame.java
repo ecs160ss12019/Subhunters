@@ -69,6 +69,14 @@ public class PacmanGame extends SurfaceView implements Runnable{
         private boolean mPaused = true;
         public Context activityContext;
         public MediaPlayer PacmanGameStart;
+
+        private Location mGrid;
+        private int xPac; // Grabs loc.x & loc.y coordinates
+        private int yPac;
+
+        private int pellet;
+        Block mBlock;
+
         //constructor
         public PacmanGame(Context context, int x, int y) {
                 //Super... calls the parent class
@@ -97,6 +105,8 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 mPacman = new Pacman(mScreenX, 1000, 700);
                 mGhost = new Ghost(mScreenX, 800, 400);
                 mFakeJoy = new FakeJoy(200, 100, blockSize, fakePosition);
+                pellet = 0;
+                // testing maze and level creator
                 //Maze mMaze = new Maze();
 
                 //bitmap
@@ -119,9 +129,10 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 mPacman.reset(mScreenX, mScreenY);
                 mGhost.reset(mScreenX, mScreenY);
 
-                //resetting score/lives/direction
+                //resetting score/lives/direction/pellets
                 mScore = 0;
                 mLives = 3;
+                pellet = 0;
                 mFakeJoy.setCenter();
                 mPacman.updateNextDirection('l');
 
@@ -206,6 +217,9 @@ public class PacmanGame extends SurfaceView implements Runnable{
 
                 //TODO: separate detection collision methods within pacman/ghost/maze classes OR do it here
                 //pacman && ghost collision (add condition for super mode later)
+
+                // Eventually, must use Location to detect collion not screen position.
+                //if (mPacman.detectCollision(mGhost.loc, mScreenX, mScreenY)) {
                 if (mPacman.detectCollision(mGhost.loc, mScreenX, mScreenY)) {
                         //Pacman dies, respawns without super mode
                         if(mPacman.getPowerState() == false && mPacman.getPowerTimer() >= 0){
@@ -226,12 +240,68 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                 //mghost.moveTowardsTarget();
                         }
                 }
-                //pacman & pellet
 
-                //pacman & fruit
+                /*
+                mGrid = mMaze.getMaze();
+                xPac = mPacman.loc.getX();
+                yPac = mPacman.loc.getY();
+                //if(mGrid[xPac][yPac].getObj() == EMPTY){
+                //}
+                switch(mGrid[xPac][yPac].getObj()){
+                        case GHOST: // Death sequence, Pacman and Ghost same tile. Which Ghost does not matter.
+                                if(mPacman.getPowerState() == false && mPacman.getPowerTimer() >= 0){
+                                        PacmanGameStart = MediaPlayer.create(activityContext, R.raw.pacman_death);
+                                        PacmanGameStart.start();
+                                        draw();
+                                        pauseStartDeath(3000);
+                                        mFakeJoy.setCenter();
+                                        draw();
+                                        deathRestart();
 
-                //pacman & wall / ghost & wall
+                                }
+                                else{
+                                        // Ghost matters, set the specific ghost's deathState.
+                                        // TODO: Set timer as ghost touches Graveyard?
+                                        mGhost.setDeathState(0, true);
+                                        //Pacman is able to eat ghosts
+                                        // TODO: Send ghost back to graveyard.
+                                        //mghost.moveTowardsTarget(  ); // Graveyard spawn coordinates.
+                                }
+                                break;
+                	    case WALL: // Prevent movement here, but pacman MUST continue moving
+                                break;
+                        case PELLET:
+                                if(pellet >= 100){
+                                        Log.d("Debugging", "In Collision Interact: POWER_PELLET");
+                                        //TODO: Win screen, added win(), request/New level
+                                }
+                                // TODO: Have grid set location to empty Object.
+                                //mGrid[xPac][yPac].updateLoc(xPac, yPac, EMPTY ); // Set empty?
+                                pellet++;
+                                break;
+                         case POWER_PELLET: // Encounter PowerPellet, set state
+                                 Log.d("Debugging", "In Collision Interact: POWER_PELLET");
+                                 mPacman.setPowerUpState(2000,true);
+                                // TODO: Set exact amount of frames the powerup lasts, for now infinite.
+                                break;
+                        case WARP_SPACE:
+                                // TODO: Find out both locations of warp_space. Have pacman swap positions.
+                                //mPacman.loc.setNewLoc( );
+                                break;
+                        case GHOST_GATE: // Prevent movement. Collision
 
+                                break;
+                        case PAC_SPAWN: // Not needed?
+                                break;
+                        case GHOST_SPAWN: // Nothing at the moment/ Prevent movement?
+                        case EMPTY: // empty space, Nothing happens. Continue movement.
+                                Log.d("Debugging", "In Collision Interact: EMPTY");
+                                break;
+                        default:
+                                Log.d("Debugging", "In Collision Interact");
+                                break;
+                }
+        */
         }
 
         //called by PacmanActivity when player quits game
@@ -276,6 +346,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                         "  Lives: " + mLives,
                                 mFontMargin, mFontSize, mPaint);
 
+                        // testing maze and level creator
                         //mMaze.draw(mCanvas, mPaint);
 
                         // draw pacman as circle

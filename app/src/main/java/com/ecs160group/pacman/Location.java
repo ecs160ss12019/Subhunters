@@ -83,6 +83,11 @@ public class Location
 		x = newX;
 		y = newY;
 	}
+	public void updateLoc(int newX, int newY, Block newBlock){
+		x = newX;
+		y = newY;
+		block = newBlock;
+	}
 
 
 	/**
