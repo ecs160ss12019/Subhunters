@@ -1,6 +1,7 @@
 package com.ecs160group.pacman;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -13,6 +14,8 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+
+
 
 /*
 
@@ -51,6 +54,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
         private int mLives; //number lives user has left
 
         //variables to handle drawing
+        private Bitmap bitmap;
         private SurfaceHolder mOurHolder;
         private Canvas mCanvas;
         private Paint mPaint;
@@ -76,8 +80,8 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 //PacmanSounds.setContext(context);
                 fakePosition = new PointF(200, 700);
                 blockSize = new PointF();
-                blockSize.x = (float) x / 100;
-                blockSize.y = (float) x / 100;
+                blockSize.x = (float) x / 55;
+                blockSize.y = (float) x / 55;
                 mScreenX = x;
                 mScreenY = y;
 
@@ -89,11 +93,15 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 joystickX = 0;
                 joystickY = 0;
 
+                //Initialize objects(maze, pacman, ghost, joystick)
                 mPacman = new Pacman(mScreenX, 1000, 700);
                 mGhost = new Ghost(mScreenX, 800, 400);
                 mFakeJoy = new FakeJoy(200, 100, blockSize, fakePosition);
 
-                //Initialize objects(maze, pacman, ghost);
+
+                //bitmap
+                bitmap = Bitmap.createBitmap(mScreenX, mScreenY, Bitmap.Config.ARGB_8888);
+                mCanvas = new Canvas(bitmap);
 
                 //start the game LETS GET PACCING
                 update();
@@ -144,7 +152,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 //pauseStartDeath(2000); // In milliseconds
                 //TODO: Pause the game and resume
 
-        };
+        }
 
 
         // When we start the thread with:
@@ -272,6 +280,27 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         mPacman.draw(mCanvas, mPaint, (mScreenX + mScreenY) / 200);
                         mGhost.draw(mCanvas, mPaint, (mScreenX + mScreenY) / 200);
                         mFakeJoy.draw(mCanvas, mPaint);
+
+                        mPaint.setColor(Color.argb(255, 0, 0, 255));
+                        //redPaint.setColor(Color.argb(0,255, 0, 0));
+                        // Draw the vertical lines of the maze
+
+                        mCanvas.drawLine(blockSize.y * 20, blockSize.y * 1,
+                                blockSize.y * 20, blockSize.y * 30,
+                                mPaint);
+                        mCanvas.drawLine(blockSize.y * 53, blockSize.y * 1,
+                                blockSize.y * 53, blockSize.y * 30,
+                                mPaint);
+
+                        // Draw the horizontal lines of the maze
+                        mCanvas.drawLine(blockSize.x * 20, blockSize.x * 1,
+                                blockSize.x * 53, blockSize.x * 1,
+                                mPaint);
+                        mCanvas.drawLine(blockSize.x * 20, blockSize.x * 30,
+                                blockSize.x * 53, blockSize.x * 30,
+                                mPaint);
+
+
 
                         if (DEBUGGING) {
                                 printDebuggingText();
