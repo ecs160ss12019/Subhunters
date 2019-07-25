@@ -361,18 +361,18 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         //redPaint.setColor(Color.argb(0,255, 0, 0));
                         // Draw the vertical lines of the maze
 
-                        mCanvas.drawLine(blockSize.y * 20, blockSize.y * 1,
-                                blockSize.y * 20, blockSize.y * 30,
+                        mCanvas.drawLine(blockSize.y * 25, blockSize.y * 1,
+                                blockSize.y * 25, blockSize.y * 30,
                                 mPaint);
                         mCanvas.drawLine(blockSize.y * 53, blockSize.y * 1,
                                 blockSize.y * 53, blockSize.y * 30,
                                 mPaint);
 
                         // Draw the horizontal lines of the maze
-                        mCanvas.drawLine(blockSize.x * 20, blockSize.x * 1,
+                        mCanvas.drawLine(blockSize.x * 25, blockSize.x * 1,
                                 blockSize.x * 53, blockSize.x * 1,
                                 mPaint);
-                        mCanvas.drawLine(blockSize.x * 20, blockSize.x * 30,
+                        mCanvas.drawLine(blockSize.x * 25, blockSize.x * 30,
                                 blockSize.x * 53, blockSize.x * 30,
                                 mPaint);
 
