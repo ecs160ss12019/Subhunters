@@ -88,7 +88,7 @@ public class Pacman implements Collision {
         next_direction = 'l';
         powerState = false;
         powerTimer = 0;
-        velocity  = screenX / 10;
+        velocity  = screenX / 80;
 
     }
 

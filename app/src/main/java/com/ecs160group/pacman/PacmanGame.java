@@ -63,6 +63,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
 
         //Sounds to be played during gameplay.
         private sound PacmanSounds;
+
         //thread + control variables to know when to stop/start the thread
         private Thread mGameThread = null;
         private volatile boolean mPlaying;
@@ -85,7 +86,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 super(context);
                 activityContext = context;
 
-                //PacmanSounds.setContext(context);
+                //PacmanSounds.setContext(activityContext);
                 fakePosition = new PointF(200, 700);
                 blockSize = new PointF();
                 blockSize.x = (float) x / 55;
@@ -106,9 +107,6 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 mGhost = new Ghost(mScreenX, 800, 400);
                 mFakeJoy = new FakeJoy(200, 100, blockSize, fakePosition);
                 pellet = 0;
-                // testing maze and level creator
-                //Maze mMaze = new Maze();
-
                 //bitmap
                 bitmap = Bitmap.createBitmap(mScreenX, mScreenY, Bitmap.Config.ARGB_8888);
                 mCanvas = new Canvas(bitmap);
@@ -135,6 +133,9 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 pellet = 0;
                 mFakeJoy.setCenter();
                 mPacman.updateNextDirection('l');
+
+                // testing maze and level creator
+                mMaze = new Maze(activityContext, mScreenX, mScreenY);
 
                 PacmanGameStart = MediaPlayer.create(activityContext, R.raw.pacman_beginning);
                 PacmanGameStart.start();
@@ -242,12 +243,13 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         }
                 }
 
-                /*
-                mGrid = mMaze.getMaze();
+
+                //mGrid = mMaze.getMaze();
                 xPac = mPacman.loc.getX();
                 yPac = mPacman.loc.getY();
                 //if(mGrid[xPac][yPac].getObj() == EMPTY){
                 //}
+                /*
                 switch(mGrid[xPac][yPac].getObj()){
                         case GHOST: // Death sequence, Pacman and Ghost same tile. Which Ghost does not matter.
                                 if(mPacman.getPowerState() == false && mPacman.getPowerTimer() >= 0){
@@ -302,7 +304,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                 Log.d("Debugging", "In Collision Interact");
                                 break;
                 }
-        */
+*/
         }
 
         //called by PacmanActivity when player quits game
@@ -348,7 +350,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                 mFontMargin, mFontSize, mPaint);
 
                         // testing maze and level creator
-                        //mMaze.draw(mCanvas, mPaint);
+                        mMaze.draw(mCanvas, mPaint);
 
                         // draw pacman as circle
                         mPacman.draw(mCanvas, mPaint, (mScreenX + mScreenY) / 200);

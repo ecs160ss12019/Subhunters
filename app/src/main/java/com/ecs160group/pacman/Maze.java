@@ -26,15 +26,21 @@ class Maze
 	public PointF blockSize;
 	private Context context;
 
+	//holds resolution of screen
+	private int mScreenX;
+	private int mScreenY;
+
 
 	/**
 	 * Constructor for Maze
 	 * @param context context from PacmanActivity
 	 */
 //	public Maze(PointF blockSize,  Canvas mCanvas, Context context)
-	public Maze(Context context)
+	public Maze(Context context, int xScreen, int yScreen)
 	{
 		this.context = context;
+		mScreenX = xScreen;
+		mScreenY = yScreen;
 		//this.pacmanActivity = pacmanActivity;
 		// initializes the grid size
 		grid = new Location[MAZE_WIDTH][MAZE_HEIGHT];
@@ -73,21 +79,23 @@ class Maze
 
 		Log.d("Debugging", "In draw");
 
-		/*
+
 			//mCanvas.drawColor(Color.argb(255, 0, 0, 0));
-			//mPaint.setColor(Color.argb(255, 255, 255, 255));
-
+			mPaint.setColor(Color.argb(255, 255, 255, 255));
 			//getMaze();
-			for (int i = 0; i < grid.length; i++) {
+			int xScaled = mScreenX / 2;
+			int yScaled = mScreenY / 12;
 
-				for (int j = 0; j < grid[j].length; j++) {
-					//grid[i][j] // Draw what is at the location.
-					mCanvas.drawCircle(i, j, 1, mPaint);
-					Log.d("getMaze: ", "coord: " + i + "," + j);
-
+		for (int i = 0; i < MAZE_WIDTH; i++) {
+				for (int j = 0; j < MAZE_HEIGHT; j++) {
+					//grid[i][j] // Draw only if block at the location.
+					if(grid[i][j].getObj() == Block.WALL){
+						mCanvas.drawCircle(i * 28 + xScaled, j * 28 + yScaled, 4, mPaint);
+						Log.d("getMaze: ", "coord: (" + i + "," + j +")");
+					}
 				}
 			}
-		*/
+
 	}
 
 
@@ -146,10 +154,10 @@ class Maze
 		}
 		if (img != -1) {// not an empty space, print image
 			// TODO: draw image at the space
-			//Bitmap unsizedObjBM = BitmapFactory.decodeResource(res, img);
+			Bitmap unsizedObjBM = BitmapFactory.decodeResource(res, img);
 			// TODO: get the optimal size needed for each obj in the maze and then put it here
-			//Bitmap sizedBm = Bitmap.createScaledBitmap(unsizedObjBM, 50, 50, false);
-			//drawImage(sizedBm, l, mCanvas);
+			Bitmap sizedBm = Bitmap.createScaledBitmap(unsizedObjBM, 50, 50, false);
+			drawImage(sizedBm, l, mCanvas);
 		}
 	}
 
@@ -161,7 +169,9 @@ class Maze
 	void drawImage(Bitmap bm, Location l, Canvas mCanvas) {
 		// TODO: make this commented out thing with location plus the sizing we need
 		// bitmap width and height are predetermined widths and heights for items in the maze
-		//mCanvas.drawBitmap(bm, l.getX() - bitmapWidth/2, l.getY() - bitmapHeight/2, null);
+		float bitmapWidth = (mScreenX + mScreenY) / 200;
+		float bitmapHeight = (mScreenX + mScreenY) / 200;
+		mCanvas.drawBitmap(bm, l.getX() - bitmapWidth/2, l.getY() - bitmapHeight/2, null);
 	}
 
 /*

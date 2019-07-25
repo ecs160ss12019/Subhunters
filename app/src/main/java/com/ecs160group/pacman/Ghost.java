@@ -24,8 +24,9 @@ public class Ghost implements Collision
 	protected Location scatterLoc;
 
 	//ghost coords//directions
-	private int direction;
+	//private int direction;
 	private int next_direction;
+	private char direction;
 
 	// TODO: add explenations for these two vars here
 	private int deathTimer = 0;
@@ -68,7 +69,7 @@ public class Ghost implements Collision
 		//pacman width/height 1% of screen (change later if needed)
 		mGhostWidth = (float) screenX / 100;
 		mGhostHeight = (float) screenX / 100;
-		velocity  = screenX / 10;
+		velocity  = screenX / 80;
 
 		loc = new Location(locX, locY, Block.GHOST);
 
@@ -113,7 +114,7 @@ public class Ghost implements Collision
 	 */
 	Random rand = new Random();
 	int randDirection = rand.nextInt(4);
-	int newRandDir = rand.nextInt(35);
+	int newRandDir = rand.nextInt(100);
 
 	int directionCount = 15;
 	boolean newDir = false;
@@ -123,7 +124,8 @@ public class Ghost implements Collision
 		if (randDirection == 0) {
 			loc.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
 			directionCount++;
-			if(directionCount > newRandDir){
+			direction = 'l';
+			if(directionCount > newRandDir){ // TODO: Add || on collision to change direction.
 				randDirection = rand.nextInt(4);
 				directionCount = 0;
 			}
@@ -131,33 +133,32 @@ public class Ghost implements Collision
 		else if (randDirection == 1) {
 			loc.setNewLoc((int) (loc.getX() + (velocity / fps)), loc.getY());
 			directionCount++;
+			direction = 'r';
 			if(directionCount > newRandDir){
 				randDirection = rand.nextInt(4);
 				directionCount = 0;
 			}
-
 		}
 		else if (randDirection == 2) {
 			loc.setNewLoc(loc.getX(), (int) (loc.getY() - (velocity / fps)));
 			directionCount++;
+			direction = 'd';
 			if(directionCount > newRandDir){
 				randDirection = rand.nextInt(4);
 				directionCount = 0;
 			}
-
 		}
 		else if (randDirection == 3) {
 			loc.setNewLoc(loc.getX(), (int) (loc.getY() + (velocity / fps)));
 			directionCount++;
+			direction = 'u';
 			if(directionCount > newRandDir){
 				randDirection = rand.nextInt(4);
 				directionCount = 0;
 			}
-
 		}
 		else{
 			Log.d("ghost update:", "No Direction:");
-
 		}
 	}
 

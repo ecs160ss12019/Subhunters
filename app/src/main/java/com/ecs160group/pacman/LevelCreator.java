@@ -85,9 +85,7 @@ public class LevelCreator
 	{
 		//for (int i = 0; i < pieces.length && pieces[i] != null; i++) {
 			for (int i = 0; i < pieces.length; i++) {
-
 			Log.d("txt chars: ", "pieces[ " + i + "]:" + pieces[i]);
-
 			processBlock(pieces[i], i, lineNum);
 		}
 	}
