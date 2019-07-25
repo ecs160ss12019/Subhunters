@@ -35,6 +35,7 @@ class Maze
 
 	/**
 	 * Constructor for Maze
+	 *
 	 * @param context context from PacmanActivity
 	 */
 //	public Maze(PointF blockSize,  Canvas mCanvas, Context context)
@@ -97,9 +98,11 @@ class Maze
 
 	/**
 	 * Gets the array of maze locations
+	 *
 	 * @return array of maze locations
 	 */
-	Location[][] getMaze() {
+	Location[][] getMaze()
+	{
 		return grid;
 	}
 
@@ -110,6 +113,7 @@ class Maze
 
 	/**
 	 * Draws a single object in the designated space in the maze
+	 *
 	 * @param l location of the object to draw
 	 */
 	private void drawSpace(Location l, Canvas mCanvas, Paint mPaint)
@@ -117,7 +121,7 @@ class Maze
 		Resources res = Resources.getSystem();
 		int img = -1;
 		// TODO: draw each image in the location and put them in res/drawable
-		switch(l.getObj()) {
+		switch (l.getObj()) {
 			case PACMAN:
 				img = R.drawable.pacman;
 				break;
@@ -166,15 +170,28 @@ class Maze
 
 	/**
 	 * Draws an image to the location based on the
+	 *
 	 * @param bm correctly sized bitmap of the image to draw
-	 * @param l location to draw the image at
+	 * @param l  location to draw the image at
 	 */
-	void drawImage(Bitmap bm, Location l, Canvas mCanvas) {
+	void drawImage(Bitmap bm, Location l, Canvas mCanvas)
+	{
 		// TODO: make this commented out thing with location plus the sizing we need
 		// bitmap width and height are predetermined widths and heights for items in the maze
 		float bitmapWidth = (mScreenX + mScreenY) / 200;
 		float bitmapHeight = (mScreenX + mScreenY) / 200;
-		mCanvas.drawBitmap(bm, l.getX() - bitmapWidth/2, l.getY() - bitmapHeight/2, null);
+		mCanvas.drawBitmap(bm, l.getX() - bitmapWidth / 2, l.getY() - bitmapHeight / 2, null);
+	}
+
+	/**
+	 * Static function to check if Location is in bounds
+	 * @param l location to check
+	 * @return if the location is in bounds
+	 */
+	public static boolean isInBounds(Location l)
+	{
+		return (l.getX() >= 0 && l.getX() < MAZE_WIDTH)
+				&& (l.getY() >= 0 && l.getY() < MAZE_HEIGHT);
 	}
 
 /*
