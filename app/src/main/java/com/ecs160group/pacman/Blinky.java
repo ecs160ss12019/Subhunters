@@ -9,8 +9,9 @@ public class Blinky extends Ghost
 	/**
 	 * Static scatter location for Blinky
 	 *  is in wall so that Blinky scatters and patrols an area in the maze
+	 * Scatters to the top right of maze
  	 */
-	private static final Location SCATTER_LOC = new Location(0, 27, Block.WALL);
+	private static final Location SCATTER_LOC = new Location(27, 0, Block.WALL);
 
 	/**
 	 * Gets Blinky's scatter Location

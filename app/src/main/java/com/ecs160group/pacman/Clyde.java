@@ -8,17 +8,20 @@ public class Clyde extends Blinky
 {
 	/**
 	 * Static scatter location for Clyde
-	 *  is in wall so that Clyde scatters and patrols an area in the maze
+	 * is in wall so that Clyde scatters and patrols an area in the maze
+	 * Scatters to the bottom left
 	 */
 	private static final Location SCATTER_LOC = new Location(0, 30, Block.WALL);
 	private static final int MAX_CHASE_DIST = 8; // maximum distance clyde can be away to chase Pacman
 
 	/**
 	 * Gets Clyde's scatter location
+	 *
 	 * @return Clyde's scatter location
 	 */
 	@Override
-	public Location getScatterLocation() {
+	public Location getScatterLocation()
+	{
 		return SCATTER_LOC;
 	}
 
