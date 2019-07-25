@@ -49,25 +49,26 @@ public class LevelCreator
 		//BufferedReader reader = new BufferedReader(streamReader);
 
 		InputStream is = context.getResources().openRawResource(R.raw.lvl1);
-//				.getResources().openRawResource(R.raw.lvl1);
+
 
 
 //        InputStream is = res.openRawResource(R.raw.lvl1);
 //        InputStream is = (InputStream) LevelCreator.class.getResourcesAsStream(R.raw.lvl1);
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		InputStreamReader reader = new InputStreamReader(is);
+        BufferedReader br = new BufferedReader(reader);
 
 		try {
 			String eachLine = br.readLine();
-			int i = 0;
+			int lineNum = 0;
 			while (eachLine != null) { // process file line at a time
 				// the pieces of the maze in the file are separated by spaces, so to get each piece,
 				// each is a single character
 				String[] mazePieces = eachLine.split(" ");
-				processLine(mazePieces, i);
+				Log.d("LINE#: ", "lineNum in readAndProcess(): " + lineNum);
+				processLine(mazePieces, lineNum);
 				// process next line of buffer after processing the line
 				eachLine = br.readLine();
-				i++;
+				lineNum++;
 			}
 		} catch (Exception e) {
 			// TODO: handle exception and check which exception and make better
@@ -78,12 +79,16 @@ public class LevelCreator
 	/**
 	 * Processes a line of the text file to create a horizontal line of the maze
 	 * @param pieces A line of pieces of the maze
-	 * @param xcoord X coordinate of the block to process
+	 * @param lineNum line number we are on in the text file (y coord of Maze)
 	 */
-	void processLine(String[] pieces, int xcoord)
+	void processLine(String[] pieces, int lineNum)
 	{
-		for (int i = 0; i < pieces.length && pieces[i] != null; i++) {
-			processBlock(pieces[i], xcoord, i);
+		//for (int i = 0; i < pieces.length && pieces[i] != null; i++) {
+			for (int i = 0; i < pieces.length; i++) {
+
+			Log.d("txt chars: ", "pieces[ " + i + "]:" + pieces[i]);
+
+			processBlock(pieces[i], i, lineNum);
 		}
 	}
 
@@ -137,4 +142,7 @@ public class LevelCreator
 				break;
 		}
 	}
+
+
+
 }
