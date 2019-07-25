@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.Log;
+
 import java.lang.Math;
 import java.util.Random;
 
@@ -17,170 +18,191 @@ import java.util.Random;
  */
 
 
+public class Pacman implements Collision
+{
+	//pacman coords//directions
+	Location loc;
+	public char direction;
+	private char next_direction;
+
+	// Pacman's power-up state and timer.
+	private boolean powerState;
+	private int powerTimer;
 
 
-public class Pacman implements Collision {
-    //pacman coords//directions
-    Location loc;
-    public char direction;
-    private char next_direction;
+	// use an integer to temporarily replace the draw of Pacman
+	// this will be modified under the draw function
+	int pacImage = 1;
 
-    // Pacman's power-up state and timer.
-    private boolean powerState;
-    private int powerTimer;
+	//RectF has four values (left, top, right, bottom)
 
-
-
-    // use an integer to temporarily replace the draw of Pacman
-    // this will be modified under the draw function
-    int pacImage = 1;
-
-    //RectF has four values (left, top, right, bottom)
-
-    float velocity;
-    float mPacWidth;
-    float mPacHeight;
-    final Paint paint = new Paint();
+	float velocity;
+	float mPacWidth;
+	float mPacHeight;
+	final Paint paint = new Paint();
 
 
-	public Location getLoc() { return loc; }
-    public int getPowerTimer() { return powerTimer; }
-    public boolean getPowerState() { return powerState; }
+	public Location getLoc()
+	{
+		return loc;
+	}
 
-    /**
-     *
-     * @param pTimer
-     * @param pState
-     * sets the timer and powerup state of pacman
-     */
-    public void setPowerUpState(int pTimer, boolean pState) {
-        powerTimer = pTimer;
-        powerState = pState;
-    }
+	public int getPowerTimer()
+	{
+		return powerTimer;
+	}
 
-    /**
-     *
-     */
-    public void checkPowerUpState(){
-        if(powerState == true || powerTimer != 0){
-            setPowerUpState(powerTimer - 1, true);
-            if (powerTimer <= 0) {
-                setPowerUpState(0, false);
-            }
-        }
-    }
-    // isSuper returns state of Pacmans power-up state
-    public boolean isSuper(){
-        if(powerState == true && powerTimer > 0)
-            return powerState;
-        return false;
-    }
+	public boolean getPowerState()
+	{
+		return powerState;
+	}
 
-    Pacman (int screenX, int locX, int locY) {
+	/**
+	 * Gives the current direction that Pacman is facing
+	 * @return Pacman's current direction;
+	 */
+	public char getDirection()
+	{
+		return direction;
+	}
 
-        paint.setColor(Color.argb(255,255,255,0));
-        //pacman width/height 1% of screen (change later if needed)
-        mPacWidth = (float)screenX/100;
-        mPacHeight = (float)screenX/100;
+	/**
+	 * 
+	 * @param pTimer
+	 * @param pState sets the timer and powerup state of pacman
+	 */
+	public void setPowerUpState(int pTimer, boolean pState)
+	{
+		powerTimer = pTimer;
+		powerState = pState;
+	}
 
-        loc = new Location(locX, locY, Block.PACMAN );
-        direction = 'l';
-        next_direction = 'l';
-        powerState = false;
-        powerTimer = 0;
-        velocity  = screenX / 80;
+	/**
+	 *
+	 */
+	public void checkPowerUpState()
+	{
+		if (powerState == true || powerTimer != 0) {
+			setPowerUpState(powerTimer - 1, true);
+			if (powerTimer <= 0) {
+				setPowerUpState(0, false);
+			}
+		}
+	}
 
-    }
+	// isSuper returns state of Pacmans power-up state
+	public boolean isSuper()
+	{
+		if (powerState == true && powerTimer > 0)
+			return powerState;
+		return false;
+	}
 
+	Pacman(int screenX, int locX, int locY)
+	{
 
-    /**
-     * updates pacman's position
-     * called each frame/loop from PacmanGame update() method
-     * moves ball based on fps and the direction user is moving joystick
-     */
-    void update(long fps) {
-        // Move();
+		paint.setColor(Color.argb(255, 255, 255, 0));
+		//pacman width/height 1% of screen (change later if needed)
+		mPacWidth = (float) screenX / 100;
+		mPacHeight = (float) screenX / 100;
 
-        if (direction == 'l') {
-            loc.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
-        }
-        else if (direction == 'r') {
-            loc.setNewLoc((int) (loc.getX() + (velocity / fps)), loc.getY());
-        }
-        else if (direction == 'u') {
-            loc.setNewLoc(loc.getX(), (int) (loc.getY() - (velocity / fps)));
-        }
-        else if (direction == 'd') {
-            loc.setNewLoc(loc.getX(), (int) (loc.getY() + (velocity / fps)));
-        }
-    }
+		loc = new Location(locX, locY, Block.PACMAN);
+		direction = 'l';
+		next_direction = 'l';
+		powerState = false;
+		powerTimer = 0;
+		velocity = screenX / 80;
 
-    void reverseVel(){
-        velocity = - velocity;
-    }
-
-    /**
-     * detects the collisions of pacman with ghost, pellets, fruits,
-     * TODO: TESTING TO CHECK WALL DETECTION HERE
-     *
-     */
-    // currently used for Pacman and ghost collision detection
-    public boolean detectCollision(Location loc, int mScreenX, int mScreenY)
-    {
-        boolean collided = false;
-        float radius = (mScreenX + mScreenY) / 200;
-        if (Math.abs(this.loc.getX() - loc.getX()) <= radius * 2
-                && Math.abs(this.loc.getY() - loc.getY()) <= radius * 2) {
-            collided = true;
-        }
-        return collided;
-    }
-
-    /**
-     * check if Pacman is inside the screen
-     */
-    public void isInBounds(int mScreenX, int mScreenY) {
-        float radius = (mScreenX + mScreenY) / 200;
-
-        //if pacman hits the right screen wall, stop
-        if ( (loc.getX() + radius) > mScreenX) {
-            Log.d("pacman has hit a wall:", "direction:" + direction);
-            loc.setNewLoc((int) (mScreenX - radius), loc.getY());
-        }
-
-        //if pacman hits the left screen wall, stop
-        // TODO: CHANGE IT TO IF HE HITS THE MAZE's LEFT WALL
-     if ( (loc.getX() - radius) < 0) {
-            Log.d("pacman has hit a wall:", "direction:" + direction);
-            loc.setNewLoc( (int) (0 + radius) , loc.getY());
-
-        }
-        //if pacman hits the bottom screen wall
-    if  ( (loc.getY() + radius) > mScreenY) {
-            Log.d("pacman hit the bottom:", "direction:" + direction);
-            loc.setNewLoc(loc.getX(), (int)(mScreenY - radius));
-        }
-
-    if  ( (loc.getY() - radius) < 0)  //up
-        {
-            Log.d("pacman hit upper wall:", "direction:" + direction);
-            loc.setNewLoc(loc.getX(), (int)(0 + radius) );
-        }
+	}
 
 
+	/**
+	 * updates pacman's position
+	 * called each frame/loop from PacmanGame update() method
+	 * moves ball based on fps and the direction user is moving joystick
+	 */
+	void update(long fps)
+	{
+		// Move();
 
-    }
+		if (direction == 'l') {
+			loc.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
+		} else if (direction == 'r') {
+			loc.setNewLoc((int) (loc.getX() + (velocity / fps)), loc.getY());
+		} else if (direction == 'u') {
+			loc.setNewLoc(loc.getX(), (int) (loc.getY() - (velocity / fps)));
+		} else if (direction == 'd') {
+			loc.setNewLoc(loc.getX(), (int) (loc.getY() + (velocity / fps)));
+		}
+	}
 
-    /**
-     * Initializes four points of mRect(defines pacman)
-     * Initializes x and y velocities (can change later)
-     */
-    void reset(int x, int y) {
+	void reverseVel()
+	{
+		velocity = -velocity;
+	}
 
-        velocity = (float)(x / 3) ;
-        loc.setNewLoc(1000,700);
+	/**
+	 * detects the collisions of pacman with ghost, pellets, fruits,
+	 * TODO: TESTING TO CHECK WALL DETECTION HERE
+	 */
+	// currently used for Pacman and ghost collision detection
+	public boolean detectCollision(Location loc, int mScreenX, int mScreenY)
+	{
+		boolean collided = false;
+		float radius = (mScreenX + mScreenY) / 200;
+		if (Math.abs(this.loc.getX() - loc.getX()) <= radius * 2
+				&& Math.abs(this.loc.getY() - loc.getY()) <= radius * 2) {
+			collided = true;
+		}
+		return collided;
+	}
 
-    }
+	/**
+	 * check if Pacman is inside the screen
+	 */
+	public void isInBounds(int mScreenX, int mScreenY)
+	{
+		float radius = (mScreenX + mScreenY) / 200;
+
+		//if pacman hits the right screen wall, stop
+		if ((loc.getX() + radius) > mScreenX) {
+			Log.d("pacman has hit a wall:", "direction:" + direction);
+			loc.setNewLoc((int) (mScreenX - radius), loc.getY());
+		}
+
+		//if pacman hits the left screen wall, stop
+		// TODO: CHANGE IT TO IF HE HITS THE MAZE's LEFT WALL
+		if ((loc.getX() - radius) < 0) {
+			Log.d("pacman has hit a wall:", "direction:" + direction);
+			loc.setNewLoc((int) (0 + radius), loc.getY());
+
+		}
+		//if pacman hits the bottom screen wall
+		if ((loc.getY() + radius) > mScreenY) {
+			Log.d("pacman hit the bottom:", "direction:" + direction);
+			loc.setNewLoc(loc.getX(), (int) (mScreenY - radius));
+		}
+
+		if ((loc.getY() - radius) < 0)  //up
+		{
+			Log.d("pacman hit upper wall:", "direction:" + direction);
+			loc.setNewLoc(loc.getX(), (int) (0 + radius));
+		}
+
+
+	}
+
+	/**
+	 * Initializes four points of mRect(defines pacman)
+	 * Initializes x and y velocities (can change later)
+	 */
+	void reset(int x, int y)
+	{
+
+		velocity = (float) (x / 3);
+		loc.setNewLoc(1000, 700);
+
+	}
 
 	/**
 	 * Checks if pacman is within bounds of maze
@@ -199,8 +221,8 @@ public class Pacman implements Collision {
 	 */
 	public void draw(Canvas canvas, Paint mPaint, float radius)
 	{
-        mPaint.setColor(Color.argb(255, 255, 255, 0));
-	    canvas.drawCircle(loc.getX(), loc.getY(), radius, mPaint);
+		mPaint.setColor(Color.argb(255, 255, 255, 0));
+		canvas.drawCircle(loc.getX(), loc.getY(), radius, mPaint);
 	}
 
 
@@ -214,16 +236,11 @@ public class Pacman implements Collision {
 	{
 		if (joyDirection == 'l') {
 			direction = 'l';
-		}
-		else if (joyDirection == 'r') {
+		} else if (joyDirection == 'r') {
 			direction = 'r';
-		}
-
-		else if (joyDirection == 'u') {
+		} else if (joyDirection == 'u') {
 			direction = 'u';
-		}
-
-		else if (joyDirection == 'd') {
+		} else if (joyDirection == 'd') {
 			direction = 'd';
 		}
 	}
