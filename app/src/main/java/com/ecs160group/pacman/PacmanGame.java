@@ -76,6 +76,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
         private int yPac;
 
         private int pellet;
+        private int MAX_PELLETS;
         Block mBlock;
 
         //constructor
@@ -107,6 +108,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 mGhost = new Ghost(mScreenX, 800, 400);
                 mFakeJoy = new FakeJoy(200, 100, blockSize, fakePosition);
                 pellet = 0;
+                MAX_PELLETS = 100; // TODO: Update max pellets to maze.
                 //bitmap
                 bitmap = Bitmap.createBitmap(mScreenX, mScreenY, Bitmap.Config.ARGB_8888);
                 mCanvas = new Canvas(bitmap);
@@ -165,7 +167,28 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 //TODO: Pause the game and resume
 
         }
+        public void StageCleared(){
+                // TODO: reset using maze coordinates, rather than screen position.
+                mPacman.reset(mScreenX, mScreenY);
+                mGhost.reset(mScreenX, mScreenY);
 
+                //resetting /States/Direction
+                pellet = 0; // New map, reset pellet counter
+                mPacman.setPowerUpState(0, false);
+                mGhost.setDeathState(0, false);
+                // Movement reset.
+                mFakeJoy.setCenter();
+                mPacman.updateNextDirection('l');
+
+                // In this case we just reset the maze,
+                // TODO: Add more levels.
+                mMaze = new Maze(activityContext, mScreenX, mScreenY);
+                PacmanGameStart = MediaPlayer.create(activityContext, R.raw.pacman_beginning);
+                PacmanGameStart.start();
+
+
+
+        }
 
         // When we start the thread with:
         // mGameThread.start();
@@ -244,14 +267,21 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 }
 
 
+                /* TODO: Because Pacman's location is updated by the screen's position it cannot use .loc.getX or .loc.getY
+                         Create new variables to keep track of coordinate position within MAZE/GRID!
                 //mGrid = mMaze.getMaze();
                 xPac = mPacman.loc.getX();
                 yPac = mPacman.loc.getY();
                 //if(mGrid[xPac][yPac].getObj() == EMPTY){
                 //}
-                /*
-                switch(mGrid[xPac][yPac].getObj()){
-                        case GHOST: // Death sequence, Pacman and Ghost same tile. Which Ghost does not matter.
+
+                switch(mMaze.getMaze()[xPac][yPac].getObj()){
+                        //TODO: handle pacman & ghost collision seperateley.
+                        // Ghost collision should be handled by their own private x,y coordinates instead.
+                        // Maze cannot keep track of all Pellet/Pacman/Ghost at same location.
+                        // This case should be stand alone within pacman?
+                        case GHOST:
+                                // !!! Death sequence, Pacman and Ghost same tile. Which Ghost does not matter.
                                 if(mPacman.getPowerState() == false && mPacman.getPowerTimer() >= 0){
                                         PacmanGameStart = MediaPlayer.create(activityContext, R.raw.pacman_death);
                                         PacmanGameStart.start();
@@ -260,7 +290,6 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                         mFakeJoy.setCenter();
                                         draw();
                                         deathRestart();
-
                                 }
                                 else{
                                         // Ghost matters, set the specific ghost's deathState.
@@ -272,11 +301,17 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                 }
                                 break;
                 	    case WALL: // Prevent movement here, but pacman MUST continue moving
+                                // TODO: Pacman collision here
                                 break;
                         case PELLET:
-                                if(pellet >= 100){
+                                mMaze.getMaze()[xPac][yPac].updateLoc(xPac, yPac, mBlock.EMPTY);
+                                if(pellet >= MAX_PELLETS){ // On game complete TODO: Change pellet to correct amount.
                                         Log.d("Debugging", "In Collision Interact: POWER_PELLET");
-                                        //TODO: Win screen, added win(), request/New level
+                                        draw();
+                                        pauseStartDeath(3000);
+                                        mFakeJoy.setCenter();
+                                        draw();
+                                        StageCleared();
                                 }
                                 // TODO: Have grid set location to empty Object.
                                 //mGrid[xPac][yPac].updateLoc(xPac, yPac, EMPTY ); // Set empty?
@@ -284,19 +319,22 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                 break;
                          case POWER_PELLET: // Encounter PowerPellet, set state
                                  Log.d("Debugging", "In Collision Interact: POWER_PELLET");
-                                 mPacman.setPowerUpState(2000,true);
+                                 mPacman.setPowerUpState(2000,true); // 2000 is amount of frames time to be decremented EVERY FRAME
                                 // TODO: Set exact amount of frames the powerup lasts, for now infinite.
                                 break;
                         case WARP_SPACE:
                                 // TODO: Find out both locations of warp_space. Have pacman swap positions.
-                                //mPacman.loc.setNewLoc( );
+                                //mPacman.loc.setNewLoc( ); // Change to locate grid coordinates, not screen position
                                 break;
                         case GHOST_GATE: // Prevent movement. Collision
-
+                                Log.d("Debugging", "In Collision Interact: GHOST_GATE");
+                                // TODO: Pacman collision here
                                 break;
-                        case PAC_SPAWN: // Not needed?
+                        case PAC_SPAWN: // *Nothing* Not needed? Same as empty.
                                 break;
                         case GHOST_SPAWN: // Nothing at the moment/ Prevent movement?
+                                // TODO: Pacman collision here
+                                break;
                         case EMPTY: // empty space, Nothing happens. Continue movement.
                                 Log.d("Debugging", "In Collision Interact: EMPTY");
                                 break;
@@ -304,7 +342,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                 Log.d("Debugging", "In Collision Interact");
                                 break;
                 }
-*/
+        */
         }
 
         //called by PacmanActivity when player quits game

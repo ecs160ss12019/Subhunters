@@ -29,6 +29,8 @@ class Maze
 	//holds resolution of screen
 	private int mScreenX;
 	private int mScreenY;
+	private int xScaled;
+	private int yScaled;
 
 
 	/**
@@ -45,7 +47,8 @@ class Maze
 		// initializes the grid size
 		grid = new Location[MAZE_WIDTH][MAZE_HEIGHT];
 		mlevelCreator = new LevelCreator(grid, context);
-
+		xScaled = mScreenX / 2;
+		yScaled = mScreenY / 12;
 	}
 
 	/**
@@ -56,35 +59,27 @@ class Maze
 		//TODO: EDIT THIS
 		//print the whole graph
 
-		/*
+
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
 				// print the grid piece on the canvas
-				drawSpace(grid[i][j], mCanvas);
+				drawSpace(grid[i][j], mCanvas, mPaint);
 			}
 		}
-		*/
+
 
 		//print the wall
-
 		//print the Pacman's position after the last order
-
 		//using get() function in location and add the fixed value of order direction to the coordinate
-
 		//print the ghosts
-
 		//print items (fruits and more)
 
+		/*
 		//debugging
-
 		Log.d("Debugging", "In draw");
 
-
-			//mCanvas.drawColor(Color.argb(255, 0, 0, 0));
-			mPaint.setColor(Color.argb(255, 255, 255, 255));
-			//getMaze();
-			int xScaled = mScreenX / 2;
-			int yScaled = mScreenY / 12;
+		int xScaled = mScreenX / 2;
+		int yScaled = mScreenY / 12;
 
 		for (int i = 0; i < MAZE_WIDTH; i++) {
 				for (int j = 0; j < MAZE_HEIGHT; j++) {
@@ -95,17 +90,16 @@ class Maze
 					}
 				}
 			}
+			*/
 
 	}
 
 
 	/**
 	 * Gets the array of maze locations
-	 *
 	 * @return array of maze locations
 	 */
 	Location[][] getMaze() {
-
 		return grid;
 	}
 
@@ -118,7 +112,7 @@ class Maze
 	 * Draws a single object in the designated space in the maze
 	 * @param l location of the object to draw
 	 */
-	private void drawSpace(Location l, Canvas mCanvas)
+	private void drawSpace(Location l, Canvas mCanvas, Paint mPaint)
 	{
 		Resources res = Resources.getSystem();
 		int img = -1;
@@ -130,9 +124,13 @@ class Maze
 			case GHOST: // TODO: extend and change the ghosts to input for each NAMED ghost
 				img = R.drawable.blinky;
 				break;
-		/*	case WALL:
-				img = R.drawable.wall; // TODO: extend to input different wall type pieces
+			case WALL:
+				mCanvas.drawCircle(l.getX() * 28 + xScaled, l.getY() * 28 + yScaled, 4, mPaint);
+				Log.d("getMaze: ", "coord: (" + l.getX() + "," + l.getY() +")");
+				//img = R.drawable.wall; // TODO: extend to input different wall type pieces
 				break;
+
+				/*
 			case PELLET:
 				img = R.drawable.pellet;
 				break;
@@ -143,8 +141,9 @@ class Maze
 				img = R.drawable.warp;
 				break;
 			case GHOST_GATE:
-				img = R.drawable.ghost_gate;*/
-			//	break;
+				img = R.drawable.ghost_gate;
+				break;*/
+
 			case PAC_SPAWN:
 			case GHOST_SPAWN:
 			case EMPTY: // empty space, no need to draw anything
@@ -154,10 +153,10 @@ class Maze
 		}
 		if (img != -1) {// not an empty space, print image
 			// TODO: draw image at the space
-			Bitmap unsizedObjBM = BitmapFactory.decodeResource(res, img);
+			//Bitmap unsizedObjBM = BitmapFactory.decodeResource(res, img);
 			// TODO: get the optimal size needed for each obj in the maze and then put it here
-			Bitmap sizedBm = Bitmap.createScaledBitmap(unsizedObjBM, 50, 50, false);
-			drawImage(sizedBm, l, mCanvas);
+			//Bitmap sizedBm = Bitmap.createScaledBitmap(unsizedObjBM, 50, 50, false);
+			//drawImage(sizedBm, l, mCanvas);
 		}
 	}
 
@@ -175,7 +174,7 @@ class Maze
 	}
 
 /*
-	*
+	* May be used to test current performance issues.
 	 * temp method to draw the maze (hardcoded style)
 	 * @param canvas canvas to draw on
 	 * @param paint paint to paint
