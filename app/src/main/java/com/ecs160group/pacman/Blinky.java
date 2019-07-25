@@ -6,7 +6,11 @@ package com.ecs160group.pacman;
  */
 public class Blinky extends Ghost
 {
-	private static final Location SCATTER = new Location(0, 27, Block.WALL);
+	/**
+	 * Static scatter location for Blinky
+	 *  is in wall so that Blinky scatters and patrols an area in the maze
+ 	 */
+	private static final Location SCATTER_LOC = new Location(0, 27, Block.WALL);
 
 	/**
 	 * Gets Blinky's scatter Location
@@ -14,7 +18,7 @@ public class Blinky extends Ghost
 	 */
 	public Location getScatterLocation()
 	{
-		return SCATTER;
+		return SCATTER_LOC;
 	}
 
 	/**
@@ -35,7 +39,7 @@ public class Blinky extends Ghost
 	public void move()
 	{
 		if (pacman.isSuper()) {
-			scatter(SCATTER);
+			scatter(SCATTER_LOC);
 		} else {
 			chase(getChaseLocation());
 		}
