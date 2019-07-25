@@ -94,11 +94,12 @@ public class Location
 	 * Gets the manhattan distance between the location passed in and the
 	 * current location
 	 *
-	 * @param loc location to find distance away from
-	 * @return manhattan distance from loc
+	 * @param loc1 first location to find distance from
+	 * @param loc2 second location to find distance from
+	 * @return manhattan distance between loc1 and loc2
 	 */
-	public int dist(Location loc)
+	public static int dist(Location loc1, Location loc2)
 	{
-		return Math.abs(loc.x - x) + Math.abs(loc.y - y);
+		return Math.abs(loc1.x - loc2.x) + Math.abs(loc1.y - loc2.y);
 	}
 }
