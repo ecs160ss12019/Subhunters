@@ -26,9 +26,11 @@ public class Location
 
 	/**
 	 * Copy constructor
+	 *
 	 * @param l Location to be copied
 	 */
-	Location (Location l) {
+	Location(Location l)
+	{
 		this.x = l.x;
 		this.y = l.y;
 		this.block = l.block;
@@ -38,8 +40,8 @@ public class Location
 	/**
 	 * Constructor that takes in an object and a coordinate
 	 *
-	 * @param x x axis coordinate
-	 * @param y y axis coordinate
+	 * @param x     x axis coordinate
+	 * @param y     y axis coordinate
 	 * @param block object at the xy-coordinate
 	 */
 	Location(int x, int y, Block block)
@@ -79,11 +81,14 @@ public class Location
 		return block;
 	}
 
-	public void setNewLoc(int newX, int newY){
+	public void setNewLoc(int newX, int newY)
+	{
 		x = newX;
 		y = newY;
 	}
-	public void updateLoc(int newX, int newY, Block newBlock){
+
+	public void updateLoc(int newX, int newY, Block newBlock)
+	{
 		x = newX;
 		y = newY;
 		block = newBlock;
@@ -101,5 +106,27 @@ public class Location
 	public static int dist(Location loc1, Location loc2)
 	{
 		return Math.abs(loc1.x - loc2.x) + Math.abs(loc1.y - loc2.y);
+	}
+
+	/**
+	 * Gets the adjacent location to the current one based on the direction from the
+	 * current location assumes an empty space
+	 *
+	 * @param direction direction to give the adjacent location to
+	 * @return the adjacent location based on the location, assumes an empty space
+	 */
+	public Location getAdjacentLocation(char direction)
+	{
+		switch (direction) {
+			case 'l': // location to left of current
+				return new Location(x - 1, y, Block.EMPTY);
+			case 'r': // location to the right of current
+				return new Location(x + 1, y, Block.EMPTY);
+			case 'u': // location above current
+				return new Location(x, y + 1, Block.EMPTY);
+			case 'd': // location below current, only option left
+			default:
+				return new Location(x, y - 1, Block.EMPTY);
+		}
 	}
 }

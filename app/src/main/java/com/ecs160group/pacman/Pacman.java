@@ -67,7 +67,7 @@ public class Pacman implements Collision
 	}
 
 	/**
-	 * 
+	 *
 	 * @param pTimer
 	 * @param pState sets the timer and powerup state of pacman
 	 */
