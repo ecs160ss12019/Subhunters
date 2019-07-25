@@ -125,18 +125,22 @@ class Maze
 				img = R.drawable.blinky;
 				break;
 			case WALL:
-				mCanvas.drawCircle(l.getX() * 28 + xScaled, l.getY() * 28 + yScaled, 4, mPaint);
-				Log.d("getMaze: ", "coord: (" + l.getX() + "," + l.getY() +")");
+				mPaint.setColor(Color.argb(255, 0, 0, 255));
+				mCanvas.drawCircle(l.getX() * 28 + xScaled, l.getY() * 28 + yScaled, 6, mPaint);
+				//Log.d("getMaze: ", "coord: (" + l.getX() + "," + l.getY() +")");
 				//img = R.drawable.wall; // TODO: extend to input different wall type pieces
 				break;
-
-				/*
 			case PELLET:
-				img = R.drawable.pellet;
+				//img = R.drawable.pellet;
+				mPaint.setColor(Color.argb(255, 0, 255, 255));
+				mCanvas.drawCircle(l.getX() * 28 + xScaled, l.getY() * 28 + yScaled, 3, mPaint);
 				break;
 			case POWER_PELLET:
-				img = R.drawable.power_pellet;
+				mPaint.setColor(Color.argb(255, 0, 255, 255));
+				mCanvas.drawCircle(l.getX() * 28 + xScaled, l.getY() * 28 + yScaled, 4, mPaint);
+				//img = R.drawable.power_pellet;
 				break;
+				/*
 			case WARP_SPACE:
 				img = R.drawable.warp;
 				break;
