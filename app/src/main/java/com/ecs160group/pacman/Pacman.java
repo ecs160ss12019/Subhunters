@@ -43,7 +43,7 @@ public class Pacman implements Collision {
     final Paint paint = new Paint();
 
 
-
+	public Location getLoc() { return loc; }
     public int getPowerTimer() { return powerTimer; }
     public boolean getPowerState() { return powerState; }
 
