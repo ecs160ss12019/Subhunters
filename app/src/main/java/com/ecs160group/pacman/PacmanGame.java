@@ -214,6 +214,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
         private void detectCollisions() {
                 //first check if characters are in the maze
                 mPacman.isInBounds(mScreenX, mScreenY);
+                mGhost.isInBounds(mScreenX, mScreenY);
 
                 //TODO: separate detection collision methods within pacman/ghost/maze classes OR do it here
                 //pacman && ghost collision (add condition for super mode later)
