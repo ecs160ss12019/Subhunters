@@ -75,6 +75,10 @@ public class Ghost implements Collision
 
 	}
 
+	public Location getLoc() {
+		return loc;
+	}
+
 	/**
 	 *
 	 * @param dTimer
