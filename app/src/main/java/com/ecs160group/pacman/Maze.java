@@ -13,6 +13,8 @@ import android.graphics.Paint;
 import android.view.SurfaceHolder;
 
 
+
+
 class Maze
 {
 	final static int MAZE_WIDTH = 28;
@@ -31,6 +33,12 @@ class Maze
 	private int mScreenY;
 	private int xScaled;
 	private int yScaled;
+	public Pacman mPacman;
+	public Blinky mBlinky;
+	public Inky mInky;
+	public Pinky mPinky;
+	public Clyde mClyde;
+
 
 
 	/**
@@ -39,8 +47,10 @@ class Maze
 	 * @param context context from PacmanActivity
 	 */
 //	public Maze(PointF blockSize,  Canvas mCanvas, Context context)
-	public Maze(Context context, int xScreen, int yScreen)
+	public Maze(Context context, int xScreen, int yScreen, PointF blockSize)
 	{
+		this.blockSize = new PointF();
+		this.blockSize = blockSize;
 		this.context = context;
 		mScreenX = xScreen;
 		mScreenY = yScreen;
@@ -50,6 +60,10 @@ class Maze
 		mlevelCreator = new LevelCreator(grid, context);
 		xScaled = mScreenX / 2;
 		yScaled = mScreenY / 12;
+		initPacAndGhost();
+
+
+
 	}
 
 	/**
@@ -112,20 +126,61 @@ class Maze
 	}
 
 	/**
+	 * function to change pac_spawn and ghost_spawn to pacman and ghost respectively in grid
+	 */
+	private void initPacAndGhost() {
+		//hard code for now, for loop isn't working correctly
+
+		grid[13][11].updateLoc(grid[13][11].getX(), grid[13][11].getY(), Block.GHOST);
+		grid[14][11].updateLoc(grid[14][11].getX(), grid[13][11].getY(), Block.GHOST);
+		grid[13][23].updateLoc(grid[13][23].getX(), grid[13][23].getY(), Block.PACMAN);
+
+
+		//for loop not working to detect PAC_SPAWN for some reason
+      /*  for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                // print the grid piece on the canvas
+
+                if (grid[i][j].getObj() == Block.PAC_SPAWN) {
+                	Log.d("in pac_spawn object: ", "changing to pacman: " + grid[i][i].getObj());
+                    grid[i][j].updateLoc(grid[i][j].getX(), grid[i][j].getY(), Block.PACMAN);
+					Log.d("in pac_spawn object: ", "changing to pacman: " + grid[i][i].getObj());
+                }
+                if (grid[i][j].getObj() == Block.GHOST_SPAWN) {
+                    grid[i][j].updateLoc(grid[i][j].getX(), grid[i][j].getY(), Block.GHOST);
+                }
+
+
+            }
+        }*/
+
+
+    }
+
+	/**
 	 * Draws a single object in the designated space in the maze
 	 *
 	 * @param l location of the object to draw
 	 */
 	private void drawSpace(Location l, Canvas mCanvas, Paint mPaint)
 	{
-		Resources res = Resources.getSystem();
+		//Resources res = Resources.getSystem();
+
 		int img = -1;
 		// TODO: draw each image in the location and put them in res/drawable
 		switch (l.getObj()) {
 			case PACMAN:
+				/*mPaint.setColor(Color.argb(255, 255, 255, 0));
+				mCanvas.drawCircle(l.getX() * 28 + xScaled, l.getY() * 28 + yScaled, 14, mPaint);*/
+
+				Log.d("hi im pacman: ", "im pacman" + l.getObj());
 				img = R.drawable.pacman;
 				break;
-			case GHOST: // TODO: extend and change the ghosts to input for each NAMED ghost
+			case GHOST:
+				 //TODO: extend and change the ghosts to input for each NAMED ghost
+				/*mPaint.setColor(Color.argb(255, 0, 0, 255));
+				mCanvas.drawCircle(l.getX() * 28 + xScaled, l.getY() * 28 + yScaled, 14, mPaint);*/
+				Log.d("hi im a ghost", "im a ghost" + l.getObj());
 				img = R.drawable.blinky;
 				break;
 			case WALL:
@@ -135,15 +190,14 @@ class Maze
 				//img = R.drawable.wall; // TODO: extend to input different wall type pieces
 				break;
 			case PELLET:
-				//img = R.drawable.pellet;
 				mPaint.setColor(Color.argb(255, 0, 255, 255));
 				mCanvas.drawCircle(l.getX() * 28 + xScaled, l.getY() * 28 + yScaled, 3, mPaint);
 				break;
 			case POWER_PELLET:
 				mPaint.setColor(Color.argb(255, 0, 255, 255));
 				mCanvas.drawCircle(l.getX() * 28 + xScaled, l.getY() * 28 + yScaled, 4, mPaint);
-				//img = R.drawable.power_pellet;
 				break;
+				//img = R.drawable.power_pellet;
 				/*
 			case WARP_SPACE:
 				img = R.drawable.warp;
@@ -151,20 +205,28 @@ class Maze
 			case GHOST_GATE:
 				img = R.drawable.ghost_gate;
 				break;*/
-
-			case PAC_SPAWN:
-			case GHOST_SPAWN:
-			case EMPTY: // empty space, no need to draw anything
-			default:
+		/*	case PAC_SPAWN:
+				Log.d("in pac_spawn", "hi pac_spawn" +l.getObj());
+				//img = 0;
+				//mPacman = new Pacman(mScreenX, l.getX(), l.getY());
+				l.updateLoc(l.getX(), l.getY(), Block.PACMAN);//changes this to PACMAN
+				break;*/
+			/*case GHOST_SPAWN:
 				img = 0;
+			case EMPTY:
+				img = 0;// empty space, no need to draw anything*/
+			default:
+				//img = 0;
 				break;
 		}
 		if (img != -1) {// not an empty space, print image
-			// TODO: draw image at the space
-			//Bitmap unsizedObjBM = BitmapFactory.decodeResource(res, img);
-			// TODO: get the optimal size needed for each obj in the maze and then put it here
-			//Bitmap sizedBm = Bitmap.createScaledBitmap(unsizedObjBM, 50, 50, false);
-			//drawImage(sizedBm, l, mCanvas);
+			//Log.d("in yesDraw", "yesDraw" +l.getObj());
+			Log.d("x coord: ", "l.getX(): " + (l.getX() * 28 + xScaled));
+            Log.d("y coord: ", "l.getY(): " + (l.getY() * 28 + xScaled));
+			Bitmap unsizedBitmap = BitmapFactory.decodeResource(context.getResources(), img);
+			Bitmap sizedBitmap = Bitmap.createScaledBitmap(unsizedBitmap, 29, 29, false);
+			mCanvas.drawBitmap(sizedBitmap, (l.getX() * 28 + xScaled) - + ((mScreenX + mScreenY) / 200),
+					(l.getY() * 28 + yScaled) - + ((mScreenX + mScreenY) / 200) , null);
 		}
 	}
 
@@ -174,8 +236,7 @@ class Maze
 	 * @param bm correctly sized bitmap of the image to draw
 	 * @param l  location to draw the image at
 	 */
-	void drawImage(Bitmap bm, Location l, Canvas mCanvas)
-	{
+	void drawImage(Bitmap bm, Location l, Canvas mCanvas) {
 		// TODO: make this commented out thing with location plus the sizing we need
 		// bitmap width and height are predetermined widths and heights for items in the maze
 		float bitmapWidth = (mScreenX + mScreenY) / 200;
@@ -194,16 +255,25 @@ class Maze
 				&& (l.getY() >= 0 && l.getY() < MAZE_HEIGHT);
 	}
 
-/*
-	* May be used to test current performance issues.
+	/**
+	 * function to change the BLOCK of PAC_SPAWN to PACMAN
+	 * @param l location of PAC_SPAWN
+	 */
+
+
+	/** May be used to test current performance issues.
 	 * temp method to draw the maze (hardcoded style)
 	 * @param canvas canvas to draw on
 	 * @param paint paint to paint
-	void tempDraw(Canvas canvas, Paint paint){
-
+	 */
+	void tempDraw(Canvas mCanvas, Paint paint, Location l){
+		Bitmap unsizedBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.blinky);
+		Bitmap sizedBitmap = Bitmap.createScaledBitmap(unsizedBitmap, 29, 29, false);
+		mCanvas.drawBitmap(sizedBitmap, l.getX() * 28
+				+ xScaled, l.getY() * 28 + xScaled, null);
 
 
 	}
-*/
+
 
 }
