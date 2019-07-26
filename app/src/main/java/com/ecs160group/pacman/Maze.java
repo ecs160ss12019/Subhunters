@@ -261,10 +261,12 @@ class Maze
 	 */
 
 
-	/** May be used to test current performance issues.
-	 * temp method to draw the maze (hardcoded style)
-	 * @param canvas canvas to draw on
-	 * @param paint paint to paint
+	/**
+	 * May be used to test current performance issues.
+	 * 	temp method to draw the maze (hardcoded style)
+ 	 * @param mCanvas
+	 * @param paint
+	 * @param l
 	 */
 	void tempDraw(Canvas mCanvas, Paint paint, Location l){
 		Bitmap unsizedBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.blinky);
