@@ -221,11 +221,11 @@ class Maze
 		}
 		if (img != -1) {// not an empty space, print image
 			//Log.d("in yesDraw", "yesDraw" +l.getObj());
-			Log.d("x coord: ", "l.getX(): " + (l.getX() * 28 + xScaled));
-            Log.d("y coord: ", "l.getY(): " + (l.getY() * 28 + xScaled));
-			Bitmap unsizedBitmap = BitmapFactory.decodeResource(context.getResources(), img);
-			Bitmap sizedBitmap = Bitmap.createScaledBitmap(unsizedBitmap, 29, 29, false);
-			mCanvas.drawBitmap(sizedBitmap, (l.getX() * 28 + xScaled) - + ((mScreenX + mScreenY) / 200),
+			//Log.d("x coord: ", "l.getX(): " + (l.getX() * 28 + xScaled));
+           // Log.d("y coord: ", "l.getY(): " + (l.getY() * 28 + xScaled));
+			//Bitmap unsizedBitmap = BitmapFactory.decodeResource(context.getResources(), img);
+			//Bitmap sizedBitmap = Bitmap.createScaledBitmap(unsizedBitmap, 29, 29, false);
+			//mCanvas.drawBitmap(sizedBitmap, (l.getX() * 28 + xScaled) - + ((mScreenX + mScreenY) / 200),
 					(l.getY() * 28 + yScaled) - + ((mScreenX + mScreenY) / 200) , null);
 		}
 	}

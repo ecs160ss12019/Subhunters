@@ -112,8 +112,8 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 
                 //Initialize objects(maze, pacman, ghost, joystick)
                 PacGhostRadius = (float) (mScreenX + mScreenY) / 200;
-                mPacman = new Pacman(mScreenX, 13, 23);
-                mGhost = new Ghost(mScreenX, 13, 11);
+                mPacman = new Pacman(mScreenX, 1000, 700);
+                mGhost = new Ghost(mScreenX, 800, 400);
                 mFakeJoy = new FakeJoy(200, 100, blockSize, fakePosition);
                 pellet = 0;
                 MAX_PELLETS = 100; // TODO: Update max pellets to maze.
@@ -408,28 +408,24 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         mMaze.draw(mCanvas, mPaint);
                         mFakeJoy.draw(mCanvas, mPaint);
 
-                        float xScaled = (float) mScreenX / 2;
-                        float yScaled = (float) mScreenY / 12;
-                        //mPaint.setColor(Color.argb(255, 255, 255, 0));
-                        //canvas.drawCircle(loc.getX(), loc.getY(), radius, mPaint);
-                      /*  Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.pacman);
+                        Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.pacman);
 
 
                         Bitmap sizedB = Bitmap.createScaledBitmap(b, (int) PacGhostRadius * 2,
                                 (int) PacGhostRadius * 2, false);
 
-                        mCanvas.drawBitmap(sizedB, (mPacman.loc.getX() * 28 + xScaled) - PacGhostRadius,
-                                (mPacman.loc.getY() * 28 + yScaled) - PacGhostRadius , null);
+                       
 
-
+                        mCanvas.drawBitmap(sizedB, mPacman.loc.getX() - PacGhostRadius,
+                                mPacman.loc.getY() - PacGhostRadius, null);
 
                         b = BitmapFactory.decodeResource(getResources(), R.drawable.blinky);
 
                         sizedB = Bitmap.createScaledBitmap(b, (int) PacGhostRadius * 2,
                                 (int) PacGhostRadius * 2, false);
 
-                        mCanvas.drawBitmap(sizedB, (mGhost.loc.getX() * 28 + xScaled) - PacGhostRadius,
-                                (mGhost.loc.getY() * 28 + yScaled) - PacGhostRadius , null);*/
+                        mCanvas.drawBitmap(sizedB, mGhost.loc.getX() - PacGhostRadius,
+                                mGhost.loc.getY() - PacGhostRadius, null);
 
                         mPaint.setColor(Color.argb(255, 0, 0, 255));
                         //redPaint.setColor(Color.argb(0,255, 0, 0));
