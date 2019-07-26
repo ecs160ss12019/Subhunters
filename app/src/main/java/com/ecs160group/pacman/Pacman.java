@@ -166,22 +166,27 @@ public class Pacman implements Collision
 	// further can be used for pullet collision
 	public boolean wallDetection(Maze maze)
 	{
+		// this value will be used for deciding update or not
 		boolean update;
 		update = true;
 
+		//read in Grid and grid indices of current location
 		Location [][] mGrid = maze.getMaze();
 		int gridValues[] = maze.getGridValues(loc);
 
 
 
 		//if Pacman will hit the right wall, stop
+		// that is, set to NOT updata
 		if (direction == 'r' )
 		{
+			// first judge if we are already at the right bound
 			if (gridValues[1] == 30)
 			{
 				Log.d("PACMAN HAS HIT A BOUND:", "direction:" + direction);
 				update = false;
 			}
+			// if not, are we gonna hit a wall?
 			else if (mGrid[gridValues[0]][gridValues[1] + 1].getObj() == Block.WALL)
 			{
 				Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
