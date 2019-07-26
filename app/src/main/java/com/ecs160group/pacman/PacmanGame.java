@@ -105,7 +105,11 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 mPaint = new Paint();
                 joystickX = 0;
                 joystickY = 0;
-
+                
+                //set flags for Pacman and Ghost
+                boolean updatePacman = true;
+                boolean updateGhost = true;
+                
                 //Initialize objects(maze, pacman, ghost, joystick)
                 PacGhostRadius = (float) (mScreenX + mScreenY) / 200;
                 mPacman = new Pacman(mScreenX, 13, 23);
@@ -120,7 +124,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 mMaze = new Maze(activityContext, mScreenX, mScreenY, blockSize);
 
                 //start the game LETS GET PACCING
-                update();
+                update(updatePacman, updateGhost);
                 draw();
                 startNewGame();
 
@@ -209,7 +213,11 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         long frameStartTime = System.currentTimeMillis();
 
                         if (!mPaused) {
-                                update();
+                                //Boolean updatePacman = mPacman.isInMaze(mMaze);
+                                // true for testing
+                                Boolean updatePacman = true;
+                                Boolean updateGhost = true;
+                                update(updatePacman, updateGhost);
                                 detectCollisions();
 
 
@@ -233,10 +241,15 @@ public class PacmanGame extends SurfaceView implements Runnable{
         }
 
         //updates pacman/ghosts/pellets/maze
-        private void update() {
+        private void update(boolean updatePacman, boolean updateGhost) {
                 //TODO: add update methods to pacman/ghost/maze classes OR do it here
-                mPacman.update(mFPS);
-                mGhost.update(mFPS);
+                
+                // now has a if-condition to check whether Pacman and ghost will hit a wall
+                // so there is no need for update
+                if (updatePacman)
+                        mPacman.update(mFPS);
+                if (updateGhost)
+                        mGhost.update(mFPS);
 
         }
 
