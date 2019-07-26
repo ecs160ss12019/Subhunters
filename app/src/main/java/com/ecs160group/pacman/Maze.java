@@ -274,6 +274,26 @@ class Maze
 
 
 	}
+	
+	/**
+	 * Given the location of a object, try to find its position in the maze
+	 * @param l
+	 * @return the grid values i and j
+	 */
+	public int [] getGridValues(Location l)
+	{
+		int gridVal[];
+		gridVal = new int[2];
+		
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid[i].length; j++) {
+				if (grid[i][j].getX() == l.getX() && grid[i][j].getY() == l.getY())
+					gridVal[0] = i;
+					gridVal[1] = j;
+			}
+		}
+		return gridVal;
+	}
 
 
 }
