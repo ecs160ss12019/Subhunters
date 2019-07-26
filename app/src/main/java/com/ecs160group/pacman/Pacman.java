@@ -175,37 +175,65 @@ public class Pacman implements Collision
 
 
 		//if Pacman will hit the right wall, stop
-		if (direction == 'r' && gridValues[1] == 31)
-		//|| (direction == 'r' && mGrid[gridValues[0]][gridValues[1] + 1].getObj() == Block.WALL))
+		if (direction == 'r' )
 		{
-			Log.d("pacman has hit a wall:", "direction:" + direction);
-			update = false;
+			if (gridValues[1] == 30)
+			{
+				Log.d("PACMAN HAS HIT A BOUND:", "direction:" + direction);
+				update = false;
+			}
+			else if (mGrid[gridValues[0]][gridValues[1] + 1].getObj() == Block.WALL)
+			{
+				Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
+				update = false;
+			}
 		}
 
 
 		//if pacman will hit the left wall, stop
-		if (direction == 'l' && gridValues[1] == 0)
-		//if (direction == 'l' && mGrid[gridValues[0]][gridValues[1] - 1].getObj() == Block.WALL)
+		if (direction == 'l' )
 		{
-			Log.d("pacman has hit a wall:", "direction:" + direction);
-			update = false;
+			if (gridValues[1] == 0)
+			{
+				Log.d("PACMAN HAS HIT A BOUND:", "direction:" + direction);
+				update = false;
+			}
+			else if (mGrid[gridValues[0]][gridValues[1] - 1].getObj() == Block.WALL)
+			{
+				Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
+				update = false;
+			}
 		}
 
 		//if Pacman will hit the top wall, stop
-		if (direction == 'u' && gridValues[0] == 0)
-		//if (direction == 'u' && mGrid[gridValues[0] - 1 ][gridValues[1]].getObj() == Block.WALL)
+		if (direction == 'u' )
 		{
-			Log.d("pacman has hit a wall:", "direction:" + direction);
-			update = false;
+			if (gridValues[0] == 0)
+			{
+				Log.d("PACMAN HAS HIT A BOUND:", "direction:" + direction);
+				update = false;
+			}
+			else if (mGrid[gridValues[0] - 1][gridValues[1]].getObj() == Block.WALL)
+			{
+				Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
+				update = false;
+			}
 		}
 
 
 		//if Pacman will hit the bottom wall, stop
-		if (direction == 'd' && gridValues[0] == 31)
-		//if (direction == 'd' && mGrid[gridValues[0] + 1][gridValues[1]-1].getObj() == Block.WALL)
+		if (direction == 'd' )
 		{
-			Log.d("pacman has hit a wall:", "direction:" + direction);
-			update = false;
+			if (gridValues[0] == 28)
+			{
+				Log.d("PACMAN HAS HIT A BOUND:", "direction:" + direction);
+				update = false;
+			}
+			else if (mGrid[gridValues[0] + 1][gridValues[1]].getObj() == Block.WALL)
+			{
+				Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
+				update = false;
+			}
 		}
 		return update;
 
