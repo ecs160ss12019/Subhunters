@@ -158,12 +158,13 @@ public class Pacman implements Collision
 	}
 	
 	/**
-	 * check if Pacman is inside the mae
+	 * check if Pacman need to update by wall detection
 	 * this fucntion will be executed before update
+	 * by avoiding going through the wall, Pacman is inside the maze
 	 * so we can predict whether a update is needed for Pacman
 	 */
 	// further can be used for pullet collision
-	public boolean isInMaze(Maze maze)
+	public boolean wallDetection(Maze maze)
 	{
 		boolean update;
 		update = true;

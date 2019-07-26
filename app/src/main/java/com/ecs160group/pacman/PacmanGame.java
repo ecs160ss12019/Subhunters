@@ -213,7 +213,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         long frameStartTime = System.currentTimeMillis();
 
                         if (!mPaused) {
-                                //Boolean updatePacman = mPacman.isInMaze(mMaze);
+                                //Boolean updatePacman = mPacman.wallDetection(mMaze);
                                 // true for testing
                                 Boolean updatePacman = true;
                                 Boolean updateGhost = true;
