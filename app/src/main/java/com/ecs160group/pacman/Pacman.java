@@ -172,8 +172,11 @@ public class Pacman implements Collision
 		Location [][] mGrid = maze.getMaze();
 		int gridValues[] = maze.getGridValues(loc);
 
+
+
 		//if Pacman will hit the right wall, stop
-		if (direction == 'r' && mGrid[gridValues[0]][gridValues[1] + 1].getObj() == Block.WALL)
+		if (direction == 'r' && gridValues[1] == 31)
+		//|| (direction == 'r' && mGrid[gridValues[0]][gridValues[1] + 1].getObj() == Block.WALL))
 		{
 			Log.d("pacman has hit a wall:", "direction:" + direction);
 			update = false;
@@ -181,14 +184,16 @@ public class Pacman implements Collision
 
 
 		//if pacman will hit the left wall, stop
-		if (direction == 'l' && mGrid[gridValues[0]][gridValues[1] - 1].getObj() == Block.WALL)
+		if (direction == 'l' && gridValues[1] == 0)
+		//if (direction == 'l' && mGrid[gridValues[0]][gridValues[1] - 1].getObj() == Block.WALL)
 		{
 			Log.d("pacman has hit a wall:", "direction:" + direction);
 			update = false;
 		}
 
 		//if Pacman will hit the top wall, stop
-		if (direction == 'l' && mGrid[gridValues[0] - 1 ][gridValues[1]].getObj() == Block.WALL)
+		if (direction == 'u' && gridValues[0] == 0)
+		//if (direction == 'u' && mGrid[gridValues[0] - 1 ][gridValues[1]].getObj() == Block.WALL)
 		{
 			Log.d("pacman has hit a wall:", "direction:" + direction);
 			update = false;
@@ -196,7 +201,8 @@ public class Pacman implements Collision
 
 
 		//if Pacman will hit the bottom wall, stop
-		if (direction == 'l' && mGrid[gridValues[0] + 1][gridValues[1]-1].getObj() == Block.WALL)
+		if (direction == 'd' && gridValues[0] == 31)
+		//if (direction == 'd' && mGrid[gridValues[0] + 1][gridValues[1]-1].getObj() == Block.WALL)
 		{
 			Log.d("pacman has hit a wall:", "direction:" + direction);
 			update = false;
