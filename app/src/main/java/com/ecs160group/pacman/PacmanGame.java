@@ -214,9 +214,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
 
                         if (!mPaused) {
                                 Boolean updatePacman = mPacman.wallDetection(mMaze);
-                                // true for testing
-                                //Boolean updatePacman = true;
-                                Boolean updateGhost = true;
+                                Boolean updateGhost = mGhost.wallDetection(mMaze);
                                 update(updatePacman, updateGhost);
                                 detectCollisions();
 

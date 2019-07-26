@@ -241,11 +241,97 @@ public class Ghost implements Collision
 		}
 	}
 
+	/**
+	 * check if Ghost need to update by wall detection
+	 * this fucntion will be executed before update
+	 * by avoiding going through the wall, Ghost is inside the maze
+	 * so we can predict whether a update is needed for Pacman
+	 */
+	// further can be used for pullet collision
+	public boolean wallDetection(Maze maze)
+	{
+		// this value will be used for deciding update or not
+		boolean update;
+		update = true;
+
+		//read in Grid and grid indices of current location
+		Location [][] mGrid = maze.getMaze();
+		int gridValues[] = maze.getGridValues(loc);
+
+
+
+		//if ghost will hit the right wall, stop
+		// that is, set to NOT update
+		if (direction == 'r' )
+		{
+			// first judge if we are already at the right bound
+			if (gridValues[1] == 30)
+			{
+				Log.d("GHOST HAS HIT A BOUND:", "direction:" + direction);
+				update = false;
+			}
+			// if not, are we gonna hit a wall?
+			else if (mGrid[gridValues[0]][gridValues[1] + 1].getObj() == Block.WALL)
+			{
+				Log.d("GHOST HAS HIT A WALL:", "direction:" + direction);
+				update = false;
+			}
+		}
+
+		//if ghost will hit the left wall, stop
+		if (direction == 'l' )
+		{
+			if (gridValues[1] == 0)
+			{
+				Log.d("GHOST HAS HIT A BOUND:", "direction:" + direction);
+				update = false;
+			}
+			else if (mGrid[gridValues[0]][gridValues[1] - 1].getObj() == Block.WALL)
+			{
+				Log.d("GHOST HAS HIT A WALL:", "direction:" + direction);
+				update = false;
+			}
+		}
+
+		//if ghost will hit the top wall, stop
+		if (direction == 'u' )
+		{
+			if (gridValues[0] == 0)
+			{
+				Log.d("GHOST HAS HIT A BOUND:", "direction:" + direction);
+				update = false;
+			}
+			else if (mGrid[gridValues[0] - 1][gridValues[1]].getObj() == Block.WALL)
+			{
+				Log.d("GHOST HAS HIT A WALL:", "direction:" + direction);
+				update = false;
+			}
+		}
+
+		//if ghost will hit the bottom wall, stop
+		if (direction == 'd' )
+		{
+			if (gridValues[0] == 27)
+			{
+				Log.d("GHOST HAS HIT A BOUND:", "direction:" + direction);
+				update = false;
+			}
+			else if (mGrid[gridValues[0] + 1][gridValues[1]].getObj() == Block.WALL)
+			{
+				Log.d("GHOST HAS HIT A WALL:", "direction:" + direction);
+				update = false;
+			}
+		}
+		return update;
+
+
+	}
+
 	/*
     check if ghost is in bounds
     the function will later be used to check collision
     between ghost and wall probably
- */
+ 	*/
 	public void isInBounds(int mScreenX, int mScreenY) {
 		float radius = (mScreenX + mScreenY) / 200;
 

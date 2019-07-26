@@ -177,7 +177,7 @@ public class Pacman implements Collision
 
 
 		//if Pacman will hit the right wall, stop
-		// that is, set to NOT updata
+		// that is, set to NOT update
 		if (direction == 'r' )
 		{
 			// first judge if we are already at the right bound
@@ -193,7 +193,6 @@ public class Pacman implements Collision
 				update = false;
 			}
 		}
-
 
 		//if pacman will hit the left wall, stop
 		if (direction == 'l' )
@@ -225,11 +224,10 @@ public class Pacman implements Collision
 			}
 		}
 
-
 		//if Pacman will hit the bottom wall, stop
 		if (direction == 'd' )
 		{
-			if (gridValues[0] == 28)
+			if (gridValues[0] == 27)
 			{
 				Log.d("PACMAN HAS HIT A BOUND:", "direction:" + direction);
 				update = false;
