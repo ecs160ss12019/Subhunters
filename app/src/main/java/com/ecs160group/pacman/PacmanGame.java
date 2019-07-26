@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.graphics.BitmapFactory;
 
 
 
@@ -25,7 +26,7 @@ import android.view.View;
 
 public class PacmanGame extends SurfaceView implements Runnable{
         //for debugging purposes
-        private final boolean DEBUGGING = true;
+        private final boolean DEBUGGING = false;
         private long mFPS; //frames per second
         private final int MILLIS_IN_SECOND = 1000;
 
@@ -79,6 +80,8 @@ public class PacmanGame extends SurfaceView implements Runnable{
         private int MAX_PELLETS;
         Block mBlock;
 
+        private float PacGhostRadius;
+
         //constructor
         public PacmanGame(Context context, int x, int y) {
                 //Super... calls the parent class
@@ -104,6 +107,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 joystickY = 0;
 
                 //Initialize objects(maze, pacman, ghost, joystick)
+                PacGhostRadius = (float) (mScreenX + mScreenY) / 200;
                 mPacman = new Pacman(mScreenX, 1000, 700);
                 mGhost = new Ghost(mScreenX, 800, 400);
                 mFakeJoy = new FakeJoy(200, 100, blockSize, fakePosition);
@@ -112,6 +116,8 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 //bitmap
                 bitmap = Bitmap.createBitmap(mScreenX, mScreenY, Bitmap.Config.ARGB_8888);
                 mCanvas = new Canvas(bitmap);
+
+                mMaze = new Maze(activityContext, mScreenX, mScreenY);
 
                 //start the game LETS GET PACCING
                 update();
@@ -137,7 +143,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 mPacman.updateNextDirection('l');
 
                 // testing maze and level creator
-                mMaze = new Maze(activityContext, mScreenX, mScreenY);
+              //  mMaze = new Maze(activityContext, mScreenX, mScreenY);
 
                 PacmanGameStart = MediaPlayer.create(activityContext, R.raw.pacman_beginning);
                 PacmanGameStart.start();
@@ -178,7 +184,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 mGhost.setDeathState(0, false);
                 // Movement reset.
                 mFakeJoy.setCenter();
-                mPacman.updateNextDirection('l');
+                //mPacman.updateNextDirection('l');
 
                 // In this case we just reset the maze,
                 // TODO: Add more levels.
@@ -387,17 +393,34 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                         "  Lives: " + mLives,
                                 mFontMargin, mFontSize, mPaint);
 
-                        // testing maze and level creator
+                        // draw all member objects
                         mMaze.draw(mCanvas, mPaint);
-
-                        // draw pacman as circle
-                        mPacman.draw(mCanvas, mPaint, (mScreenX + mScreenY) / 200);
-                        mGhost.draw(mCanvas, mPaint, (mScreenX + mScreenY) / 200);
                         mFakeJoy.draw(mCanvas, mPaint);
+                        Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.pacman);
+
+
+                        Bitmap sizedB = Bitmap.createScaledBitmap(b, (int) PacGhostRadius * 2,
+                                (int) PacGhostRadius * 2, false);
+
+                         mCanvas.drawBitmap(sizedB, mPacman.loc.getX() - PacGhostRadius,
+                                mPacman.loc.getY() - PacGhostRadius, null);
+
+                        mCanvas.drawBitmap(sizedB, mPacman.loc.getX() - PacGhostRadius,
+                                mPacman.loc.getY() - PacGhostRadius, null);
+
+                        b = BitmapFactory.decodeResource(getResources(), R.drawable.blinky);
+
+                        sizedB = Bitmap.createScaledBitmap(b, (int) PacGhostRadius * 2,
+                                (int) PacGhostRadius * 2, false);
+
+                        mCanvas.drawBitmap(sizedB, mGhost.loc.getX() - PacGhostRadius,
+                                mGhost.loc.getY() - PacGhostRadius, null);
 
                         mPaint.setColor(Color.argb(255, 0, 0, 255));
                         //redPaint.setColor(Color.argb(0,255, 0, 0));
                         // Draw the vertical lines of the maze
+
+
 
                         mCanvas.drawLine(blockSize.y * 25, blockSize.y * 1,
                                 blockSize.y * 25, blockSize.y * 30,
@@ -413,6 +436,8 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         mCanvas.drawLine(blockSize.x * 25, blockSize.x * 30,
                                 blockSize.x * 53, blockSize.x * 30,
                                 mPaint);
+
+
 
 
 
