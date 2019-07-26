@@ -156,6 +156,54 @@ public class Pacman implements Collision
 		}
 		return collided;
 	}
+	
+	/**
+	 * check if Pacman is inside the mae
+	 * this fucntion will be executed before update
+	 * so we can predict whether a update is needed for Pacman
+	 */
+	// further can be used for pullet collision
+	public boolean isInMaze(Maze maze)
+	{
+		boolean update;
+		update = true;
+
+		Location [][] mGrid = maze.getMaze();
+		int gridValues[] = maze.getGridValues(loc);
+
+		//if Pacman will hit the right wall, stop
+		if (direction == 'r' && mGrid[gridValues[0]][gridValues[1] + 1].getObj() == Block.WALL)
+		{
+			Log.d("pacman has hit a wall:", "direction:" + direction);
+			update = false;
+		}
+
+
+		//if pacman will hit the left wall, stop
+		if (direction == 'l' && mGrid[gridValues[0]][gridValues[1] - 1].getObj() == Block.WALL)
+		{
+			Log.d("pacman has hit a wall:", "direction:" + direction);
+			update = false;
+		}
+
+		//if Pacman will hit the top wall, stop
+		if (direction == 'l' && mGrid[gridValues[0] - 1 ][gridValues[1]].getObj() == Block.WALL)
+		{
+			Log.d("pacman has hit a wall:", "direction:" + direction);
+			update = false;
+		}
+
+
+		//if Pacman will hit the bottom wall, stop
+		if (direction == 'l' && mGrid[gridValues[0] + 1][gridValues[1]-1].getObj() == Block.WALL)
+		{
+			Log.d("pacman has hit a wall:", "direction:" + direction);
+			update = false;
+		}
+		return update;
+
+
+	}
 
 	/**
 	 * check if Pacman is inside the screen
