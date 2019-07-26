@@ -6,7 +6,7 @@ package com.ecs160group.pacman;
 public class Pinky extends Ghost
 {
 	// scatters to the top left
-	private static final Location SCATTER_LOC = new Location();
+	private static final Location SCATTER_LOC = new Location(0,0,Block.WALL);
 
 	/**
 	 * Default ctor which inherits from the ghost class
