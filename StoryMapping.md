@@ -28,6 +28,10 @@ Sprint 2:
 ![Link to CRC Chart](https://github.com/ecs160ss12019/Subhunters/blob/master/CRC/CRC_2-1.PNG)
 ![Link to CRC Chart](https://github.com/ecs160ss12019/Subhunters/blob/master/CRC/CRC_2-2.PNG)
 
+Sprint 3: (same as Sprint 2, but added two more below)
+
+![Link to CRC Chart](https://github.com/ecs160ss12019/Subhunters/blob/master/CRC/CRC_3.PNG)
+
 ## Acceptance Criteria
 
 ![Link to Acceptance Criteria Chart](https://github.com/ecs160ss12019/Subhunters/blob/master/AcceptanceCriteriaTable.png)
