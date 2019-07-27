@@ -233,19 +233,35 @@ class Maze
 		int img = -1;
 		// TODO: draw each image in the location and put them in res/drawable
 		switch (l.getObj()) {
-			case PACMAN:
-				/*mPaint.setColor(Color.argb(255, 255, 255, 0));
-				mCanvas.drawCircle(l.getX() * 28 + xScaled, l.getY() * 28 + yScaled, 14, mPaint);*/
+			/*case PACMAN:
+				*//*mPaint.setColor(Color.argb(255, 255, 255, 0));
+				mCanvas.drawCircle(l.getX() * 28 + xScaled, l.getY() * 28 + yScaled, 14, mPaint);*//*
 
 				//Log.d("hi im pacman: ", "im pacman" + l.getObj());
 				img = R.drawable.pacman;
 				break;
 			case GHOST:
 				 //TODO: extend and change the ghosts to input for each NAMED ghost
-				/*mPaint.setColor(Color.argb(255, 0, 0, 255));
-				mCanvas.drawCircle(l.getX() * 28 + xScaled, l.getY() * 28 + yScaled, 14, mPaint);*/
+				*//*mPaint.setColor(Color.argb(255, 0, 0, 255));
+				mCanvas.drawCircle(l.getX() * 28 + xScaled, l.getY() * 28 + yScaled, 14, mPaint);*//*
 				//Log.d("hi im a ghost", "im a ghost" + l.getObj());
 				img = R.drawable.blinky;
+				break;*/
+			case HORIZONTAL_WALL:
+				mPaint.setColor(Color.argb(255, 0, 0, 255));
+				mCanvas.drawLine(l.getX() - 16, l.getY() , l.getX() + 16, l.getY(), mPaint);
+				break;
+			case VERTICAL_WALL:
+				mPaint.setColor(Color.argb(255, 0, 0, 255));
+				mCanvas.drawLine(l.getX(), l.getY() - 16 , l.getX(), l.getY() + 16, mPaint);
+				break;
+			case BOT_LEFT_TOP_RIGHT_WALL:
+				mPaint.setColor(Color.argb(255, 0, 0, 255));
+				mCanvas.drawLine(l.getX() - 5, l.getY() - 6, l.getX() + 5, l.getY() + 6, mPaint);
+				break;
+			case BOT_RIGHT_TOP_LEFT_WALL:
+				mPaint.setColor(Color.argb(255, 0, 0, 255));
+				mCanvas.drawLine(l.getX() - 5, l.getY() + 6, l.getX() + 5, l.getY() - 6, mPaint);
 				break;
 			case WALL:
 				mPaint.setColor(Color.argb(255, 0, 0, 255));
@@ -254,12 +270,12 @@ class Maze
 				//img = R.drawable.wall; // TODO: extend to input different wall type pieces
 				break;
 			case PELLET:
-				mPaint.setColor(Color.argb(255, 0, 255, 255));
+				mPaint.setColor(Color.argb(255, 155, 155, 0));
 				mCanvas.drawCircle(l.getX(), l.getY(), 3, mPaint);
 				break;
 			case POWER_PELLET:
-				mPaint.setColor(Color.argb(255, 0, 255, 255));
-				mCanvas.drawCircle(l.getX(), l.getY(), 4, mPaint);
+				mPaint.setColor(Color.argb(255, 255, 155, 0));
+				mCanvas.drawCircle(l.getX(), l.getY(), 10, mPaint);
 				break;
 				//img = R.drawable.power_pellet;
 				/*
@@ -269,13 +285,13 @@ class Maze
 			case GHOST_GATE:
 				img = R.drawable.ghost_gate;
 				break;*/
-			case PAC_SPAWN:
+			/*case PAC_SPAWN:
 				Log.d("in pac_spawn", "hi pac_spawn" +l.getObj());
 				//img = 0;
 				//mPacman = new Pacman(mScreenX, l.getX(), l.getY());
 				l.updateLoc(l.getX(), l.getY(), Block.PACMAN);
 				Log.d("in pac_spawn", "hi pac_spawn" +l.getObj());//changes this to PACMAN
-				break;
+				break;*/
 			/*case GHOST_SPAWN:
 				img = 0;
 			case EMPTY:

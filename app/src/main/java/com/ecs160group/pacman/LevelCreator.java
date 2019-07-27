@@ -39,7 +39,7 @@ public class LevelCreator
 	 */
 	void readAndProcessFile()
 	{
-		Log.d("Debugging", "readAndProcessFile");
+		//Log.d("Debugging", "readAndProcessFile");
 
 //		Resources res = Resources.getSystem();
         //ClassLoader classloader = Thread.currentThread().getContextClassLoader();
@@ -64,7 +64,7 @@ public class LevelCreator
 				// the pieces of the maze in the file are separated by spaces, so to get each piece,
 				// each is a single character
 				String[] mazePieces = eachLine.split(" ");
-				Log.d("LINE#: ", "lineNum in readAndProcess(): " + lineNum);
+				//Log.d("LINE#: ", "lineNum in readAndProcess(): " + lineNum);
 				processLine(mazePieces, lineNum);
 				// process next line of buffer after processing the line
 				eachLine = br.readLine();
@@ -100,12 +100,25 @@ public class LevelCreator
 	{
 		char c = s.charAt(0); // convert to character before processing
 		switch(c) {
-			case '|': // vertical wal
+			case '|': // vertical wall
+				maze[x][y] = new Location (x, y, Block.VERTICAL_WALL);
+				break;
+			case '-': // horizontal wall
+				maze[x][y] =  new Location (x, y, Block.HORIZONTAL_WALL);
+				break;
+			case '/': // bottom right or top left corner wall
+				maze[x][y] = new Location (x, y, Block. BOT_RIGHT_TOP_LEFT_WALL);
+				break;
+			case '\\': // bottom left or top right corner wall
+				maze[x][y] = new Location (x, y, Block.BOT_LEFT_TOP_RIGHT_WALL);
+				//maze[x][y] = new Location(x, y, Block.WALL);
+				break;
+			/*case '|': // vertical wall
 			case '-': // horizontal wall
 			case '/': // bottom right or top left corner wall
 			case '\\': // bottom left or top right corner wall
 				maze[x][y] = new Location(x, y, Block.WALL);
-				break;
+				break;*/
 			case '.': // pellet
 				maze[x][y] = new Location(x, y, Block.PELLET);
 				break;
