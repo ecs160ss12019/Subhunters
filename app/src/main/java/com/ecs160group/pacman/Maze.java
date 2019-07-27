@@ -43,6 +43,16 @@ class Maze
 	public Clyde mClyde;
 	public Ghost mGhost;
 
+	public Location pacSpawn;
+
+	//do all four ghosts later
+	public Location ghostSpawn;
+
+	/*public Location blinkySpawn;
+	public Location inkySpawn;
+	public Location pinkySpawn;
+	public Location clydeSpawn;*/
+
 
 	/**
 	 * Constructor for Maze
@@ -65,9 +75,7 @@ class Maze
 		yScaled = mScreenY / 12;
 		scaledGrid = grid;
 		scaleGrid();
-		/*mPacman = pacman;
-		mGhost = ghost;*/
-		//initPacAndGhost();
+		initPacAndGhostSpawns();
 
 
 
@@ -124,7 +132,7 @@ class Maze
 	 * draws the square that encircles the grid
 	 * putting it here so PacmanGame is cleaner
 	 */
-	void drawOuterBoundary(Canvas mCanvas, Paint mPaint) {
+	private void drawOuterBoundary(Canvas mCanvas, Paint mPaint) {
 
 		mPaint.setColor(Color.argb(255, 0, 0, 255));
 
@@ -151,13 +159,10 @@ class Maze
 
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
-				scaledGrid[i][j].setNewLoc(grid[i][j].getX() * 28 + xScaled,
-						grid[i][j].getY() * 28 + yScaled);
+				scaledGrid[i][j].updateLoc(grid[i][j].getX() * 28 + xScaled,
+						grid[i][j].getY() * 28 + yScaled, grid[i][j].getObj());
 			}
 		}
-
-
-
 	}
 
 
@@ -179,15 +184,20 @@ class Maze
 	/**
 	 * function to change pac_spawn and ghost_spawn to pacman and ghost respectively in grid
 	 */
-	private void initPacAndGhost() {
-		//hard code for now, for loop isn't working correctly
+	private void initPacAndGhostSpawns() {
 
-//		mPacman.loc.setNewLoc(13, 23);
-		//mGhost.loc.setNewLoc(13, 11);
+		//for loop later to find the pacman/ghost spawns
 
-		grid[13][11].updateLoc(grid[13][11].getX(), grid[13][11].getY(), Block.GHOST);
+		pacSpawn = scaledGrid[13][23];
+		ghostSpawn = scaledGrid[13][11];
+
+
+
+		//no need to do this anymore since we are drawing ghost/pac in pacmangame, just need the locations
+		//		to pass into the pacmna and ghost objects in pacmangame
+		/*grid[13][11].updateLoc(grid[13][11].getX(), grid[13][11].getY(), Block.GHOST);
 		grid[14][11].updateLoc(grid[14][11].getX(), grid[13][11].getY(), Block.GHOST);
-		grid[13][23].updateLoc(grid[13][23].getX(), grid[13][23].getY(), Block.PACMAN);
+		grid[13][23].updateLoc(grid[13][23].getX(), grid[13][23].getY(), Block.PACMAN);*/
 
 
 		//for loop not working to detect PAC_SPAWN for some reason

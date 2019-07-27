@@ -47,6 +47,7 @@ public class Ghost implements Collision
 	float mGhostWidth;
 	float mGhostHeight;
 	Paint paint = new Paint();
+	private Location spawnLoc;
 
 
 	/**
@@ -63,15 +64,17 @@ public class Ghost implements Collision
 	 * @param locX
 	 * @param locY
 	 */
-	public Ghost(int screenX, int locX, int locY)
+	public Ghost(int screenX, Location spawnLoc)
 	{
 		paint.setColor(Color.argb(255, 0, 0, 255));
 		//pacman width/height 1% of screen (change later if needed)
 		mGhostWidth = (float) screenX / 100;
 		mGhostHeight = (float) screenX / 100;
-		velocity  = screenX / 80;
+		velocity  = screenX / 15;
 
-		loc = new Location(locX, locY, Block.GHOST);
+		this.spawnLoc = spawnLoc;
+
+		loc = new Location(spawnLoc.getX(), spawnLoc.getY(), Block.GHOST);
 
 	}
 
@@ -124,7 +127,7 @@ public class Ghost implements Collision
 	boolean newDir = false;
 	void update(long fps)
 	{
-		Log.d("ghost update:", "Random:" + randDirection);
+		//Log.d("ghost update:", "Random:" + randDirection);
 		if (randDirection == 0) {
 			loc.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
 			directionCount++;
@@ -162,7 +165,7 @@ public class Ghost implements Collision
 			}
 		}
 		else{
-			Log.d("ghost update:", "No Direction:");
+			//Log.d("ghost update:", "No Direction:");
 		}
 	}
 
@@ -181,10 +184,10 @@ public class Ghost implements Collision
 	 * Initializes x and y velocities (can change later)
 	 */
 	// TODO: not sure if we needs this
-	void reset(int x, int y)
+	void reset()
 	{
-		velocity = (float)(x / 3) ;
-		loc.setNewLoc(800,400);
+
+		loc.setNewLoc(spawnLoc.getX(),spawnLoc.getY());
 
 		//mXVelocity = (float) (y / 3);
 		//mYVelocity = (float) -(y / 3);
@@ -331,33 +334,33 @@ public class Ghost implements Collision
     check if ghost is in bounds
     the function will later be used to check collision
     between ghost and wall probably
- 	*/
+ */
 	public void isInBounds(int mScreenX, int mScreenY) {
 		float radius = (mScreenX + mScreenY) / 200;
 
 		//if ghost hits the right screen wall, stop
 		if ( (loc.getX() + radius) > mScreenX) {
-			Log.d("ghost has hit a wall:", "direction:" + direction);
+			//Log.d("ghost has hit a wall:", "direction:" + direction);
 			loc.setNewLoc((int) (mScreenX - radius), loc.getY());
 		}
 
 		//if ghost hits the left screen wall, stop
 		// TODO: CHANGE IT TO IF HE HITS THE MAZE's LEFT WALL
 		if ( (loc.getX() - radius) < 0) {
-			Log.d("ghost has hit a wall:", "direction:" + direction);
+			//Log.d("ghost has hit a wall:", "direction:" + direction);
 			loc.setNewLoc( (int) (0 + radius) , loc.getY());
 
 		}
 		//if ghost hits the bottom screen wall
 		if  ( (loc.getY() + radius) > mScreenY) {
-			Log.d("ghost hit the bottom:", "direction:" + direction);
+			//Log.d("ghost hit the bottom:", "direction:" + direction);
 			loc.setNewLoc(loc.getX(), (int)(mScreenY - radius));
 		}
 
 		//if ghost hits the top screen wall
 		if  ( (loc.getY() - radius) < 0)  //up
 		{
-			Log.d("ghost hit upper wall:", "direction:" + direction);
+			//Log.d("ghost hit upper wall:", "direction:" + direction);
 			loc.setNewLoc(loc.getX(), (int)(0 + radius) );
 		}
 

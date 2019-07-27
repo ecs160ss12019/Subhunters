@@ -1,5 +1,8 @@
 package com.ecs160group.pacman;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -28,6 +31,9 @@ public class Pacman implements Collision
 	// Pacman's power-up state and timer.
 	private boolean powerState;
 	private int powerTimer;
+	private PacmanGame game;
+
+	public Location spawnLoc;
 
 
 	// use an integer to temporarily replace the draw of Pacman
@@ -37,8 +43,7 @@ public class Pacman implements Collision
 	//RectF has four values (left, top, right, bottom)
 
 	float velocity;
-	float mPacWidth;
-	float mPacHeight;
+	private float radius;
 	final Paint paint = new Paint();
 
 
@@ -98,22 +103,24 @@ public class Pacman implements Collision
 		return false;
 	}
 
-	Pacman(int screenX, int locX, int locY)
+	Pacman(int screenX, Location spawnLoc, float radius)
 	{
 
 		paint.setColor(Color.argb(255, 255, 255, 0));
 		//pacman width/height 1% of screen (change later if needed)
-		mPacWidth = (float) screenX / 100;
-		mPacHeight = (float) screenX / 100;
+		this.radius = radius;
 
-		loc = new Location(locX, locY, Block.PACMAN);
+		this.spawnLoc = spawnLoc;
+		loc = new Location(spawnLoc.getX(), spawnLoc.getY(), Block.PACMAN);
 		direction = 'l';
 		next_direction = 'l';
 		powerState = false;
 		powerTimer = 0;
-		velocity = screenX / 80;
+		velocity = screenX / 15;
 
 	}
+
+
 
 
 	/**
@@ -141,22 +148,6 @@ public class Pacman implements Collision
 		velocity = -velocity;
 	}
 
-	/**
-	 * detects the collisions of pacman with ghost, pellets, fruits,
-	 * TODO: TESTING TO CHECK WALL DETECTION HERE
-	 */
-	// currently used for Pacman and ghost collision detection
-	public boolean detectCollision(Location loc, int mScreenX, int mScreenY)
-	{
-		boolean collided = false;
-		float radius = (mScreenX + mScreenY) / 200;
-		if (Math.abs(this.loc.getX() - loc.getX()) <= radius * 2
-				&& Math.abs(this.loc.getY() - loc.getY()) <= radius * 2) {
-			collided = true;
-		}
-		return collided;
-	}
-	
 	/**
 	 * check if Pacman need to update by wall detection
 	 * this fucntion will be executed before update
@@ -244,6 +235,22 @@ public class Pacman implements Collision
 	}
 
 	/**
+	 * detects the collisions of pacman with ghost, pellets, fruits,
+	 * TODO: TESTING TO CHECK WALL DETECTION HERE
+	 */
+	// currently used for Pacman and ghost collision detection
+	public boolean detectCollision(Location loc, int mScreenX, int mScreenY)
+	{
+		boolean collided = false;
+		float radius = (mScreenX + mScreenY) / 200;
+		if (Math.abs(this.loc.getX() - loc.getX()) <= radius * 2
+				&& Math.abs(this.loc.getY() - loc.getY()) <= radius * 2) {
+			collided = true;
+		}
+		return collided;
+	}
+
+	/**
 	 * check if Pacman is inside the screen
 	 */
 	public void isInBounds(int mScreenX, int mScreenY)
@@ -252,26 +259,26 @@ public class Pacman implements Collision
 
 		//if pacman hits the right screen wall, stop
 		if ((loc.getX() + radius) > mScreenX) {
-			Log.d("pacman has hit a wall:", "direction:" + direction);
+			//Log.d("pacman has hit a wall:", "direction:" + direction);
 			loc.setNewLoc((int) (mScreenX - radius), loc.getY());
 		}
 
 		//if pacman hits the left screen wall, stop
-		// TODO: CHANGE IT TO IF HE HITS THE MAZE's LEFT WALL
+		//
 		if ((loc.getX() - radius) < 0) {
-			Log.d("pacman has hit a wall:", "direction:" + direction);
+			//Log.d("pacman has hit a wall:", "direction:" + direction);
 			loc.setNewLoc((int) (0 + radius), loc.getY());
 
 		}
 		//if pacman hits the bottom screen wall
 		if ((loc.getY() + radius) > mScreenY) {
-			Log.d("pacman hit the bottom:", "direction:" + direction);
+			//Log.d("pacman hit the bottom:", "direction:" + direction);
 			loc.setNewLoc(loc.getX(), (int) (mScreenY - radius));
 		}
 
 		if ((loc.getY() - radius) < 0)  //up
 		{
-			Log.d("pacman hit upper wall:", "direction:" + direction);
+			//Log.d("pacman hit upper wall:", "direction:" + direction);
 			loc.setNewLoc(loc.getX(), (int) (0 + radius));
 		}
 
@@ -279,14 +286,14 @@ public class Pacman implements Collision
 	}
 
 	/**
-	 * Initializes four points of mRect(defines pacman)
-	 * Initializes x and y velocities (can change later)
+	 * resets pacman's location to its original spawn
+	 * called at PacmanGame's startNewGame() and reset()
+	 * (whenever user starts a new game or dies to a ghost)
 	 */
-	void reset(int x, int y)
+	void reset()
 	{
 
-		velocity = (float) (x / 3);
-		loc.setNewLoc(1000, 700);
+		loc.setNewLoc(spawnLoc.getX(), spawnLoc.getY());
 
 	}
 
@@ -309,6 +316,7 @@ public class Pacman implements Collision
 	{
 		mPaint.setColor(Color.argb(255, 255, 255, 0));
 		canvas.drawCircle(loc.getX(), loc.getY(), radius, mPaint);
+
 	}
 
 

@@ -26,7 +26,7 @@ import android.graphics.BitmapFactory;
 
 public class PacmanGame extends SurfaceView implements Runnable{
         //for debugging purposes
-        private final boolean DEBUGGING = false;
+        private final boolean DEBUGGING = true;
         private long mFPS; //frames per second
         private final int MILLIS_IN_SECOND = 1000;
 
@@ -80,7 +80,10 @@ public class PacmanGame extends SurfaceView implements Runnable{
         private int MAX_PELLETS;
         Block mBlock;
 
-        private float PacGhostRadius;
+        public float PacGhostRadius;
+
+        private int xScaled;
+        private int yScaled;
 
         //constructor
         public PacmanGame(Context context, int x, int y) {
@@ -98,6 +101,9 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 mScreenX = x;
                 mScreenY = y;
 
+                xScaled = mScreenX / 2;
+                yScaled = mScreenY / 12;
+
                 mFontSize = mScreenX / 30; //5%(1/20) of screen width
                 mFontMargin = mScreenX / 75; //1.5%(1/75) of scren width
 
@@ -112,8 +118,13 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 
                 //Initialize objects(maze, pacman, ghost, joystick)
                 PacGhostRadius = (float) (mScreenX + mScreenY) / 200;
-                mPacman = new Pacman(mScreenX, 1000, 700);
-                mGhost = new Ghost(mScreenX, 800, 400);
+
+                //initialize maze first so pacman and ghost can use its grid to find initial location
+                mMaze = new Maze(activityContext, mScreenX, mScreenY, blockSize);
+
+
+                mPacman = new Pacman(mScreenX, mMaze.pacSpawn, PacGhostRadius);
+                mGhost = new Ghost(mScreenX, mMaze.ghostSpawn);
                 mFakeJoy = new FakeJoy(200, 100, blockSize, fakePosition);
                 pellet = 0;
                 MAX_PELLETS = 100; // TODO: Update max pellets to maze.
@@ -121,11 +132,9 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 bitmap = Bitmap.createBitmap(mScreenX, mScreenY, Bitmap.Config.ARGB_8888);
                 mCanvas = new Canvas(bitmap);
 
-                mMaze = new Maze(activityContext, mScreenX, mScreenY, blockSize);
-
                 //start the game LETS GET PACCING
-                update(updatePacman, updateGhost);
-                draw();
+              //  update(true, true);
+               // draw();
                 startNewGame();
 
         }
@@ -136,8 +145,8 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 //reset maze level
 
                 //initialize the position of pacman and ghosts
-                mPacman.reset(mScreenX, mScreenY);
-                mGhost.reset(mScreenX, mScreenY);
+                mPacman.reset();
+                mGhost.reset();
 
                 //resetting score/lives/direction/pellets
                 mScore = 0;
@@ -159,8 +168,8 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 //PacmanSounds.pacmanBeginning();
                 mPaused = true;
                 //initialize the position of pacman and ghosts
-                mPacman.reset(mScreenX, mScreenY);
-                mGhost.reset(mScreenX, mScreenY);
+                mPacman.reset();
+                mGhost.reset();
 
                 //resetting score/lives/States/Direction
                 //mScore = 0;
@@ -179,8 +188,8 @@ public class PacmanGame extends SurfaceView implements Runnable{
         }
         public void StageCleared(){
                 // TODO: reset using maze coordinates, rather than screen position.
-                mPacman.reset(mScreenX, mScreenY);
-                mGhost.reset(mScreenX, mScreenY);
+                mPacman.reset();
+                mGhost.reset();
 
                 //resetting /States/Direction
                 pellet = 0; // New map, reset pellet counter
@@ -213,9 +222,10 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         long frameStartTime = System.currentTimeMillis();
 
                         if (!mPaused) {
-                                Boolean updatePacman = mPacman.wallDetection(mMaze);
-                                Boolean updateGhost = mGhost.wallDetection(mMaze);
-                                update(updatePacman, updateGhost);
+                                //Boolean updatePacman = mPacman.wallDetection(mMaze);
+                               // Boolean updateGhost = mGhost.wallDetection(mMaze);
+
+                                update(true, true);
                                 detectCollisions();
 
 
@@ -394,6 +404,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         mCanvas.drawColor(Color.argb(255, 0, 0, 0));
 
                         mPaint.setStyle(Paint.Style.FILL);
+
                         mPaint.setColor(Color.argb(255, 255, 255, 0));
 
                         //font size
@@ -430,29 +441,6 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         mPaint.setColor(Color.argb(255, 0, 0, 255));
                         //redPaint.setColor(Color.argb(0,255, 0, 0));
                         // Draw the vertical lines of the maze*/
-
-                        mPaint.setColor(Color.argb(255, 0, 0, 255));
-
-
-
-
-                        mCanvas.drawLine(blockSize.y * 25, blockSize.y * 1,
-                                blockSize.y * 25, blockSize.y * 30,
-                                mPaint);
-                        mCanvas.drawLine(blockSize.y * 53, blockSize.y * 1,
-                                blockSize.y * 53, blockSize.y * 30,
-                                mPaint);
-
-                        // Draw the horizontal lines of the maze
-                        mCanvas.drawLine(blockSize.x * 25, blockSize.x * 1,
-                                blockSize.x * 53, blockSize.x * 1,
-                                mPaint);
-                        mCanvas.drawLine(blockSize.x * 25, blockSize.x * 30,
-                                blockSize.x * 53, blockSize.x * 30,
-                                mPaint);
-
-
-
 
 
                         if (DEBUGGING) {
