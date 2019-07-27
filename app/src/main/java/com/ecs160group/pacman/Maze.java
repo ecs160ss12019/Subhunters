@@ -20,7 +20,10 @@ class Maze
 	final static int MAZE_WIDTH = 28;
 	final static int MAZE_HEIGHT = 31;
 
-	private Location[][] grid; // holds all the objects/pieces currently in the maze
+	private Location[][] grid;
+	//so that we don't have to keep scaling every location we get to draw
+	//we can just take it from this grid
+	public Location[][] scaledGrid;// holds all the objects/pieces currently in the maze
 
 	//variables to handle drawing
 	private LevelCreator mlevelCreator;
@@ -38,7 +41,7 @@ class Maze
 	public Inky mInky;
 	public Pinky mPinky;
 	public Clyde mClyde;
-
+	public Ghost mGhost;
 
 
 	/**
@@ -60,7 +63,11 @@ class Maze
 		mlevelCreator = new LevelCreator(grid, context);
 		xScaled = mScreenX / 2;
 		yScaled = mScreenY / 12;
-		initPacAndGhost();
+		scaledGrid = grid;
+		scaleGrid();
+		/*mPacman = pacman;
+		mGhost = ghost;*/
+		//initPacAndGhost();
 
 
 
@@ -74,11 +81,14 @@ class Maze
 		//TODO: EDIT THIS
 		//print the whole graph
 
+		//update();
+		drawOuterBoundary(mCanvas, mPaint);
+
 
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
 				// print the grid piece on the canvas
-				drawSpace(grid[i][j], mCanvas, mPaint);
+				drawSpace(scaledGrid[i][j], mCanvas, mPaint);
 			}
 		}
 
@@ -109,6 +119,47 @@ class Maze
 
 	}
 
+	/**
+	 * called from draw() , which is in turn called by draw() in PacmanGame
+	 * draws the square that encircles the grid
+	 * putting it here so PacmanGame is cleaner
+	 */
+	void drawOuterBoundary(Canvas mCanvas, Paint mPaint) {
+
+		mPaint.setColor(Color.argb(255, 0, 0, 255));
+
+		mCanvas.drawLine(blockSize.y * 25, blockSize.y * 1,
+				blockSize.y * 25, blockSize.y * 30,
+				mPaint);
+		mCanvas.drawLine(blockSize.y * 53, blockSize.y * 1,
+				blockSize.y * 53, blockSize.y * 30,
+				mPaint);
+		mCanvas.drawLine(blockSize.x * 25, blockSize.x * 1,
+				blockSize.x * 53, blockSize.x * 1,
+				mPaint);
+		mCanvas.drawLine(blockSize.x * 25, blockSize.x * 30,
+				blockSize.x * 53, blockSize.x * 30,
+				mPaint);
+
+	}
+
+	/**
+	 * function to scale the grid (all x and y coordinates of the locations)
+	 * so that we don't have to keep scaling the locations every time we want to draw/update a location
+	 */
+	private void scaleGrid(){
+
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid[i].length; j++) {
+				scaledGrid[i][j].setNewLoc(grid[i][j].getX() * 28 + xScaled,
+						grid[i][j].getY() * 28 + yScaled);
+			}
+		}
+
+
+
+	}
+
 
 	/**
 	 * Gets the array of maze locations
@@ -130,6 +181,9 @@ class Maze
 	 */
 	private void initPacAndGhost() {
 		//hard code for now, for loop isn't working correctly
+
+//		mPacman.loc.setNewLoc(13, 23);
+		//mGhost.loc.setNewLoc(13, 11);
 
 		grid[13][11].updateLoc(grid[13][11].getX(), grid[13][11].getY(), Block.GHOST);
 		grid[14][11].updateLoc(grid[14][11].getX(), grid[13][11].getY(), Block.GHOST);
@@ -173,29 +227,29 @@ class Maze
 				/*mPaint.setColor(Color.argb(255, 255, 255, 0));
 				mCanvas.drawCircle(l.getX() * 28 + xScaled, l.getY() * 28 + yScaled, 14, mPaint);*/
 
-				Log.d("hi im pacman: ", "im pacman" + l.getObj());
+				//Log.d("hi im pacman: ", "im pacman" + l.getObj());
 				img = R.drawable.pacman;
 				break;
 			case GHOST:
 				 //TODO: extend and change the ghosts to input for each NAMED ghost
 				/*mPaint.setColor(Color.argb(255, 0, 0, 255));
 				mCanvas.drawCircle(l.getX() * 28 + xScaled, l.getY() * 28 + yScaled, 14, mPaint);*/
-				Log.d("hi im a ghost", "im a ghost" + l.getObj());
+				//Log.d("hi im a ghost", "im a ghost" + l.getObj());
 				img = R.drawable.blinky;
 				break;
 			case WALL:
 				mPaint.setColor(Color.argb(255, 0, 0, 255));
-				mCanvas.drawCircle(l.getX() * 28 + xScaled, l.getY() * 28 + yScaled, 6, mPaint);
+				mCanvas.drawCircle(l.getX(), l.getY(), 6, mPaint);
 				//Log.d("getMaze: ", "coord: (" + l.getX() + "," + l.getY() +")");
 				//img = R.drawable.wall; // TODO: extend to input different wall type pieces
 				break;
 			case PELLET:
 				mPaint.setColor(Color.argb(255, 0, 255, 255));
-				mCanvas.drawCircle(l.getX() * 28 + xScaled, l.getY() * 28 + yScaled, 3, mPaint);
+				mCanvas.drawCircle(l.getX(), l.getY(), 3, mPaint);
 				break;
 			case POWER_PELLET:
 				mPaint.setColor(Color.argb(255, 0, 255, 255));
-				mCanvas.drawCircle(l.getX() * 28 + xScaled, l.getY() * 28 + yScaled, 4, mPaint);
+				mCanvas.drawCircle(l.getX(), l.getY(), 4, mPaint);
 				break;
 				//img = R.drawable.power_pellet;
 				/*
@@ -205,12 +259,13 @@ class Maze
 			case GHOST_GATE:
 				img = R.drawable.ghost_gate;
 				break;*/
-		/*	case PAC_SPAWN:
+			case PAC_SPAWN:
 				Log.d("in pac_spawn", "hi pac_spawn" +l.getObj());
 				//img = 0;
 				//mPacman = new Pacman(mScreenX, l.getX(), l.getY());
-				l.updateLoc(l.getX(), l.getY(), Block.PACMAN);//changes this to PACMAN
-				break;*/
+				l.updateLoc(l.getX(), l.getY(), Block.PACMAN);
+				Log.d("in pac_spawn", "hi pac_spawn" +l.getObj());//changes this to PACMAN
+				break;
 			/*case GHOST_SPAWN:
 				img = 0;
 			case EMPTY:
@@ -221,12 +276,12 @@ class Maze
 		}
 		if (img != -1) {// not an empty space, print image
 			//Log.d("in yesDraw", "yesDraw" +l.getObj());
-			//Log.d("x coord: ", "l.getX(): " + (l.getX() * 28 + xScaled));
-           // Log.d("y coord: ", "l.getY(): " + (l.getY() * 28 + xScaled));
-			//Bitmap unsizedBitmap = BitmapFactory.decodeResource(context.getResources(), img);
-			//Bitmap sizedBitmap = Bitmap.createScaledBitmap(unsizedBitmap, 29, 29, false);
-			//mCanvas.drawBitmap(sizedBitmap, (l.getX() * 28 + xScaled) - + ((mScreenX + mScreenY) / 200),
-					(l.getY() * 28 + yScaled) - + ((mScreenX + mScreenY) / 200) , null);
+		//	Log.d("x coord: ", "l.getX(): " + (l.getX() * 28 + xScaled));
+        //    Log.d("y coord: ", "l.getY(): " + (l.getY() * 28 + xScaled));
+			/*Bitmap unsizedBitmap = BitmapFactory.decodeResource(context.getResources(), img);
+			Bitmap sizedBitmap = Bitmap.createScaledBitmap(unsizedBitmap, 29, 29, false);
+			mCanvas.drawBitmap(sizedBitmap, (l.getX() * 28 + xScaled) - + ((mScreenX + mScreenY) / 200),
+					(l.getY() * 28 + yScaled) - + ((mScreenX + mScreenY) / 200) , null);*/
 		}
 	}
 
@@ -261,12 +316,10 @@ class Maze
 	 */
 
 
-	/**
-	 * May be used to test current performance issues.
-	 * 	temp method to draw the maze (hardcoded style)
- 	 * @param mCanvas
-	 * @param paint
-	 * @param l
+	/** May be used to test current performance issues.
+	 * temp method to draw the maze (hardcoded style)
+	 * @param canvas canvas to draw on
+	 * @param paint paint to paint
 	 */
 	void tempDraw(Canvas mCanvas, Paint paint, Location l){
 		Bitmap unsizedBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.blinky);
@@ -276,7 +329,30 @@ class Maze
 
 
 	}
-	
+
+
+	/**
+	 * function to update the location of pacman (and the ghosts later)
+	 *
+	 */
+	private void update() {
+
+//		int x = mPacman.loc.getX();
+		//int y = mPacman.loc.getY();
+		//grid[x][y].updateLoc(x, y, Block.PACMAN);
+
+		/*for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid[i].length; j++) {
+				Location l = grid[i][j];
+				if (l.getObj() == Block.PACMAN && l.getX() != x && l.getY() != y) {
+					grid[i][j].updateLoc(x, y, Block.PACMAN);
+				}
+
+			}
+		}
+*/
+	}
+
 	/**
 	 * Given the location of a object, try to find its position in the maze
 	 * @param l
@@ -286,16 +362,15 @@ class Maze
 	{
 		int gridVal[];
 		gridVal = new int[2];
-		
+
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
 				if (grid[i][j].getX() == l.getX() && grid[i][j].getY() == l.getY())
 					gridVal[0] = i;
-					gridVal[1] = j;
+				gridVal[1] = j;
 			}
 		}
 		return gridVal;
 	}
-
 
 }
