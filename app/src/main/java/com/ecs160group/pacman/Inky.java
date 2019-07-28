@@ -9,13 +9,13 @@ public class Inky extends Ghost
 	// Scatters to the bottom right
 	private static final Location SCATTER_LOC = new Location(27, 30, Block.WALL);
 
-	private Location blinkyLoc;
+	private Blinky blinky;
 	private Location[][] maze;
 
-	Inky(Location[][] maze)
+	Inky(Blinky blinky)
 	{
 		this.maze = maze;
-		findBlinky();
+//		findBlinky();
 	}
 
 
@@ -29,18 +29,19 @@ public class Inky extends Ghost
 		return SCATTER_LOC;
 	}
 
-	private Location findBlinky()
+	private Blinky findBlinky()
 	{
-		if (blinkyLoc != null) // if blinky is saved as a variable already
-			return blinkyLoc;
+		if (blinky != null) // if blinky is saved as a variable already
+			return blinky;
 		for (int i = 0; i < maze.length; i++) {
 			for (int j = 0; j < maze[i].length; j++) {
 				if (maze[i][j].getObj() == Block.BLINKY) {
-					blinkyLoc = new Location(i, j, Block.BLINKY);
+					// TODO: get this obj at the location (i,j)
+//					blinkyLoc = new Location(i, j, Block.BLINKY);
 				}
 			}
 		}
-		return blinkyLoc;
+		return blinky;
 	}
 
 	/**
@@ -53,7 +54,7 @@ public class Inky extends Ghost
 	public Location getChaseLocation()
 	{
 		Location pacLoc = pacman.getLoc();
-		Location blinkyLoc = findBlinky();
+		Location blinkyLoc = findBlinky().getLoc();
 		// once we have locations need to create new offsets for location to find
 		// if the location of blinky or pacman don't exist, use 0 for row and column
 		int pacRow = pacLoc != null ? pacLoc.getX() : 0;
