@@ -188,7 +188,8 @@ public class Ghost implements Collision
 	{
 
 		loc.setNewLoc(spawnLoc.getX(),spawnLoc.getY());
-
+        deathTimer = 0;
+        isDead = false;
 		//mXVelocity = (float) (y / 3);
 		//mYVelocity = (float) -(y / 3);
 	}

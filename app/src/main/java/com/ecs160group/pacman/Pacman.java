@@ -295,6 +295,8 @@ public class Pacman implements Collision
 
 		loc.setNewLoc(spawnLoc.getX(), spawnLoc.getY());
         direction = 'l';
+        powerTimer = 0;
+        powerState = false;
 
 	}
 
