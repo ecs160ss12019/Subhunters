@@ -70,7 +70,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
         private volatile boolean mPlaying;
         private boolean mPaused = true;
         public Context activityContext;
-        public MediaPlayer PacmanGameStart;
+        public sound PacmanGameStart;
 
         private Location mGrid;
         private int xPac; // Grabs loc.x & loc.y coordinates
@@ -93,7 +93,6 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 super(context);
                 activityContext = context;
 
-                //PacmanSounds.setContext(activityContext);
                 fakePosition = new PointF(200, 700);
                 blockSize = new PointF();
                 blockSize.x = (float) x / 55;
@@ -106,6 +105,10 @@ public class PacmanGame extends SurfaceView implements Runnable{
 
                 mFontSize = mScreenX / 30; //5%(1/20) of screen width
                 mFontMargin = mScreenX / 75; //1.5%(1/75) of scren width
+
+
+                //Setup sound
+                PacmanSounds = new sound(activityContext);
 
                 mOurHolder = getHolder();
                 mPaint = new Paint();
@@ -154,12 +157,13 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 pellet = 0;
                 mFakeJoy.setCenter();
                 mPacman.updateNextDirection('l');
-
                 // testing maze and level creator
               //  mMaze = new Maze(activityContext, mScreenX, mScreenY);
 
-                PacmanGameStart = MediaPlayer.create(activityContext, R.raw.pacman_beginning);
-                PacmanGameStart.start();
+                //PacmanGameStart = MediaPlayer.create(activityContext, R.raw.pacman_beginning);
+                //PacmanGameStart.start();
+
+                PacmanSounds.pacmanBeginning();
 
         }
 
@@ -176,7 +180,6 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 mLives--;
                 mPacman.setPowerUpState(0, false);
                 mGhost.setDeathState(0, false);
-                mPacman.updateNextDirection('l');
 
                 //mGhost.setDeathState(0, false); // add other ghosts later.
 
@@ -197,15 +200,13 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 mGhost.setDeathState(0, false);
                 // Movement reset.
                 mFakeJoy.setCenter();
-                //mPacman.updateNextDirection('l');
 
                 // In this case we just reset the maze,
                 // TODO: Add more levels.
                 //mMaze = new Maze(activityContext, mScreenX, mScreenY);
-                PacmanGameStart = MediaPlayer.create(activityContext, R.raw.pacman_beginning);
-                PacmanGameStart.start();
-
-
+                //PacmanGameStart = MediaPlayer.create(activityContext, R.raw.pacman_beginning);
+                //PacmanGameStart.start();
+                PacmanSounds.pacmanBeginning();
 
         }
 
@@ -275,8 +276,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 if (mPacman.detectCollision(mGhost.loc, mScreenX, mScreenY)) {
                         //Pacman dies, respawns without super mode
                         if(mPacman.getPowerState() == false && mPacman.getPowerTimer() >= 0){
-                                PacmanGameStart = MediaPlayer.create(activityContext, R.raw.pacman_death);
-                                PacmanGameStart.start();
+                                PacmanSounds.pacmanDeath();
                                 draw();
                                 pauseStartDeath(3000);
                                 mFakeJoy.setCenter();
@@ -287,6 +287,8 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         else{
                                 // Set timer as ghost touches Graveyard?
                                 mGhost.setDeathState(0, true);
+                                pauseStartDeath(500);
+                                PacmanSounds.pacmanEatGhost();
                                 //Pacman is able to eat ghosts
                                 //Deal with ghost returning to graveyard.
                                 //mghost.moveTowardsTarget();
@@ -310,8 +312,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         case GHOST:
                                 // !!! Death sequence, Pacman and Ghost same tile. Which Ghost does not matter.
                                 if(mPacman.getPowerState() == false && mPacman.getPowerTimer() >= 0){
-                                        PacmanGameStart = MediaPlayer.create(activityContext, R.raw.pacman_death);
-                                        PacmanGameStart.start();
+                                        PacmanSounds.pacmanDeath();
                                         draw();
                                         pauseStartDeath(3000);
                                         mFakeJoy.setCenter();
@@ -335,6 +336,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                 if(pellet >= MAX_PELLETS){ // On game complete TODO: Change pellet to correct amount.
                                         Log.d("Debugging", "In Collision Interact: POWER_PELLET");
                                         draw();
+                                        PacmanSounds.pacmanChomp(); // Consume pellet..
                                         pauseStartDeath(3000);
                                         mFakeJoy.setCenter();
                                         draw();
@@ -346,9 +348,13 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                 break;
                          case POWER_PELLET: // Encounter PowerPellet, set state
                                  Log.d("Debugging", "In Collision Interact: POWER_PELLET");
+                                 pacmanSounds.Powerup();
                                  mPacman.setPowerUpState(2000,true); // 2000 is amount of frames time to be decremented EVERY FRAME
                                 // TODO: Set exact amount of frames the powerup lasts, for now infinite.
                                 break;
+                        case FRUIT:
+                                // Score(); TODO: give score depending on spawned fruit.
+                                pacmanSounds.pacmanEatFruit();
                         case WARP_SPACE:
                                 // TODO: Find out both locations of warp_space. Have pacman swap positions.
                                 //mPacman.loc.setNewLoc( ); // Change to locate grid coordinates, not screen position
@@ -514,18 +520,6 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 return false;
         }
 
-        void playSong(MediaPlayer mp){
-                mp.start();
-        }
-
-        void pauseSong(MediaPlayer mp) {
-                mp.pause();
-        }
-
-        void stopSong(MediaPlayer mp) {
-                mp.stop();
-                //PacmanSounds=MediaPlayer.create(activityContext, R.raw.abcd);
-        }
         // In milliseconds..
         void pauseStartDeath(int t){
                 try {

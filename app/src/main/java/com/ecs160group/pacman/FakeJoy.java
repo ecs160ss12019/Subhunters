@@ -122,19 +122,19 @@ public class FakeJoy {
         if(yPercent <= -.35 && xPercent <= .75 && xPercent >= -.75){ // UP
             direction = 'u';
             //Move(Pacman, direction); // Here?
-            Log.d("Pacman-Direction: ", "Move: " + direction);
+            //Log.d("Pacman-Direction: ", "Move: " + direction);
         }
         else if(yPercent >= .35 && xPercent <= .75 && xPercent >= -.75){ // DOWN
             direction = 'd';
-            Log.d("Pacman-Direction: ", "Move: " + direction);
+            //Log.d("Pacman-Direction: ", "Move: " + direction);
         }
         else if(xPercent <= -.35 && yPercent < .75 && yPercent > -.75){ // LEFT
             direction = 'l';
-            Log.d("Pacman-Direction: ", "Move: " + direction);
+            //Log.d("Pacman-Direction: ", "Move: " + direction);
         }
         else if(xPercent >= .35 && yPercent < .75 && yPercent > -.75){ // RIGHT
             direction = 'r';
-            Log.d("Pacman-Direction: ", "Move: " + direction);
+            //Log.d("Pacman-Direction: ", "Move: " + direction);
         }
     }
 
