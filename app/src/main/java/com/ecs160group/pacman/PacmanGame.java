@@ -73,9 +73,10 @@ public class PacmanGame extends SurfaceView implements Runnable{
         public sound PacmanGameStart;
 
         private Location mGrid;
-        private int xPac; // Grabs loc.x & loc.y coordinates
+        private int xPac; // Sote loc.x & loc.y coordinates
         private int yPac;
-        int gridValues[];
+        //int pacmanGridValues[];
+        Location pacmanGridValues;
         private int pellet; // Eventually needs to be deleted TODO: Let maze handle win condition, check if no more pellets.
         private int MAX_PELLETS;
 
@@ -160,7 +161,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 mPacman.updateNextDirection('l');
 
                 // Should reset the Maze, refresh pellets
-                //mMaze = new Maze(activityContext, mScreenX, mScreenY, blockSize);
+                mMaze = new Maze(activityContext, mScreenX, mScreenY, blockSize);
 
                 //draw();
                 PacmanSounds.pacmanBeginning();
@@ -171,7 +172,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
 
         public void deathRestart(){
                 //reset maze level
-                mPaused = true;
+                mPaused = true; // Pause until touch
                 //initialize the position of pacman and ghosts, also resets timers and states
                 mPacman.reset();
                 mGhost.reset();
@@ -180,11 +181,9 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 //Reset game if 0 lives.
                 if(mLives <= 0){ startNewGame(); }
                 pauseStartDeath(3000); // In milliseconds
-                //TODO: Pause the game and resume
 
         }
         public void StageCleared(){
-                // TODO: reset using maze coordinates, rather than screen position.
                 //initialize the position of pacman and ghosts, also resets timers and states
                 mPacman.reset();
                 mGhost.reset();
@@ -216,7 +215,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         long frameStartTime = System.currentTimeMillis();
 
                         if (!mPaused) {
-                                //Boolean updatePacman = mPacman.wallDetection(mMaze);
+                                Boolean updatePacman = mPacman.wallDetection(mMaze);
                                // Boolean updateGhost = mGhost.wallDetection(mMaze);
 
                                 update(true, true);
@@ -256,15 +255,13 @@ public class PacmanGame extends SurfaceView implements Runnable{
 
         //detects if pacman hit a pellet/ghost/wall
         private void detectCollisions() {
-                //first check if characters are in the maze
-                mPacman.isInBounds(mScreenX, mScreenY);
-                mGhost.isInBounds(mScreenX, mScreenY);
 
                 //TODO: separate detection collision methods within pacman/ghost/maze classes OR do it here
                 //pacman && ghost collision (add condition for super mode later)
 
                 // Eventually, must use Location to detect collion not screen position.
                 //if (mPacman.detectCollision(mGhost.loc, mScreenX, mScreenY)) {
+
                 if (mPacman.detectCollision(mGhost.loc, mScreenX, mScreenY)) {
                         //Pacman dies, respawns without super mode
                         if(mPacman.getPowerState() == false && mPacman.getPowerTimer() >= 0){
@@ -287,12 +284,40 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         }
                 }
 
-                gridValues = mMaze.getGridValues(mPacman.getLoc());
-                xPac = gridValues[0];
-                yPac = gridValues[1];
-                Location[][] mGrid = mMaze.getMaze();
-                Log.d("Debugging: ", "detect collision OBJECT gameactivity: " + mGrid[xPac][yPac].getObj());
-                switch(mGrid[xPac][yPac].getObj()){
+
+        /*
+                if (mPacman.detectCollision(mGhost.loc, mScreenX, mScreenY)) {
+                        //Pacman dies, respawns without super mode
+                        if(mPacman.getPowerState() == false && mPacman.getPowerTimer() >= 0){
+                                PacmanSounds.pacmanDeath();
+                                draw();
+                                pauseStartDeath(3000);
+                                mFakeJoy.setCenter();
+                                draw();
+                                deathRestart();
+
+                        }
+                        else{
+                                // Set timer as ghost touches Graveyard?
+                                mGhost.setDeathState(0, true);
+                                pauseStartDeath(500);
+                                PacmanSounds.pacmanEatGhost();
+                                //Pacman is able to eat ghosts
+                                //Deal with ghost returning to graveyard.
+                                //mghost.moveTowardsTarget();
+                        }
+                }
+        */
+
+        /*
+                // TODO: Need to fix pacman's update to also save/update the grid coordinate.
+                pacmanGridValues = mPacman.getGridLoc();
+                xPac = pacmanGridValues.getX();
+                yPac = pacmanGridValues.getY();
+                Location[][] checkGrid = mMaze.getMaze();
+                //Log.d("Pacman-Detect_Collision: ", "pacmanGridValues: " + "Location: " + xPac + "," + yPac);
+                //Log.d("Pacman-Detect_Collision: ", "detect collision OBJECT gameactivity: " + checkGrid[xPac][yPac].getObj());
+                switch(checkGrid[xPac][yPac].getObj()){
                         case GHOST:
                                 // !!! Death sequence, Pacman and Ghost same tile. Which Ghost does not matter.
                                 if(mPacman.getPowerState() == false && mPacman.getPowerTimer() >= 0){
@@ -307,6 +332,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                         // Ghost matters, set the specific ghost's deathState.
                                         // TODO: Set timer as ghost touches Graveyard?
                                         mGhost.setDeathState(540, true); // 540 frames?
+                                        // mGhost.loc.setNewLoc();
                                         //Pacman is able to eat ghosts
                                         // TODO: Send ghost back to graveyard.
                                         //mghost.moveTowardsTarget(  ); // Graveyard spawn coordinates.
@@ -372,7 +398,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                 Log.d("Debugging", "In Collision Interact Default");
                                 break;
                 }
-
+                */
         }
 
         //called by PacmanActivity when player quits game

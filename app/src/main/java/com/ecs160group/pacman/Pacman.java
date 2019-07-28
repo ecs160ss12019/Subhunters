@@ -25,6 +25,10 @@ public class Pacman implements Collision
 {
 	//pacman coords//directions
 	Location loc;
+	Location gridLocation;
+	private int pacGridX;
+	private int pacGridY;
+
 	public char direction;
 	private char next_direction;
 
@@ -50,6 +54,11 @@ public class Pacman implements Collision
 	public Location getLoc()
 	{
 		return loc;
+	}
+
+	public Location getGridLoc()
+	{
+		return gridLocation;
 	}
 
 	public int getPowerTimer()
@@ -109,15 +118,15 @@ public class Pacman implements Collision
 		paint.setColor(Color.argb(255, 255, 255, 0));
 		//pacman width/height 1% of screen (change later if needed)
 		this.radius = radius;
-
 		this.spawnLoc = spawnLoc;
 		loc = new Location(spawnLoc.getX(), spawnLoc.getY(), Block.PACMAN);
+		gridLocation = new Location(13, 29, Block.PACMAN); // 13,29 Used to keep track of own grid position.
+		Log.d("Pacman-gridlocation: ",  "Location: " + gridLocation.getX() + "," + gridLocation.getY());
 		direction = 'l';
 		next_direction = 'l';
 		powerState = false;
 		powerTimer = 0;
 		velocity = screenX / 15;
-
 	}
 
 
@@ -130,17 +139,26 @@ public class Pacman implements Collision
 	 */
 	void update(long fps)
 	{
+		pacGridX = gridLocation.getX();
+		pacGridY = gridLocation.getY();
 		// Move();
-
+		Log.d("Pacman-update: ", "Current_LOC: " + direction + "Location: " + pacGridX + "," + pacGridY);
 		if (direction == 'l') {
 			loc.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
+			gridLocation.setNewLoc(pacGridX - 1, pacGridY);
 		} else if (direction == 'r') {
 			loc.setNewLoc((int) (loc.getX() + (velocity / fps)), loc.getY());
+			gridLocation.setNewLoc(pacGridX + 1, pacGridY);
 		} else if (direction == 'u') {
 			loc.setNewLoc(loc.getX(), (int) (loc.getY() - (velocity / fps)));
+			gridLocation.setNewLoc(pacGridX, pacGridY - 1);
+
 		} else if (direction == 'd') {
 			loc.setNewLoc(loc.getX(), (int) (loc.getY() + (velocity / fps)));
+			gridLocation.setNewLoc(pacGridX, pacGridY + 1);
 		}
+		Log.d("Pacman-update: ", "New_LOC: " + direction + " , Location: " + pacGridX + "," + pacGridY);
+
 	}
 
 	void reverseVel()
@@ -295,6 +313,7 @@ public class Pacman implements Collision
 	{
 
 		loc.setNewLoc(spawnLoc.getX(), spawnLoc.getY());
+		gridLocation.setNewLoc(spawnLoc.getX(), spawnLoc.getY());
         direction = 'l';
         powerTimer = 0;
         powerState = false;
