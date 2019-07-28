@@ -6,6 +6,7 @@ public class Score
 
 	/**
 	 * Default ctor for the score class
+	 * Used for a new game
 	 */
 	Score()
 	{
@@ -13,8 +14,18 @@ public class Score
 	}
 
 	/**
-	 *
-	 * @return
+	 * Ctor with score parameter for score class
+	 * Used for resetting score when Pacman respawns but no game over
+	 * or new level reached
+	 * @param currentScore current score in the game
+	 */
+	Score(int currentScore) {
+		score = currentScore;
+	}
+
+	/**
+	 * Called to get the current score
+	 * @return the current score
 	 */
 	int getScore()
 	{
@@ -48,7 +59,7 @@ public class Score
 	/**
 	 * Called when Pacman eats a fruit
 	 */
-	// TODO: extend this for multiple fruit types
+	// TODO: extend this for multiple fruit types, use parameters
 	void ateFruit()
 	{
 		score += 1000;
