@@ -172,6 +172,7 @@ public class Pacman implements Collision
 		if (direction == 'r' )
 		{
 			// first judge if we are already at the right bound
+			// if (gridValues[1] == 30) // TYPO? Duplicate line
 			if (gridValues[1] == 30)
 			{
 				Log.d("PACMAN HAS HIT A BOUND:", "direction:" + direction);

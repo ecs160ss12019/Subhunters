@@ -75,7 +75,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
         private Location mGrid;
         private int xPac; // Grabs loc.x & loc.y coordinates
         private int yPac;
-
+        int gridValues[];
         private int pellet; // Eventually needs to be deleted TODO: Let maze handle win condition, check if no more pellets.
         private int MAX_PELLETS;
 
@@ -222,7 +222,6 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                 update(true, true);
                                 detectCollisions();
 
-
                                  //Determines powerup state of pacman powerTimer decrements on every frame.
                                 mPacman.checkPowerUpState();
                                 mGhost.checkDeathTimer();
@@ -288,20 +287,12 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         }
                 }
 
-
-                 // TODO: Because Pacman's location is updated by the screen's position it cannot use .loc.getX or .loc.getY
-                //         Create new variables to keep track of coordinate position within MAZE/GRID!
-                //mGrid = mMaze.getMaze();
-                xPac = mPacman.loc.getX();
-                yPac = mPacman.loc.getY();
-                //if(mGrid[xPac][yPac].getObj() == EMPTY){
-                //}
-                /*
-                switch(mMaze.getMaze()[xPac][yPac].getObj()){
-                        //TODO: handle pacman & ghost collision seperateley.
-                        // Ghost collision should be handled by their own private x,y coordinates instead.
-                        // Maze cannot keep track of all Pellet/Pacman/Ghost at same location.
-                        // This case should be stand alone within pacman?
+                gridValues = mMaze.getGridValues(mPacman.getLoc());
+                xPac = gridValues[0];
+                yPac = gridValues[1];
+                Location[][] mGrid = mMaze.getMaze();
+                Log.d("Debugging: ", "detect collision OBJECT gameactivity: " + mGrid[xPac][yPac].getObj());
+                switch(mGrid[xPac][yPac].getObj()){
                         case GHOST:
                                 // !!! Death sequence, Pacman and Ghost same tile. Which Ghost does not matter.
                                 if(mPacman.getPowerState() == false && mPacman.getPowerTimer() >= 0){
@@ -315,19 +306,22 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                 else{
                                         // Ghost matters, set the specific ghost's deathState.
                                         // TODO: Set timer as ghost touches Graveyard?
-                                        mGhost.setDeathState(0, true);
+                                        mGhost.setDeathState(540, true); // 540 frames?
                                         //Pacman is able to eat ghosts
                                         // TODO: Send ghost back to graveyard.
                                         //mghost.moveTowardsTarget(  ); // Graveyard spawn coordinates.
                                 }
                                 break;
-                	    case WALL: // Prevent movement here, but pacman MUST continue moving
-                                // TODO: Pacman collision here
+                	    case WALL: // Prevent movement here, but pacman MUST continue moving, Dealt within Pacman update.
+                                // TODO: Pacman collision here? Already done in update collision check?
                                 break;
                         case PELLET:
+                                // Placeholder, encounters pellet set empty.
                                 mMaze.getMaze()[xPac][yPac].updateLoc(xPac, yPac, mBlock.EMPTY);
-                                if(pellet >= MAX_PELLETS){ // On game complete TODO: Change pellet to correct amount.
-                                        Log.d("Debugging", "In Collision Interact: POWER_PELLET");
+                                pellet++;
+                                Log.d("Debugging", "In Collision Interact: POWER_PELLET");
+                                if(pellet >= MAX_PELLETS){ // On game complete TODO: Allow maze to handle, instead "check no pellets exist"
+                                        Log.d("Debugging", "In Collision Interact: PELLET, STAGE COMPLETE");
                                         draw();
                                         PacmanSounds.pacmanChomp(); // Consume pellet..
                                         pauseStartDeath(3000);
@@ -335,40 +329,50 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                         draw();
                                         StageCleared();
                                 }
-                                // TODO: Have grid set location to empty Object.
-                                //mGrid[xPac][yPac].updateLoc(xPac, yPac, EMPTY ); // Set empty?
-                                pellet++;
                                 break;
                          case POWER_PELLET: // Encounter PowerPellet, set state
                                  Log.d("Debugging", "In Collision Interact: POWER_PELLET");
                                  PacmanSounds.pacmanPowerup();
-                                 mPacman.setPowerUpState(2000,true); // 2000 is amount of frames time to be decremented EVERY FRAME
-                                // TODO: Set exact amount of frames the powerup lasts, for now infinite.
+                                 mPacman.setPowerUpState(540,true); // 2000 is amount of frames time to be decremented EVERY FRAME
                                 break;
                         case FRUIT:
-                                // Score(); TODO: give score depending on spawned fruit.
+                                // TODO: give score depending on spawned fruit.
+                                // Score(); // score class?
+                                mMaze.getMaze()[xPac][yPac].updateLoc(xPac, yPac, mBlock.FRUIT_SPAWN);
                                 PacmanSounds.pacmanEatFruit();
-                        case WARP_SPACE:
-                                // TODO: Find out both locations of warp_space. Have pacman swap positions.
-                                //mPacman.loc.setNewLoc( ); // Change to locate grid coordinates, not screen position
+                                break;
+                        case WARP_SPACE: // Swap Pacman's location depending on warp entrance.
+                                // Possible loop here? Updating Pacman's location on top of WARP location! Double check.
+                                if(xPac == 0 && yPac == 14){
+                                        Log.d("Debugging", "In Collision Interact: WARP_SPACE, Pacman warped[Right->Left].");
+                                        mPacman.loc.setNewLoc(27, 14); // Change to locate grid coordinates, not screen position
+                                }
+                                else{
+                                        //Assumed opposite side. Change Pacman's location
+                                        Log.d("Debugging", "In Collision Interact: WARP_SPACE, Pacman warped[Left->Right].");
+                                        mPacman.loc.setNewLoc(0, 14);
+                                }
+                                Log.d("Debugging", "In Collision Interact: WARP_SPACE, Pacman warped.");
                                 break;
                         case GHOST_GATE: // Prevent movement. Collision
                                 Log.d("Debugging", "In Collision Interact: GHOST_GATE");
                                 // TODO: Pacman collision here
                                 break;
                         case PAC_SPAWN: // *Nothing* Not needed? Same as empty.
+                                Log.d("Debugging", "In Collision Interact: PAC_SPAWN");
                                 break;
-                        case GHOST_SPAWN: // Nothing at the moment/ Prevent movement?
+                        case GHOST_SPAWN: // Nothing at the moment/ Prevent movement in update collision check?
+                                Log.d("Debugging", "In Collision Interact: GHOST_SPAWN");
                                 // TODO: Pacman collision here
                                 break;
                         case EMPTY: // empty space, Nothing happens. Continue movement.
                                 Log.d("Debugging", "In Collision Interact: EMPTY");
                                 break;
                         default:
-                                Log.d("Debugging", "In Collision Interact");
+                                Log.d("Debugging", "In Collision Interact Default");
                                 break;
                 }
-                       */
+
         }
 
         //called by PacmanActivity when player quits game

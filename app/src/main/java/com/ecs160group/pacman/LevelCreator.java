@@ -133,7 +133,7 @@ public class LevelCreator
 				maze[x][y] = new Location(x, y, Block.PAC_SPAWN);
 			case 't': // bonus fruit drop space
 				// is null except when fruit is placed
-				maze[x][y] = new Location(x, y, Block.FRUIT_SPAWN);
+				maze[x][y] = new Location(x, y, Block.FRUIT_SPAWN); // [13,17] Changed within level1 txt file.
 				break;
 			case 'x': // ghost drop in space
 				// is null space except when ghost drops in from waiting room
