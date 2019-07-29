@@ -249,8 +249,8 @@ public class Ghost implements Collision
 		if (canMove())
 
 
-			// get each location in the grid to move to
-			Location left = target.getAdjacentLocation('l');
+		// get each location in the grid to move to
+		Location left = target.getAdjacentLocation('l');
 		Location right = target.getAdjacentLocation('r');
 		Location up = target.getAdjacentLocation('u');
 		Location down = target.getAdjacentLocation('d');
@@ -318,5 +318,4 @@ public class Ghost implements Collision
 	{
 		return false;
 	}
-
 }
