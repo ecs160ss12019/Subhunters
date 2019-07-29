@@ -2,5 +2,5 @@ package com.ecs160group.pacman;
 
 public enum Fruit
 {
-	CHERRY, STRAWBERRY, APPLE, ORANGE, GALAGA, KEY
+	CHERRY, STRAWBERRY, ORANGE, APPLE, PASSION_FRUIT, GALAGA, BELL, KEY
 }

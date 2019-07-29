@@ -197,7 +197,7 @@ public class Pacman implements Collision
 				update = false;
 			}
 			// if not, are we gonna hit a wall?
-			else if (mGrid[gridValues[0]][gridValues[1] + 1].getObj() == Block.WALL)
+			else if (mGrid[gridValues[0]][gridValues[1] + 1].isWall())
 			{
 				Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
 				update = false;
@@ -212,7 +212,7 @@ public class Pacman implements Collision
 				Log.d("PACMAN HAS HIT A BOUND:", "direction:" + direction);
 				update = false;
 			}
-			else if (mGrid[gridValues[0]][gridValues[1] - 1].getObj() == Block.WALL)
+			else if (mGrid[gridValues[0]][gridValues[1] - 1].isWall())
 			{
 				Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
 				update = false;
@@ -227,7 +227,7 @@ public class Pacman implements Collision
 				Log.d("PACMAN HAS HIT A BOUND:", "direction:" + direction);
 				update = false;
 			}
-			else if (mGrid[gridValues[0] - 1][gridValues[1]].getObj() == Block.WALL)
+			else if (mGrid[gridValues[0] - 1][gridValues[1]].isWall())
 			{
 				Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
 				update = false;
@@ -242,7 +242,7 @@ public class Pacman implements Collision
 				Log.d("PACMAN HAS HIT A BOUND:", "direction:" + direction);
 				update = false;
 			}
-			else if (mGrid[gridValues[0] + 1][gridValues[1]].getObj() == Block.WALL)
+			else if (mGrid[gridValues[0] + 1][gridValues[1]].isWall())
 			{
 				Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
 				update = false;
@@ -431,4 +431,6 @@ public class Pacman implements Collision
 	{
 		return false;
 	}
+
+	public boolean hasCollision(Location l) {return false;}
 }

@@ -2,7 +2,7 @@ package com.ecs160group.pacman;
 
 public class Score
 {
-	int score;
+	private int score;
 
 	/**
 	 * Default ctor for the score class
@@ -17,14 +17,17 @@ public class Score
 	 * Ctor with score parameter for score class
 	 * Used for resetting score when Pacman respawns but no game over
 	 * or new level reached
+	 *
 	 * @param currentScore current score in the game
 	 */
-	Score(int currentScore) {
+	Score(int currentScore)
+	{
 		score = currentScore;
 	}
 
 	/**
 	 * Called to get the current score
+	 *
 	 * @return the current score
 	 */
 	int getScore()
@@ -41,7 +44,7 @@ public class Score
 	}
 
 	/**
-	 *  Called when Pacman eats a power pellet
+	 * Called when Pacman eats a power pellet
 	 */
 	void atePowerPellet()
 	{
@@ -61,7 +64,7 @@ public class Score
 	 */
 	void ateFruit(Fruit f)
 	{
-		switch(f) {
+		switch (f) {
 			case CHERRY:
 				score += 100;
 				break;
@@ -74,8 +77,14 @@ public class Score
 			case APPLE:
 				score += 700;
 				break;
+			case PASSION_FRUIT:
+				score += 1000;
+				break;
 			case GALAGA:
 				score += 2000;
+				break;
+			case BELL:
+				score += 3000;
 				break;
 			case KEY:
 				score += 5000;
