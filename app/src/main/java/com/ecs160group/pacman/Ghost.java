@@ -15,8 +15,8 @@ import java.util.Random;
  * turn left or right since one will be closer to target if forward is not possible
  * Only time a Ghost will turn 180 degrees is when pacman initially turns super
  */
-public class Ghost implements Collision
-{
+public class Ghost// implements Collision
+{ // TODO: check if really needs/fix interface
 
 	//pixel(maze) coords
 	protected Pacman pacman;
@@ -206,12 +206,6 @@ public class Ghost implements Collision
 	}
 
 
-	//function to check if ghost is within the bounds of the maze
-	void checkBounds()
-	{
-
-	}
-
 	//function to draw the ghosts
 	//can draw all four at once here or can implement functions for each of the four
 	public void draw(Canvas canvas, Paint mPaint, float radius)
@@ -243,49 +237,69 @@ public class Ghost implements Collision
 		moveTowardsTarget(scatterLocation);
 	}
 
-	Location minDistance(Location l, Location r, Location u, Location d, Location target)
+	/**
+	 * Private helper to find location that is closest to a location
+	 * @param target location ghost wants to get closest to
+	 * @return Location that is closest to target location
+	 */
+	private Location minDistance(Location target)
 	{
+		int minDist = 0;
 		Location next = loc.getAhead(direction);
-		if (canMove())
-
-
-		// get each location in the grid to move to
-		Location left = target.getAdjacentLocation('l');
-		Location right = target.getAdjacentLocation('r');
-		Location up = target.getAdjacentLocation('u');
-		Location down = target.getAdjacentLocation('d');
-		// check which one is the closest one
-
-
-		Location xDir = new Location();
-		Location yDir = new Location();
-		// get x direction minimum
-		if (Location.dist(l, target) < Location.dist(r, target))
-			xDir = l;
-		else
-			xDir = r;
-		// get y direction minimum
-
-	}
-
-	Location canMove()
-	{
-
+		// set object in maze after getting the location
+		next.setObj(maze[next.getX()][next.getY()].getObj());
+		if (canMoveTo(next)) {
+			minDist = Location.dist(next, target);
+		}
+		// compare with left
+		Location left = loc.getLeft(direction);
+		left.setObj(maze[left.getX()][left.getY()].getObj());
+		if (canMoveTo(left)) {
+			// get distance between left and target location
+			int distLeft = Location.dist(left, target);
+			if (distLeft < minDist) { // test distance between the left and target against min
+				minDist = distLeft;
+				next = left;
+			}
+		}
+		// compare with right
+		Location right = loc.getRight(direction);
+		right.setObj(maze[right.getX()][right.getY()].getObj());
+		if (canMoveTo(right)) {
+			int distRight = Location.dist(right, target);
+			if (distRight < minDist) {
+				next = right;
+			}
+		}
+		return next;
 	}
 
 	/**
 	 * Checks if the location can be moved to
 	 *
 	 * @param l location to check
-	 * @return
+	 * @return if the location given can be moved to
 	 */
-	boolean canMoveTo(Location l)
+	private boolean canMoveTo(Location l)
 	{
 		if (l == null || Maze.isInBounds(l) || l.isWall()) {
 			return false;
 		}
 		return l.isEmpty() || l.isPellet() || (l.isPacman() && !pacman.isSuper());
 	}
+
+	/**
+	 * Private helper to find is Ghost can move to the next space
+	 * @param next nex location to move to
+	 * @return
+	 */
+	private Location canMove(Location next)
+	{
+		return canMoveTo(next) ? next : null;
+	}
+
+	
+
 
 	/**
 	 * Private helper used by chase and scatter that moves towards target
@@ -299,23 +313,13 @@ public class Ghost implements Collision
 			// target exists and ghost is initialized in the grid
 			if (target != null && isInGrid()) {
 				Location next = canMove(minDistance(target));
-
-
-				// TODO: if can move/next location exists: move, else: turn
-
+				if (next != null) {
+					move(next);
+				} else {
+					turn(next);
+				}
 			}
 		}
 	}
 
-
-	/**
-	 * check if there is a collision for ghost at the given location
-	 *
-	 * @param loc
-	 * @return
-	 */
-	public boolean hasCollision(Location loc)
-	{
-		return false;
-	}
 }
