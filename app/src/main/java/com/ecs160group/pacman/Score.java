@@ -45,7 +45,7 @@ public class Score
 	 */
 	void atePowerPellet()
 	{
-		score += 100;
+		score += 50;
 	}
 
 	/**
@@ -53,15 +53,32 @@ public class Score
 	 */
 	void ateGhost()
 	{
-		score += 500;
+		score += 200;
 	}
 
 	/**
 	 * Called when Pacman eats a fruit
 	 */
-	// TODO: extend this for multiple fruit types, use parameters
-	void ateFruit()
+	void ateFruit(Fruit f)
 	{
-		score += 1000;
+		switch(f) {
+			case CHERRY:
+				score += 100;
+				break;
+			case STRAWBERRY:
+				score += 300;
+				break;
+			case ORANGE:
+				score += 500;
+				break;
+			case APPLE:
+				score += 700;
+				break;
+			case KEY:
+				score += 5000;
+				break;
+			default:
+				break;
+		}
 	}
 }
