@@ -275,7 +275,7 @@ public class Ghost implements Collision
 				update = false;
 			}
 			// if not, are we gonna hit a wall?
-			else if (mGrid[gridValues[0]][gridValues[1] + 1].isWall())
+			else if (mGrid[gridValues[0]][gridValues[1] + 1].getObj() == Block.WALL)
 			{
 				Log.d("GHOST HAS HIT A WALL:", "direction:" + direction);
 				update = false;
@@ -290,7 +290,7 @@ public class Ghost implements Collision
 				Log.d("GHOST HAS HIT A BOUND:", "direction:" + direction);
 				update = false;
 			}
-			else if (mGrid[gridValues[0]][gridValues[1] - 1].isWall())
+			else if (mGrid[gridValues[0]][gridValues[1] - 1].getObj() == Block.WALL)
 			{
 				Log.d("GHOST HAS HIT A WALL:", "direction:" + direction);
 				update = false;
@@ -305,7 +305,7 @@ public class Ghost implements Collision
 				Log.d("GHOST HAS HIT A BOUND:", "direction:" + direction);
 				update = false;
 			}
-			else if (mGrid[gridValues[0] - 1][gridValues[1]].isWall())
+			else if (mGrid[gridValues[0] - 1][gridValues[1]].getObj() == Block.WALL)
 			{
 				Log.d("GHOST HAS HIT A WALL:", "direction:" + direction);
 				update = false;
@@ -320,7 +320,7 @@ public class Ghost implements Collision
 				Log.d("GHOST HAS HIT A BOUND:", "direction:" + direction);
 				update = false;
 			}
-			else if (mGrid[gridValues[0] + 1][gridValues[1]].isWall())
+			else if (mGrid[gridValues[0] + 1][gridValues[1]].getObj() == Block.WALL)
 			{
 				Log.d("GHOST HAS HIT A WALL:", "direction:" + direction);
 				update = false;
@@ -378,6 +378,4 @@ public class Ghost implements Collision
 	{
 		return false;
 	}
-
-	public boolean hasCollision(Location l) {return false;}
 }
