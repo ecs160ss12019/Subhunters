@@ -129,4 +129,10 @@ public class Location
 				return new Location(x, y - 1, Block.EMPTY);
 		}
 	}
+
+	public boolean isWall()
+	{
+		return  block == Block.HORIZONTAL_WALL || block == Block.VERTICAL_WALL
+				|| block == Block.BOT_LEFT_TOP_RIGHT_WALL || block == Block.BOT_RIGHT_TOP_LEFT_WALL;
+	}
 }
