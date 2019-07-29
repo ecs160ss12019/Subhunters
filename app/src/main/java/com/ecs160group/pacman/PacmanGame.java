@@ -129,7 +129,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
 
 
                 mPacman = new Pacman(mScreenX, mMaze.pacSpawn, PacGhostRadius);
-                mGhost = new Ghost(mScreenX, mMaze.ghostSpawn);
+                mGhost = new Ghost(mScreenX, mMaze.ghostSpawn, mMaze.getMaze());
                 mFakeJoy = new FakeJoy(200, 100, blockSize, fakePosition);
                 pellet = 0;
                 MAX_PELLETS = 50; // testing purposes TODO: Update max pellets to maze.

@@ -330,16 +330,15 @@ public class Ghost// implements Collision
 	{
 		if (Location.isValid(next)) {
 			Location ahead = loc.getAdjacentLocation(direction);
-			if (ahead.getX() == next.getX() && ahead.getY() == next.getY()) {
+//			if (ahead.getX() == next.getX() && ahead.getY() == next.getY()) {
 				turn(next);
-			}
-			// TODO: do the movement
 		}
+			// TODO: do the movement
 	}
 
 	/**
 	 * Helper to turn towards a direction
-	 * Gets the next location 
+	 * Gets the next location
 	 * @param next
 	 */
 	private void turn(Location next)
