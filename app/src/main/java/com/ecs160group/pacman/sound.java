@@ -1,26 +1,12 @@
 package com.ecs160group.pacman;
 
-
 import android.content.Context;
 import android.media.MediaPlayer;
-
-import android.provider.MediaStore;
-import android.os.Bundle;
-
-import java.io.*;
-import java.io.FileInputStream;
-//import javax.sound.sampled.*;
-
-//import javax.sound.sampled.AudioInputSystem;
-//import javax.sound.sampled.Clip;
-
-
 
 public class sound{
 
     Context context;
     MediaPlayer mp;
-    //public Context activityContext;
     public sound(Context c){
         this.context = c;
 
@@ -56,7 +42,6 @@ public class sound{
         mp = MediaPlayer.create(context, R.raw.pacman_intermission);
         mp.start();
     }
-
 
 
     void playSong(MediaPlayer mp){
