@@ -74,6 +74,9 @@ public class Score
 			case APPLE:
 				score += 700;
 				break;
+			case GALAGA:
+				score += 2000;
+				break;
 			case KEY:
 				score += 5000;
 				break;
