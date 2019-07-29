@@ -148,6 +148,7 @@ public class Location
 
 	/**
 	 * Checks if the location contains a pellet
+	 *
 	 * @return if the location contains a pellet
 	 */
 	public boolean isPellet()
@@ -157,6 +158,7 @@ public class Location
 
 	/**
 	 * Checks if the location is empty
+	 *
 	 * @return if the location is empty
 	 */
 	public boolean isEmpty()
@@ -166,6 +168,7 @@ public class Location
 
 	/**
 	 * Checks if the location contains Pacman
+	 *
 	 * @return if the location contains Pacman
 	 */
 	public boolean isPacman()
@@ -175,6 +178,7 @@ public class Location
 
 	/**
 	 * Gets the location in front of the direction facing
+	 *
 	 * @param dirFacing Direction the object is facing
 	 * @return location immediately in front of current location
 	 */
@@ -185,10 +189,12 @@ public class Location
 
 	/**
 	 * Gets the location to the left of the direction facing
+	 *
 	 * @param dirFacing Direction the object is facing
 	 * @return location immediately to the left of current location
 	 */
-	public Location getLeft(char dirFacing) {
+	public Location getLeft(char dirFacing)
+	{
 		switch (dirFacing) {
 			case 'l':
 				return getAdjacentLocation('d');
@@ -204,10 +210,12 @@ public class Location
 
 	/**
 	 * Gets the location to the right of the direction facing
+	 *
 	 * @param dirFacing Direction the object is facing
 	 * @return location immediately to the right of current location
 	 */
-	public Location getRight(char dirFacing) {
+	public Location getRight(char dirFacing)
+	{
 		switch (dirFacing) {
 			case 'l':
 				return getAdjacentLocation('u');
@@ -219,6 +227,11 @@ public class Location
 			default:
 				return getAdjacentLocation('l');
 		}
+	}
+
+	public static boolean isValid(Location l)
+	{
+		return l != null || Maze.isInBounds(l);
 	}
 
 }

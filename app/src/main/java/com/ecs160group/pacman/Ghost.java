@@ -27,7 +27,7 @@ public class Ghost// implements Collision
 
 	//ghost coords//directions
 	//private int direction;
-	private int next_direction;
+	private int nextDirection;
 	private char direction;
 
 	// TODO: add explenations for these two vars here
@@ -194,7 +194,6 @@ public class Ghost// implements Collision
 	 * Initializes four points of mRect(defines pacman)
 	 * Initializes x and y velocities (can change later)
 	 */
-	// TODO: not sure if we needs this
 	void reset()
 	{
 
@@ -239,6 +238,7 @@ public class Ghost// implements Collision
 
 	/**
 	 * Private helper to find location that is closest to a location
+	 *
 	 * @param target location ghost wants to get closest to
 	 * @return Location that is closest to target location
 	 */
@@ -282,7 +282,7 @@ public class Ghost// implements Collision
 	 */
 	private boolean canMoveTo(Location l)
 	{
-		if (l == null || Maze.isInBounds(l) || l.isWall()) {
+		if (!Location.isValid(l) || l.isWall()) { // location exists, is not in bounds, or is a wall
 			return false;
 		}
 		return l.isEmpty() || l.isPellet() || (l.isPacman() && !pacman.isSuper());
@@ -290,6 +290,7 @@ public class Ghost// implements Collision
 
 	/**
 	 * Private helper to find is Ghost can move to the next space
+	 *
 	 * @param next nex location to move to
 	 * @return
 	 */
@@ -297,8 +298,6 @@ public class Ghost// implements Collision
 	{
 		return canMoveTo(next) ? next : null;
 	}
-
-	
 
 
 	/**
@@ -320,6 +319,32 @@ public class Ghost// implements Collision
 				}
 			}
 		}
+	}
+
+	/**
+	 * Helper to accomplish move
+	 *
+	 * @param next the next
+	 */
+	private void move(Location next)
+	{
+		if (Location.isValid(next)) {
+			Location ahead = loc.getAdjacentLocation(direction);
+			if (ahead.getX() == next.getX() && ahead.getY() == next.getY()) {
+				turn(next);
+			}
+			// TODO: do the movement
+		}
+	}
+
+	/**
+	 * Helper to turn towards a direction
+	 * Gets the next location 
+	 * @param next
+	 */
+	private void turn(Location next)
+	{
+
 	}
 
 }
