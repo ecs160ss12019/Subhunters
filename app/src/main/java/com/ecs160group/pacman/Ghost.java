@@ -3,8 +3,8 @@ package com.ecs160group.pacman;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.RectF;
 import android.util.Log;
+
 import java.util.Random;
 
 
@@ -22,6 +22,8 @@ public class Ghost implements Collision
 	protected Pacman pacman;
 	protected Location loc;
 	protected Location scatterLoc;
+
+	private Location[][] maze;
 
 	//ghost coords//directions
 	//private int direction;
@@ -60,17 +62,19 @@ public class Ghost implements Collision
 
 	/**
 	 * Parameterized Ghost ctor
+	 *
 	 * @param screenX
-	 * @param locX
-	 * @param locY
+	 * @param spawnLoc
+	 * @param maze
 	 */
-	public Ghost(int screenX, Location spawnLoc)
+	public Ghost(int screenX, Location spawnLoc, Location[][] maze)
 	{
+		this.maze = maze;
 		paint.setColor(Color.argb(255, 0, 0, 255));
 		//pacman width/height 1% of screen (change later if needed)
 		mGhostWidth = (float) screenX / 100;
 		mGhostHeight = (float) screenX / 100;
-		velocity  = screenX / 15;
+		velocity = screenX / 15;
 
 		this.spawnLoc = spawnLoc;
 
@@ -78,16 +82,24 @@ public class Ghost implements Collision
 
 	}
 
-	public Location getLoc() {
+	/**
+	 * Gets the location of the ghost
+	 *
+	 * @return location of the ghost
+	 */
+	public Location getLoc()
+	{
 		return loc;
 	}
 
 	/**
+	 * Sets the death state of the ghost
 	 *
-	 * @param dTimer
-	 * @param dState
+	 * @param dTimer amount of time left on the death timer
+	 * @param dState state of the ghost
 	 */
-	public void setDeathState(int dTimer, boolean dState) {
+	public void setDeathState(int dTimer, boolean dState)
+	{
 		deathTimer = dTimer;
 		isDead = dState;
 	}
@@ -95,8 +107,9 @@ public class Ghost implements Collision
 	/**
 	 *
 	 */
-	public void checkDeathTimer(){
-		if(isDead == true || deathTimer != 0){
+	public void checkDeathTimer()
+	{
+		if (isDead == true || deathTimer != 0) {
 			setDeathState(deathTimer - 1, true);
 			if (deathTimer <= 0) {
 				setDeathState(0, false);
@@ -106,6 +119,7 @@ public class Ghost implements Collision
 
 	/**
 	 * Checks if the ghost has been spawned in the grid
+	 *
 	 * @return if the ghost has been spawned
 	 */
 	private boolean isInGrid()
@@ -125,6 +139,7 @@ public class Ghost implements Collision
 
 	int directionCount = 15;
 	boolean newDir = false;
+
 	void update(long fps)
 	{
 		//Log.d("ghost update:", "Random:" + randDirection);
@@ -132,39 +147,35 @@ public class Ghost implements Collision
 			loc.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
 			directionCount++;
 			direction = 'l';
-			if(directionCount > newRandDir){ // TODO: Add || on collision to change direction.
+			if (directionCount > newRandDir) { // TODO: Add || on collision to change direction.
 				randDirection = rand.nextInt(4);
 				directionCount = 0;
 			}
-		}
-		else if (randDirection == 1) {
+		} else if (randDirection == 1) {
 			loc.setNewLoc((int) (loc.getX() + (velocity / fps)), loc.getY());
 			directionCount++;
 			direction = 'r';
-			if(directionCount > newRandDir){
+			if (directionCount > newRandDir) {
 				randDirection = rand.nextInt(4);
 				directionCount = 0;
 			}
-		}
-		else if (randDirection == 2) {
+		} else if (randDirection == 2) {
 			loc.setNewLoc(loc.getX(), (int) (loc.getY() - (velocity / fps)));
 			directionCount++;
 			direction = 'd';
-			if(directionCount > newRandDir){
+			if (directionCount > newRandDir) {
 				randDirection = rand.nextInt(4);
 				directionCount = 0;
 			}
-		}
-		else if (randDirection == 3) {
+		} else if (randDirection == 3) {
 			loc.setNewLoc(loc.getX(), (int) (loc.getY() + (velocity / fps)));
 			directionCount++;
 			direction = 'u';
-			if(directionCount > newRandDir){
+			if (directionCount > newRandDir) {
 				randDirection = rand.nextInt(4);
 				directionCount = 0;
 			}
-		}
-		else{
+		} else {
 			//Log.d("ghost update:", "No Direction:");
 		}
 	}
@@ -187,9 +198,9 @@ public class Ghost implements Collision
 	void reset()
 	{
 
-		loc.setNewLoc(spawnLoc.getX(),spawnLoc.getY());
-        deathTimer = 0;
-        isDead = false;
+		loc.setNewLoc(spawnLoc.getX(), spawnLoc.getY());
+		deathTimer = 0;
+		isDead = false;
 		//mXVelocity = (float) (y / 3);
 		//mYVelocity = (float) -(y / 3);
 	}
@@ -216,6 +227,8 @@ public class Ghost implements Collision
 	 */
 	void chase(Location chaseLocation)
 	{
+		// sets the object at the target location before scattering
+		chaseLocation.setObj(maze[chaseLocation.getX()][chaseLocation.getY()].getObj());
 		moveTowardsTarget(chaseLocation);
 	}
 
@@ -225,7 +238,53 @@ public class Ghost implements Collision
 	 */
 	void scatter(Location scatterLocation)
 	{
+		// sets the object at the target location before scattering
+		scatterLocation.setObj(maze[scatterLocation.getX()][scatterLocation.getY()].getObj());
 		moveTowardsTarget(scatterLocation);
+	}
+
+	Location minDistance(Location l, Location r, Location u, Location d, Location target)
+	{
+		Location next = loc.getAhead(direction);
+		if (canMove())
+
+
+			// get each location in the grid to move to
+			Location left = target.getAdjacentLocation('l');
+		Location right = target.getAdjacentLocation('r');
+		Location up = target.getAdjacentLocation('u');
+		Location down = target.getAdjacentLocation('d');
+		// check which one is the closest one
+
+
+		Location xDir = new Location();
+		Location yDir = new Location();
+		// get x direction minimum
+		if (Location.dist(l, target) < Location.dist(r, target))
+			xDir = l;
+		else
+			xDir = r;
+		// get y direction minimum
+
+	}
+
+	Location canMove()
+	{
+
+	}
+
+	/**
+	 * Checks if the location can be moved to
+	 *
+	 * @param l location to check
+	 * @return
+	 */
+	boolean canMoveTo(Location l)
+	{
+		if (l == null || Maze.isInBounds(l) || l.isWall()) {
+			return false;
+		}
+		return l.isEmpty() || l.isPellet() || (l.isPacman() && !pacman.isSuper());
 	}
 
 	/**
@@ -237,8 +296,11 @@ public class Ghost implements Collision
 	{
 		// keep moving towards target if pacman hasn't won and isn't dead
 		if (pacman != null && !pacman.hasWon()) {
-			if (target != null && isInGrid()) { // target exists within grid
-				// TODO: get next location to move to in grid
+			// target exists and ghost is initialized in the grid
+			if (target != null && isInGrid()) {
+				Location next = canMove(minDistance(target));
+
+
 				// TODO: if can move/next location exists: move, else: turn
 
 			}
@@ -259,69 +321,53 @@ public class Ghost implements Collision
 		update = true;
 
 		//read in Grid and grid indices of current location
-		Location [][] mGrid = maze.getMaze();
+		Location[][] mGrid = maze.getMaze();
 		int gridValues[] = maze.getGridValues(loc);
-
 
 
 		//if ghost will hit the right wall, stop
 		// that is, set to NOT update
-		if (direction == 'r' )
-		{
+		if (direction == 'r') {
 			// first judge if we are already at the right bound
-			if (gridValues[1] == 30)
-			{
+			if (gridValues[1] == 30) {
 				Log.d("GHOST HAS HIT A BOUND:", "direction:" + direction);
 				update = false;
 			}
 			// if not, are we gonna hit a wall?
-			else if (mGrid[gridValues[0]][gridValues[1] + 1].getObj() == Block.WALL)
-			{
+			else if (mGrid[gridValues[0]][gridValues[1] + 1].getObj() == Block.WALL) {
 				Log.d("GHOST HAS HIT A WALL:", "direction:" + direction);
 				update = false;
 			}
 		}
 
 		//if ghost will hit the left wall, stop
-		if (direction == 'l' )
-		{
-			if (gridValues[1] == 0)
-			{
+		if (direction == 'l') {
+			if (gridValues[1] == 0) {
 				Log.d("GHOST HAS HIT A BOUND:", "direction:" + direction);
 				update = false;
-			}
-			else if (mGrid[gridValues[0]][gridValues[1] - 1].getObj() == Block.WALL)
-			{
+			} else if (mGrid[gridValues[0]][gridValues[1] - 1].getObj() == Block.WALL) {
 				Log.d("GHOST HAS HIT A WALL:", "direction:" + direction);
 				update = false;
 			}
 		}
 
 		//if ghost will hit the top wall, stop
-		if (direction == 'u' )
-		{
-			if (gridValues[0] == 0)
-			{
+		if (direction == 'u') {
+			if (gridValues[0] == 0) {
 				Log.d("GHOST HAS HIT A BOUND:", "direction:" + direction);
 				update = false;
-			}
-			else if (mGrid[gridValues[0] - 1][gridValues[1]].getObj() == Block.WALL)
-			{
+			} else if (mGrid[gridValues[0] - 1][gridValues[1]].getObj() == Block.WALL) {
 				Log.d("GHOST HAS HIT A WALL:", "direction:" + direction);
 				update = false;
 			}
 		}
 
 		//if ghost will hit the bottom wall, stop
-		if (direction == 'd' )
-		{
-			if (gridValues[0] == 27)
-			{
+		if (direction == 'd') {
+			if (gridValues[0] == 27) {
 				Log.d("GHOST HAS HIT A BOUND:", "direction:" + direction);
 				update = false;
-			}
-			else if (mGrid[gridValues[0] + 1][gridValues[1]].getObj() == Block.WALL)
-			{
+			} else if (mGrid[gridValues[0] + 1][gridValues[1]].getObj() == Block.WALL) {
 				Log.d("GHOST HAS HIT A WALL:", "direction:" + direction);
 				update = false;
 			}
@@ -331,50 +377,13 @@ public class Ghost implements Collision
 
 	}
 
-	/*
-    check if ghost is in bounds
-    the function will later be used to check collision
-    between ghost and wall probably
- */
-	public void isInBounds(int mScreenX, int mScreenY) {
-		float radius = (mScreenX + mScreenY) / 200;
-
-		//if ghost hits the right screen wall, stop
-		if ( (loc.getX() + radius) > mScreenX) {
-			//Log.d("ghost has hit a wall:", "direction:" + direction);
-			loc.setNewLoc((int) (mScreenX - radius), loc.getY());
-		}
-
-		//if ghost hits the left screen wall, stop
-		// TODO: CHANGE IT TO IF HE HITS THE MAZE's LEFT WALL
-		if ( (loc.getX() - radius) < 0) {
-			//Log.d("ghost has hit a wall:", "direction:" + direction);
-			loc.setNewLoc( (int) (0 + radius) , loc.getY());
-
-		}
-		//if ghost hits the bottom screen wall
-		if  ( (loc.getY() + radius) > mScreenY) {
-			//Log.d("ghost hit the bottom:", "direction:" + direction);
-			loc.setNewLoc(loc.getX(), (int)(mScreenY - radius));
-		}
-
-		//if ghost hits the top screen wall
-		if  ( (loc.getY() - radius) < 0)  //up
-		{
-			//Log.d("ghost hit upper wall:", "direction:" + direction);
-			loc.setNewLoc(loc.getX(), (int)(0 + radius) );
-		}
-
-	}
-
 	/**
 	 * check if there is a collision for ghost at the given location
+	 *
 	 * @param loc
-	 * @param mScreenX
-	 * @param mScreenY
 	 * @return
 	 */
-	public boolean detectCollision(Location loc, int mScreenX, int mScreenY)
+	public boolean hasCollision(Location loc)
 	{
 		return false;
 	}
