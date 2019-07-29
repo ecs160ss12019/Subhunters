@@ -156,7 +156,6 @@ class Maze
 	 * so that we don't have to keep scaling the locations every time we want to draw/update a location
 	 */
 	private void scaleGrid(){
-
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
 				scaledGrid[i][j].updateLoc(grid[i][j].getX() * 28 + xScaled,
@@ -344,8 +343,9 @@ class Maze
 
 	/** May be used to test current performance issues.
 	 * temp method to draw the maze (hardcoded style)
-	 * @param canvas canvas to draw on
+	 * @param mCanvas canvas to draw on
 	 * @param paint paint to paint
+	 * @param l
 	 */
 	void tempDraw(Canvas mCanvas, Paint paint, Location l){
 		Bitmap unsizedBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.blinky);

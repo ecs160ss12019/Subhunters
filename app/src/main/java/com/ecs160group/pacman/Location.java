@@ -87,6 +87,11 @@ public class Location
 		y = newY;
 	}
 
+	public void setObj(Block b)
+	{
+		block = b;
+	}
+
 	public void updateLoc(int newX, int newY, Block newBlock)
 	{
 		x = newX;
@@ -130,9 +135,36 @@ public class Location
 		}
 	}
 
+	/**
+	 * Checks if the location is a wall of not
+	 *
+	 * @return if the location is a wall
+	 */
 	public boolean isWall()
 	{
-		return  block == Block.HORIZONTAL_WALL || block == Block.VERTICAL_WALL
+		return block == Block.HORIZONTAL_WALL || block == Block.VERTICAL_WALL
 				|| block == Block.BOT_LEFT_TOP_RIGHT_WALL || block == Block.BOT_RIGHT_TOP_LEFT_WALL;
 	}
+
+	public boolean isPellet()
+	{
+		return block == Block.PELLET || block == Block.POWER_PELLET;
+	}
+
+	public boolean isEmpty()
+	{
+		return block == Block.EMPTY;
+	}
+
+	public boolean isPacman()
+	{
+		return block == Block.PACMAN;
+	}
+
+
+	public Location getAhead(char dirFacing)
+	{
+		return getAdjacentLocation(dirFacing);
+	}
+
 }
