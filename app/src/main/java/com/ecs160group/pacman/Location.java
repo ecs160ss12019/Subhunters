@@ -146,25 +146,79 @@ public class Location
 				|| block == Block.BOT_LEFT_TOP_RIGHT_WALL || block == Block.BOT_RIGHT_TOP_LEFT_WALL;
 	}
 
+	/**
+	 * Checks if the location contains a pellet
+	 * @return if the location contains a pellet
+	 */
 	public boolean isPellet()
 	{
 		return block == Block.PELLET || block == Block.POWER_PELLET;
 	}
 
+	/**
+	 * Checks if the location is empty
+	 * @return if the location is empty
+	 */
 	public boolean isEmpty()
 	{
 		return block == Block.EMPTY;
 	}
 
+	/**
+	 * Checks if the location contains Pacman
+	 * @return if the location contains Pacman
+	 */
 	public boolean isPacman()
 	{
 		return block == Block.PACMAN;
 	}
 
-
+	/**
+	 * Gets the location in front of the direction facing
+	 * @param dirFacing Direction the object is facing
+	 * @return location immediately in front of current location
+	 */
 	public Location getAhead(char dirFacing)
 	{
 		return getAdjacentLocation(dirFacing);
+	}
+
+	/**
+	 * Gets the location to the left of the direction facing
+	 * @param dirFacing Direction the object is facing
+	 * @return location immediately to the left of current location
+	 */
+	public Location getLeft(char dirFacing) {
+		switch (dirFacing) {
+			case 'l':
+				return getAdjacentLocation('d');
+			case 'r':
+				return getAdjacentLocation('u');
+			case 'u':
+				return getAdjacentLocation('l');
+			case 'd':
+			default:
+				return getAdjacentLocation('r');
+		}
+	}
+
+	/**
+	 * Gets the location to the right of the direction facing
+	 * @param dirFacing Direction the object is facing
+	 * @return location immediately to the right of current location
+	 */
+	public Location getRight(char dirFacing) {
+		switch (dirFacing) {
+			case 'l':
+				return getAdjacentLocation('u');
+			case 'r':
+				return getAdjacentLocation('d');
+			case 'u':
+				return getAdjacentLocation('r');
+			case 'd':
+			default:
+				return getAdjacentLocation('l');
+		}
 	}
 
 }
