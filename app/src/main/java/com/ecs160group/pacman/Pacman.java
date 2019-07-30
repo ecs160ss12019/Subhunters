@@ -21,7 +21,7 @@ import java.util.Random;
  */
 
 
-public class Pacman implements Collision
+public class Pacman //implements Collision
 {
 	//pacman coords//directions
 	Location loc;
@@ -38,7 +38,7 @@ public class Pacman implements Collision
 	private PacmanGame game;
 
 	public Location spawnLoc;
-
+	private Score score;
 
 	// use an integer to temporarily replace the draw of Pacman
 	// this will be modified under the draw function
@@ -49,6 +49,24 @@ public class Pacman implements Collision
 	float velocity;
 	private float radius;
 	final Paint paint = new Paint();
+
+	Pacman(int screenX, Location spawnLoc, float radius, Score score)
+	{
+		this.score = score;
+
+		paint.setColor(Color.argb(255, 255, 255, 0));
+		//pacman width/height 1% of screen (change later if needed)
+		this.radius = radius;
+		this.spawnLoc = spawnLoc;
+		loc = new Location(spawnLoc.getX(), spawnLoc.getY(), Block.PACMAN);
+		gridLocation = new Location(13, 29, Block.PACMAN); // 13,29 Used to keep track of own grid position.
+		Log.d("Pacman-gridlocation: ",  "Location: " + gridLocation.getX() + "," + gridLocation.getY());
+		direction = 'l';
+		next_direction = 'l';
+		powerState = false;
+		powerTimer = 0;
+		velocity = screenX / 15;
+	}
 
 
 	public Location getLoc()
@@ -111,25 +129,6 @@ public class Pacman implements Collision
 			return powerState;
 		return false;
 	}
-
-	Pacman(int screenX, Location spawnLoc, float radius)
-	{
-
-		paint.setColor(Color.argb(255, 255, 255, 0));
-		//pacman width/height 1% of screen (change later if needed)
-		this.radius = radius;
-		this.spawnLoc = spawnLoc;
-		loc = new Location(spawnLoc.getX(), spawnLoc.getY(), Block.PACMAN);
-		gridLocation = new Location(13, 29, Block.PACMAN); // 13,29 Used to keep track of own grid position.
-		Log.d("Pacman-gridlocation: ",  "Location: " + gridLocation.getX() + "," + gridLocation.getY());
-		direction = 'l';
-		next_direction = 'l';
-		powerState = false;
-		powerTimer = 0;
-		velocity = screenX / 15;
-	}
-
-
 
 
 	/**
@@ -353,7 +352,7 @@ public class Pacman implements Collision
 	 * Depending on direction given and traversability, Pacman will attempt to move.
 	 * Helper function checkCollision, checks next cell and deals with it. If pellet, ghost,fruit, ect..
 	 */
-	public void Move() // Change direction to char? "Easier to Read" udlr
+	public void move() // Change direction to char? "Easier to Read" udlr
 	{
 		// TODO: extend this to introduce movement based on the direction given
 		int pacX = loc.getX();
