@@ -3,6 +3,8 @@ package com.ecs160group.pacman;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
+import android.graphics.PointF;
 import android.util.Log;
 
 import java.util.Random;
@@ -24,6 +26,8 @@ public class Ghost// implements Collision
 	protected Location scatterLoc;
 
 	private Location[][] maze;
+	//passing the scaledgrid so that we can move accordingly
+	private Location[][] scaledMaze;
 
 	//ghost coords//directions
 	//private int direction;
@@ -49,14 +53,17 @@ public class Ghost// implements Collision
 	float mGhostWidth;
 	float mGhostHeight;
 	Paint paint = new Paint();
-	private Location spawnLoc;
+	public Location spawnLoc;
+
+
+	private Point gridCoord;
+	public Location gridLocation;
 
 
 	/**
 	 * Non-parameterized Ghost ctor
 	 */
-	public Ghost()
-	{
+	public Ghost() {
 
 	}
 
@@ -67,8 +74,8 @@ public class Ghost// implements Collision
 	 * @param spawnLoc
 	 * @param maze
 	 */
-	public Ghost(int screenX, Location spawnLoc, Location[][] maze)
-	{
+	public Ghost(int screenX, Location spawnLoc, Location[][] maze, Location[][] scaledMaze) {
+		this.scaledMaze = scaledMaze;
 		this.maze = maze;
 		paint.setColor(Color.argb(255, 0, 0, 255));
 		//pacman width/height 1% of screen (change later if needed)
@@ -76,7 +83,10 @@ public class Ghost// implements Collision
 		mGhostHeight = (float) screenX / 100;
 		velocity = screenX / 15;
 
+		gridLocation = new Location(13, 11, Block.GHOST);
+		gridCoord = new Point(gridLocation.getX(), gridLocation.getY());
 		this.spawnLoc = spawnLoc;
+		direction = 'l';
 
 		loc = new Location(spawnLoc.getX(), spawnLoc.getY(), Block.GHOST);
 
@@ -87,8 +97,7 @@ public class Ghost// implements Collision
 	 *
 	 * @return location of the ghost
 	 */
-	public Location getLoc()
-	{
+	public Location getLoc() {
 		return loc;
 	}
 
@@ -98,8 +107,7 @@ public class Ghost// implements Collision
 	 * @param dTimer amount of time left on the death timer
 	 * @param dState state of the ghost
 	 */
-	public void setDeathState(int dTimer, boolean dState)
-	{
+	public void setDeathState(int dTimer, boolean dState) {
 		deathTimer = dTimer;
 		isDead = dState;
 	}
@@ -107,8 +115,7 @@ public class Ghost// implements Collision
 	/**
 	 *
 	 */
-	public void checkDeathTimer()
-	{
+	public void checkDeathTimer() {
 		if (isDead == true || deathTimer != 0) {
 			setDeathState(deathTimer - 1, true);
 			if (deathTimer <= 0) {
@@ -122,14 +129,13 @@ public class Ghost// implements Collision
 	 *
 	 * @return if the ghost has been spawned
 	 */
-	private boolean isInGrid()
-	{
+	private boolean isInGrid() {
 		return started;
 	}
 
 
 	/**
-	 * updates the ball position
+	 * updates the ghost position
 	 * called each frame/loop from PacmanGame update() method
 	 * moves ghost based on x/y velocities and fps
 	 */
@@ -140,19 +146,27 @@ public class Ghost// implements Collision
 	int directionCount = 15;
 	boolean newDir = false;
 
-	void update(long fps)
-	{
+	/*void update(long fps) {
+		gridCoord.x = gridLocation.getX();
+		gridCoord.y = gridLocation.getY();
+		Location l;
+		l = new Location(loc.getX(), loc.getY(), Block.GHOST);
 		//Log.d("ghost update:", "Random:" + randDirection);
-		if (randDirection == 0) {
-			loc.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
-			directionCount++;
-			direction = 'l';
-			if (directionCount > newRandDir) { // TODO: Add || on collision to change direction.
-				randDirection = rand.nextInt(4);
-				directionCount = 0;
+		if (randDirection == 0){
+			l.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
+			if (!detectCollision(l)) {
+				loc.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
+				gridLocation.setNewLoc(gridCoord.x - 1, gridCoord.y);
+				directionCount++;
+				direction = 'l';
+				if (directionCount > newRandDir) { // TODO: Add || on collision to change direction.
+					randDirection = rand.nextInt(4);
+					directionCount = 0;
+				}
 			}
 		} else if (randDirection == 1) {
 			loc.setNewLoc((int) (loc.getX() + (velocity / fps)), loc.getY());
+			gridLocation.setNewLoc(gridCoord.x + 1, gridCoord.y);
 			directionCount++;
 			direction = 'r';
 			if (directionCount > newRandDir) {
@@ -160,15 +174,17 @@ public class Ghost// implements Collision
 				directionCount = 0;
 			}
 		} else if (randDirection == 2) {
-			loc.setNewLoc(loc.getX(), (int) (loc.getY() - (velocity / fps)));
+			loc.setNewLoc(loc.getX(), (int) (loc.getY() + (velocity / fps)));
+			gridLocation.setNewLoc(gridCoord.x, gridCoord.y + 1);
 			directionCount++;
 			direction = 'd';
 			if (directionCount > newRandDir) {
 				randDirection = rand.nextInt(4);
 				directionCount = 0;
 			}
-		} else if (randDirection == 3) {
-			loc.setNewLoc(loc.getX(), (int) (loc.getY() + (velocity / fps)));
+		} else if (randDirection == 3)  {
+			loc.setNewLoc(loc.getX(), (int) (loc.getY() - (velocity / fps)));
+			gridLocation.setNewLoc(gridCoord.x, gridCoord.y - 1);
 			directionCount++;
 			direction = 'u';
 			if (directionCount > newRandDir) {
@@ -176,9 +192,86 @@ public class Ghost// implements Collision
 				directionCount = 0;
 			}
 		} else {
-			//Log.d("ghost update:", "No Direction:");
+			*//*loc.setNewLoc(loc.getX(), loc.getY());
+			directionCount++;
+			randDirection = rand.nextInt(4);
+			if (directionCount > newRandDir) {
+				randDirection = rand.nextInt(4);
+				directionCount = 0;*//*
+			}
+
+			//update(fps);
+		}
+*/
+	/**
+	 * detects the collisions of pacman with ghost, pellets, fruits,
+	 * TODO: TESTING TO CHECK WALL DETECTION HERE
+	 */
+	// currently used for Pacman and ghost collision detection
+	public boolean detectCollision(Location loc)
+	{
+		boolean collided = false;
+		float radius = 29;
+		if (Math.abs(this.loc.getX() - loc.getX()) <= radius * 2
+				&& Math.abs(this.loc.getY() - loc.getY()) <= radius * 2) {
+			collided = true;
+		}
+		return collided;
+	}
+
+
+	void update(long fps) {
+		gridCoord.x = gridLocation.getX();
+		gridCoord.y = gridLocation.getY();
+		//Log.d("ghost update:", "Random:" + randDirection);
+		if (randDirection == 0 && canMoveTo(maze[gridCoord.x - 1][gridCoord.y])) {
+			loc.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
+			gridLocation.setNewLoc(gridCoord.x - 1, gridCoord.y);
+			directionCount++;
+			direction = 'l';
+			if (directionCount > newRandDir) { // TODO: Add || on collision to change direction.
+				randDirection = rand.nextInt(4);
+				directionCount = 0;
+			}
+		} else if (randDirection == 1 && canMoveTo(maze[gridCoord.x + 1][gridCoord.y])) {
+			loc.setNewLoc((int) (loc.getX() + (velocity / fps)), loc.getY());
+			gridLocation.setNewLoc(gridCoord.x + 1, gridCoord.y);
+			directionCount++;
+			direction = 'r';
+			if (directionCount > newRandDir) {
+				randDirection = rand.nextInt(4);
+				directionCount = 0;
+			}
+		} else if (randDirection == 2 && canMoveTo(maze[gridCoord.x][gridCoord.y + 1])) {
+			loc.setNewLoc(loc.getX(), (int) (loc.getY() + (velocity / fps)));
+			gridLocation.setNewLoc(gridCoord.x, gridCoord.y + 1);
+			directionCount++;
+			direction = 'd';
+			if (directionCount > newRandDir) {
+				randDirection = rand.nextInt(4);
+				directionCount = 0;
+			}
+		} else if (randDirection == 3 && canMoveTo(maze[gridCoord.x][gridCoord.y - 1])) {
+			loc.setNewLoc(loc.getX(), (int) (loc.getY() - (velocity / fps)));
+			gridLocation.setNewLoc(gridCoord.x, gridCoord.y - 1);
+			directionCount++;
+			direction = 'u';
+			if (directionCount > newRandDir) {
+				randDirection = rand.nextInt(4);
+				directionCount = 0;
+			}
+		} else {
+			loc.setNewLoc(loc.getX(), loc.getY());
+			directionCount++;
+			randDirection = rand.nextInt(4);
+			if (directionCount > newRandDir) {
+				randDirection = rand.nextInt(4);
+				directionCount = 0;
+			}
+			//update(fps);
 		}
 	}
+
 
 	void reverseXVel()
 	{
@@ -198,6 +291,7 @@ public class Ghost// implements Collision
 	{
 
 		loc.setNewLoc(spawnLoc.getX(), spawnLoc.getY());
+		gridLocation.setNewLoc(13, 11);
 		deathTimer = 0;
 		isDead = false;
 		//mXVelocity = (float) (y / 3);
@@ -282,7 +376,7 @@ public class Ghost// implements Collision
 	 */
 	private boolean canMoveTo(Location l)
 	{
-		if (!Location.isValid(l) || l.isWall()) { // location exists, is not in bounds, or is a wall
+		if (!Location.isValid(l) || l.isWall() || l.isGhostGate()) { // location exists, is not in bounds, or is a wall
 			return false;
 		}
 		return l.isEmpty() || l.isPellet() || (l.isPacman() && !pacman.isSuper());
@@ -335,6 +429,52 @@ public class Ghost// implements Collision
 		}
 			// TODO: do the movement
 	}
+
+	public boolean wallDetection(Maze maze)
+	{
+		// this value will be used for deciding update or not
+		boolean update;
+		update = true;
+		//read in Grid and grid indices of current location
+		Location [][] mGrid = maze.getMaze();
+		Location [][] scaledGrid = maze.scaledGrid;
+
+		//if ghost will hit the right wall, stop
+		// that is, set to NOT update
+		if (direction == 'r' )
+		{
+			if(mGrid[gridLocation.getX() + 1][gridLocation.getY()].isWall()) {
+				Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
+				update = false;
+			}
+		}
+		//if ghost will hit the left wall, stop
+		if (direction == 'l' )
+		{
+			if(mGrid[gridLocation.getX() - 1][gridLocation.getY()].isWall()) {
+				Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
+				update = false;
+			}
+		}
+		//if ghost will hit the top wall, stop
+		if (direction == 'u' )
+		{
+			if(mGrid[gridLocation.getX()][gridLocation.getY() - 1].isWall()) {
+				Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
+				update = false;
+			}
+		}
+		//if ghost will hit the bottom wall, stop
+		if (direction == 'd' )
+		{
+			if(mGrid[gridLocation.getX()][gridLocation.getY() + 1].isWall()) {
+				Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
+				update = false;
+			}
+		}
+		return update;
+	}
+
 
 	/**
 	 * Helper to turn towards a direction

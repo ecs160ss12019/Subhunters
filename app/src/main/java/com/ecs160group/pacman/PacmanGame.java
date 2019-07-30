@@ -129,7 +129,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
 
 
                 mPacman = new Pacman(mScreenX, mMaze.pacSpawn, PacGhostRadius);
-                mGhost = new Ghost(mScreenX, mMaze.ghostSpawn, mMaze.getMaze());
+                mGhost = new Ghost(mScreenX, mMaze.ghostSpawn, mMaze.getMaze(), mMaze.scaledGrid);
                 mFakeJoy = new FakeJoy(200, 100, blockSize, fakePosition);
                 pellet = 0;
                 MAX_PELLETS = 50; // testing purposes TODO: Update max pellets to maze.
@@ -216,7 +216,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
 
                         if (!mPaused) {
                                 Boolean updatePacman = mPacman.wallDetection(mMaze);
-                               // Boolean updateGhost = mGhost.wallDetection(mMaze);
+                                //Boolean updateGhost = mGhost.wallDetection(mMaze);
 
                                 update(updatePacman, true);
                                 detectCollisions();
@@ -271,7 +271,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         if(mPacman.getPowerState() == false && mPacman.getPowerTimer() >= 0){
                                 PacmanSounds.pacmanDeath();
                                 draw();
-                                //pauseStartDeath(3000);
+                                pauseStartDeath(3000);
                                 mFakeJoy.setCenter();
                                 draw();
                                 deathRestart();
@@ -468,8 +468,8 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         sizedB = Bitmap.createScaledBitmap(b, (int) PacGhostRadius * 2,
                                 (int) PacGhostRadius * 2, false);
 
-                        mCanvas.drawBitmap(sizedB, mGhost.loc.getX() - PacGhostRadius,
-                                mGhost.loc.getY() - PacGhostRadius, null);
+                        mCanvas.drawBitmap(sizedB, (mGhost.gridLocation.getX() * 28 + xScaled) - PacGhostRadius,
+                                (mGhost.gridLocation.getY() * 28 + yScaled) - PacGhostRadius, null);
 
                         mPaint.setColor(Color.argb(255, 0, 0, 255));
                         //redPaint.setColor(Color.argb(0,255, 0, 0));
@@ -505,6 +505,14 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 mCanvas.drawText("basebaseCenter.y: " + mFakeJoy.baseCenter.y,
                         10,debugStart + debugSize + 180, mPaint);
                 */
+                mCanvas.drawText("mGhost.gridLocation.x: " + mGhost.gridLocation.getX(),
+                        10,debugStart + debugSize + 90, mPaint);
+                mCanvas.drawText("mGhost.gridLocation.x: " + mGhost.gridLocation.getY(),
+                        10,debugStart + debugSize + 120, mPaint);
+                mCanvas.drawText("xScaled: " + xScaled,
+                        10,debugStart + debugSize + 150, mPaint);
+                mCanvas.drawText("yScaled: " + yScaled,
+                        10,debugStart + debugSize + 180, mPaint);
                 mCanvas.drawText("mGhost.loc.x: " + mGhost.loc.getX(),
                         10,debugStart + debugSize + 30, mPaint);
                 mCanvas.drawText("mGhost.loc.y: " + mGhost.loc.getY(),
