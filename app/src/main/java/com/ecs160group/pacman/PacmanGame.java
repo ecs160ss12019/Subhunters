@@ -180,7 +180,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
 
                 //Reset game if 0 lives.
                 if(mLives <= 0){ startNewGame(); }
-                pauseStartDeath(3000); // In milliseconds
+                //pauseStartDeath(3000); // In milliseconds
 
         }
         public void StageCleared(){
@@ -218,7 +218,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                 Boolean updatePacman = mPacman.wallDetection(mMaze);
                                // Boolean updateGhost = mGhost.wallDetection(mMaze);
 
-                                update(true, true);
+                                update(updatePacman, true);
                                 detectCollisions();
 
                                  //Determines powerup state of pacman powerTimer decrements on every frame.
@@ -246,6 +246,10 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 
                 // now has a if-condition to check whether Pacman and ghost will hit a wall
                 // so there is no need for update
+                Log.d("update: ", "Updating pacmman/ghost: ");
+                Log.d("update: ", "pacmanLoc: " + "Location: " + mPacman.loc.getX() + "," + mPacman.loc.getY());
+                Log.d("update: ", "pacmanLoc: " + "GridLocation: " + mPacman.getGridLoc().getX() + "," + mPacman.getGridLoc().getY());
+
                 if (updatePacman)
                         mPacman.update(mFPS);
                 if (updateGhost)
@@ -267,7 +271,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         if(mPacman.getPowerState() == false && mPacman.getPowerTimer() >= 0){
                                 PacmanSounds.pacmanDeath();
                                 draw();
-                                pauseStartDeath(3000);
+                                //pauseStartDeath(3000);
                                 mFakeJoy.setCenter();
                                 draw();
                                 deathRestart();
@@ -276,7 +280,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         else{
                                 // Set timer as ghost touches Graveyard?
                                 mGhost.setDeathState(0, true);
-                                pauseStartDeath(500);
+                                //pauseStartDeath(500);
                                 PacmanSounds.pacmanEatGhost();
                                 //Pacman is able to eat ghosts
                                 //Deal with ghost returning to graveyard.
@@ -309,21 +313,21 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 }
         */
 
-        /*
+
                 // TODO: Need to fix pacman's update to also save/update the grid coordinate.
-                pacmanGridValues = mPacman.getGridLoc();
-                xPac = pacmanGridValues.getX();
-                yPac = pacmanGridValues.getY();
-                Location[][] checkGrid = mMaze.getMaze();
-                //Log.d("Pacman-Detect_Collision: ", "pacmanGridValues: " + "Location: " + xPac + "," + yPac);
-                //Log.d("Pacman-Detect_Collision: ", "detect collision OBJECT gameactivity: " + checkGrid[xPac][yPac].getObj());
-                switch(checkGrid[xPac][yPac].getObj()){
+                //pacmanGridValues = mPacman.getLoc();
+                xPac = mPacman.gridLocation.getX();
+                yPac = mPacman.gridLocation.getY();
+                //Location[][] checkGrid = mMaze.getMaze();
+                Log.d("Pacman-Detect_Collision: ", "pacmanGridValues: " + "Location: " + xPac + "," + yPac);
+                Log.d("Pacman-Detect_Collision: ", "detect collision OBJECT gameactivity: " + mMaze.getMaze()[xPac][yPac].getObj());
+                switch(mMaze.getMaze()[xPac][yPac].getObj()){
                         case GHOST:
                                 // !!! Death sequence, Pacman and Ghost same tile. Which Ghost does not matter.
                                 if(mPacman.getPowerState() == false && mPacman.getPowerTimer() >= 0){
                                         PacmanSounds.pacmanDeath();
                                         draw();
-                                        pauseStartDeath(3000);
+                                        //pauseStartDeath(3000);
                                         mFakeJoy.setCenter();
                                         draw();
                                         deathRestart();
@@ -350,7 +354,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                         Log.d("Debugging", "In Collision Interact: PELLET, STAGE COMPLETE");
                                         draw();
                                         PacmanSounds.pacmanChomp(); // Consume pellet..
-                                        pauseStartDeath(3000);
+                                        pauseStartDeath(4000);
                                         mFakeJoy.setCenter();
                                         draw();
                                         StageCleared();
@@ -398,7 +402,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                 Log.d("Debugging", "In Collision Interact Default");
                                 break;
                 }
-                */
+
         }
 
         //called by PacmanActivity when player quits game
@@ -546,13 +550,13 @@ public class PacmanGame extends SurfaceView implements Runnable{
         // In milliseconds..
         void pauseStartDeath(int t){
                 try {
-                        mPaused = true;
+                       // mPaused = true;
                         Thread.sleep(t);
                 } catch (InterruptedException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                 }
-                mPaused = false;
+                //mPaused = false;
 
         }
 }

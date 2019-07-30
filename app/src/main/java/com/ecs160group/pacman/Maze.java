@@ -74,8 +74,10 @@ class Maze
 		xScaled = mScreenX / 2;
 		yScaled = mScreenY / 12;
 		scaledGrid = grid;
+		pacSpawn = scaledGrid[13][23];
+		ghostSpawn = scaledGrid[13][11];
 		scaleGrid();
-		initPacAndGhostSpawns();
+		//initPacAndGhostSpawns();
 
 
 
