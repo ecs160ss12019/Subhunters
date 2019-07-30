@@ -101,6 +101,9 @@ public class Ghost// implements Collision
 	public Location getLoc() {
 		return loc;
 	}
+    public Location getGridLoc() {
+        return gridLocation;
+    }
 
 	/**
 	 * Sets the death state of the ghost
@@ -225,6 +228,7 @@ public class Ghost// implements Collision
 		gridCoord.x = gridLocation.getX();
 		gridCoord.y = gridLocation.getY();
 		//Log.d("ghost update:", "Random:" + randDirection);
+		Log.d("Pacman-update: ", "Current_LOC: " + direction + " Location: " + gridCoord.x + "," + gridCoord.y);
 		if (randDirection == 0 && canMoveTo(maze[gridCoord.x - 1][gridCoord.y])) {
 			loc.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
 			gridLocation.setNewLoc(gridCoord.x - 1, gridCoord.y);
@@ -440,10 +444,9 @@ public class Ghost// implements Collision
 		Location [][] mGrid = maze.getMaze();
 		Location [][] scaledGrid = maze.scaledGrid;
 
-		//if ghost will hit the right wall, stop
-		// that is, set to NOT update
         // If current position is warp, DO NOT update position.
 		if(mGrid[gridLocation.getX()][gridLocation.getY()].getObj() != block.WARP_SPACE) {
+			//if ghost will hit the right wall, stop
 			if (direction == 'r') {
 				if (mGrid[gridLocation.getX() + 1][gridLocation.getY()].isWall()) {
 					Log.d("GHOST HAS HIT A WALL:", "direction:" + direction);

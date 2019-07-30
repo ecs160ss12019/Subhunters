@@ -142,7 +142,7 @@ public class Pacman implements Collision
 		pacGridX = gridLocation.getX();
 		pacGridY = gridLocation.getY();
 		// Move();
-		//Log.d("Pacman-update: ", "Current_LOC: " + direction + "Location: " + pacGridX + "," + pacGridY);
+		//Log.d("Pacman-update: ", "Current_LOC: " + direction + " Location: " + pacGridX + "," + pacGridY);
 		if (direction == 'l') {
 			loc.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
 			gridLocation.setNewLoc(pacGridX - 1, pacGridY);
@@ -181,10 +181,10 @@ public class Pacman implements Collision
 		//read in Grid and grid indices of current location
 		Location [][] mGrid = maze.getMaze();
 
-		//if Pacman will hit the right wall, stop
-		// that is, set to NOT update
+		// If current position is warp, DO NOT update position.
         if(mGrid[gridLocation.getX()][gridLocation.getY()].getObj() != block.WARP_SPACE) {
-            if (direction == 'r') {
+			// if Pacman will hit the right wall, stop
+			if (direction == 'r') {
                 if (mGrid[gridLocation.getX() + 1][gridLocation.getY()].isWall()) {
                     //Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
                     update = false;
