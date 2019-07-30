@@ -146,6 +146,10 @@ public class Location
 				|| block == Block.BOT_LEFT_TOP_RIGHT_WALL || block == Block.BOT_RIGHT_TOP_LEFT_WALL;
 	}
 
+	public boolean isGhostGate() {
+		return block == Block.GHOST_GATE;
+	}
+
 	/**
 	 * Checks if the location contains a pellet
 	 *
