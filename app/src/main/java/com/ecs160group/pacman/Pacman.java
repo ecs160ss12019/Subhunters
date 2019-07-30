@@ -191,13 +191,13 @@ public class Pacman implements Collision
 		{
 			// first judge if we are already at the right bound
 			// if (gridValues[1] == 30) // TYPO? Duplicate line
-			if (gridValues[1] == 30)
+			if (gridValues[0] == 27)
 			{
 				Log.d("PACMAN HAS HIT A BOUND:", "direction:" + direction);
 				update = false;
 			}
 			// if not, are we gonna hit a wall?
-			else if (mGrid[gridValues[0]][gridValues[1] + 1].getObj() == Block.WALL)
+			else if (mGrid[gridValues[0] + 1][gridValues[1]].isWall())
 			{
 				Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
 				update = false;
@@ -207,12 +207,12 @@ public class Pacman implements Collision
 		//if pacman will hit the left wall, stop
 		if (direction == 'l' )
 		{
-			if (gridValues[1] == 0)
+			if (gridValues[0] == 0)
 			{
 				Log.d("PACMAN HAS HIT A BOUND:", "direction:" + direction);
 				update = false;
 			}
-			else if (mGrid[gridValues[0]][gridValues[1] - 1].getObj() == Block.WALL)
+			else if (mGrid[gridValues[0] - 1][gridValues[1]].isWall())
 			{
 				Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
 				update = false;
@@ -222,12 +222,12 @@ public class Pacman implements Collision
 		//if Pacman will hit the top wall, stop
 		if (direction == 'u' )
 		{
-			if (gridValues[0] == 0)
+			if (gridValues[1] == 0)
 			{
 				Log.d("PACMAN HAS HIT A BOUND:", "direction:" + direction);
 				update = false;
 			}
-			else if (mGrid[gridValues[0] - 1][gridValues[1]].getObj() == Block.WALL)
+			else if (mGrid[gridValues[0]][gridValues[1] - 1].isWall())
 			{
 				Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
 				update = false;
@@ -237,12 +237,12 @@ public class Pacman implements Collision
 		//if Pacman will hit the bottom wall, stop
 		if (direction == 'd' )
 		{
-			if (gridValues[0] == 27)
+			if (gridValues[1] == 30)
 			{
 				Log.d("PACMAN HAS HIT A BOUND:", "direction:" + direction);
 				update = false;
 			}
-			else if (mGrid[gridValues[0] + 1][gridValues[1]].getObj() == Block.WALL)
+			else if (mGrid[gridValues[0]][gridValues[1] + 1].isWall())
 			{
 				Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
 				update = false;
