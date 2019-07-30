@@ -143,10 +143,12 @@ public class Location
 	public boolean isWall()
 	{
 		return block == Block.HORIZONTAL_WALL || block == Block.VERTICAL_WALL
-				|| block == Block.BOT_LEFT_TOP_RIGHT_WALL || block == Block.BOT_RIGHT_TOP_LEFT_WALL;
+				|| block == Block.BOT_LEFT_TOP_RIGHT_WALL
+				|| block == Block.BOT_RIGHT_TOP_LEFT_WALL || isGhostGate();
 	}
 
-	public boolean isGhostGate() {
+	public boolean isGhostGate()
+	{
 		return block == Block.GHOST_GATE;
 	}
 
