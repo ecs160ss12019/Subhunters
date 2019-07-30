@@ -28,7 +28,7 @@ public class Pacman implements Collision
 	Location gridLocation;
 	private int pacGridX;
 	private int pacGridY;
-
+	private Block block;
 	public char direction;
 	private char next_direction;
 
@@ -142,7 +142,7 @@ public class Pacman implements Collision
 		pacGridX = gridLocation.getX();
 		pacGridY = gridLocation.getY();
 		// Move();
-		Log.d("Pacman-update: ", "Current_LOC: " + direction + "Location: " + pacGridX + "," + pacGridY);
+		//Log.d("Pacman-update: ", "Current_LOC: " + direction + "Location: " + pacGridX + "," + pacGridY);
 		if (direction == 'l') {
 			loc.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
 			gridLocation.setNewLoc(pacGridX - 1, pacGridY);
@@ -157,7 +157,7 @@ public class Pacman implements Collision
 			loc.setNewLoc(loc.getX(), (int) (loc.getY() + (velocity / fps)));
 			gridLocation.setNewLoc(pacGridX, pacGridY + 1);
 		}
-		Log.d("Pacman-update: ", "New_LOC: " + direction + " , Location: " + pacGridX + "," + pacGridY);
+		//Log.d("Pacman-update: ", "New_LOC: " + direction + " , Location: " + pacGridX + "," + pacGridY);
 
 	}
 
@@ -183,37 +183,35 @@ public class Pacman implements Collision
 
 		//if Pacman will hit the right wall, stop
 		// that is, set to NOT update
-		if (direction == 'r' )
-		{
-		    if(mGrid[gridLocation.getX() + 1][gridLocation.getY()].isWall()) {
-                Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
-                update = false;
+        if(mGrid[gridLocation.getX()][gridLocation.getY()].getObj() != block.WARP_SPACE) {
+            if (direction == 'r') {
+                if (mGrid[gridLocation.getX() + 1][gridLocation.getY()].isWall()) {
+                    //Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
+                    update = false;
+                }
             }
-		}
-		//if pacman will hit the left wall, stop
-		if (direction == 'l' )
-		{
-            if(mGrid[gridLocation.getX() - 1][gridLocation.getY()].isWall()) {
-                Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
-                update = false;
+            //if pacman will hit the left wall, stop
+            if (direction == 'l') {
+                if (mGrid[gridLocation.getX() - 1][gridLocation.getY()].isWall() ) {
+                    //Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
+                    update = false;
+                }
             }
-		}
-		//if Pacman will hit the top wall, stop
-		if (direction == 'u' )
-		{
-            if(mGrid[gridLocation.getX()][gridLocation.getY() - 1].isWall()) {
-                Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
-                update = false;
+            //if Pacman will hit the top wall, stop
+            if (direction == 'u') {
+                if (mGrid[gridLocation.getX()][gridLocation.getY() - 1].isWall()) {
+                    //Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
+                    update = false;
+                }
             }
-		}
-		//if Pacman will hit the bottom wall, stop
-		if (direction == 'd' )
-		{
-            if(mGrid[gridLocation.getX()][gridLocation.getY() + 1].isWall()) {
-                Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
-                update = false;
+            //if Pacman will hit the bottom wall, stop
+            if (direction == 'd') {
+                if (mGrid[gridLocation.getX()][gridLocation.getY() + 1].isWall()) {
+                    //Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
+                    update = false;
+                }
             }
-		}
+        }
 		return update;
 	}
 

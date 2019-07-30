@@ -33,6 +33,7 @@ public class Ghost// implements Collision
 	//private int direction;
 	private int nextDirection;
 	private char direction;
+	private Block block;
 
 	// TODO: add explenations for these two vars here
 	private int deathTimer = 0;
@@ -441,35 +442,34 @@ public class Ghost// implements Collision
 
 		//if ghost will hit the right wall, stop
 		// that is, set to NOT update
-		if (direction == 'r' )
-		{
-			if(mGrid[gridLocation.getX() + 1][gridLocation.getY()].isWall()) {
-				Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
-				update = false;
+        // If current position is warp, DO NOT update position.
+		if(mGrid[gridLocation.getX()][gridLocation.getY()].getObj() != block.WARP_SPACE) {
+			if (direction == 'r') {
+				if (mGrid[gridLocation.getX() + 1][gridLocation.getY()].isWall()) {
+					Log.d("GHOST HAS HIT A WALL:", "direction:" + direction);
+					update = false;
+				}
 			}
-		}
-		//if ghost will hit the left wall, stop
-		if (direction == 'l' )
-		{
-			if(mGrid[gridLocation.getX() - 1][gridLocation.getY()].isWall()) {
-				Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
-				update = false;
+			//if ghost will hit the left wall, stop
+			if (direction == 'l') {
+				if (mGrid[gridLocation.getX() - 1][gridLocation.getY()].isWall()) {
+					Log.d("GHOST HAS HIT A WALL:", "direction:" + direction);
+					update = false;
+				}
 			}
-		}
-		//if ghost will hit the top wall, stop
-		if (direction == 'u' )
-		{
-			if(mGrid[gridLocation.getX()][gridLocation.getY() - 1].isWall()) {
-				Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
-				update = false;
+			//if ghost will hit the top wall, stop
+			if (direction == 'u') {
+				if (mGrid[gridLocation.getX()][gridLocation.getY() - 1].isWall()) {
+					Log.d("GHOST HAS HIT A WALL:", "direction:" + direction);
+					update = false;
+				}
 			}
-		}
-		//if ghost will hit the bottom wall, stop
-		if (direction == 'd' )
-		{
-			if(mGrid[gridLocation.getX()][gridLocation.getY() + 1].isWall()) {
-				Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
-				update = false;
+			//if ghost will hit the bottom wall, stop
+			if (direction == 'd') {
+				if (mGrid[gridLocation.getX()][gridLocation.getY() + 1].isWall()) {
+					Log.d("GHOST HAS HIT A WALL:", "direction:" + direction);
+					update = false;
+				}
 			}
 		}
 		return update;

@@ -72,6 +72,8 @@ public class PacmanGame extends SurfaceView implements Runnable{
         public Context activityContext;
         public sound PacmanGameStart;
 
+        private Boolean updatePacman;
+
         private Location mGrid;
         private int xPac; // Sote loc.x & loc.y coordinates
         private int yPac;
@@ -132,7 +134,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 mGhost = new Ghost(mScreenX, mMaze.ghostSpawn, mMaze.getMaze(), mMaze.scaledGrid);
                 mFakeJoy = new FakeJoy(200, 100, blockSize, fakePosition);
                 pellet = 0;
-                MAX_PELLETS = 50; // testing purposes TODO: Update max pellets to maze.
+                MAX_PELLETS = 150; // testing purposes TODO: Update max pellets to maze.
                 //bitmap
                 bitmap = Bitmap.createBitmap(mScreenX, mScreenY, Bitmap.Config.ARGB_8888);
                 mCanvas = new Canvas(bitmap);
@@ -215,15 +217,16 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         long frameStartTime = System.currentTimeMillis();
 
                         if (!mPaused) {
-                                Boolean updatePacman = mPacman.wallDetection(mMaze);
                                 //Boolean updateGhost = mGhost.wallDetection(mMaze);
 
-                                update(updatePacman, true);
-                                detectCollisions();
-
-                                 //Determines powerup state of pacman powerTimer decrements on every frame.
-                                mPacman.checkPowerUpState();
-                                mGhost.checkDeathTimer();
+                                //if(frameStartTime % 2 == 0) {
+                                        updatePacman = mPacman.wallDetection(mMaze);
+                                        update(updatePacman, true);
+                                        detectCollisions();
+                                        //Determines powerup state of pacman powerTimer decrements on every frame.
+                                        mPacman.checkPowerUpState();
+                                        mGhost.checkDeathTimer();
+                                //}
                         }
 
                         //redraw grid/ghosts/pacman/pellets
@@ -246,9 +249,9 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 
                 // now has a if-condition to check whether Pacman and ghost will hit a wall
                 // so there is no need for update
-                Log.d("update: ", "Updating pacmman/ghost: ");
-                Log.d("update: ", "pacmanLoc: " + "Location: " + mPacman.loc.getX() + "," + mPacman.loc.getY());
-                Log.d("update: ", "pacmanLoc: " + "GridLocation: " + mPacman.getGridLoc().getX() + "," + mPacman.getGridLoc().getY());
+                //Log.d("update: ", "Updating pacmman/ghost: ");
+                //Log.d("update: ", "pacmanLoc: " + "Location: " + mPacman.loc.getX() + "," + mPacman.loc.getY());
+                //Log.d("update: ", "pacmanLoc: " + "GridLocation: " + mPacman.getGridLoc().getX() + "," + mPacman.getGridLoc().getY());
 
                 if (updatePacman)
                         mPacman.update(mFPS);
@@ -319,9 +322,10 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 xPac = mPacman.gridLocation.getX();
                 yPac = mPacman.gridLocation.getY();
                 //Location[][] checkGrid = mMaze.getMaze();
-                Log.d("Pacman-Detect_Collision: ", "pacmanGridValues: " + "Location: " + xPac + "," + yPac);
-                Log.d("Pacman-Detect_Collision: ", "detect collision OBJECT gameactivity: " + mMaze.getMaze()[xPac][yPac].getObj());
+                //Log.d("Pacman-Detect_Collision: ", "pacmanGridValues: " + "Location: " + xPac + "," + yPac);
+                //Log.d("Pacman-Detect_Collision: ", "detect collision OBJECT gameactivity: " + mMaze.getMaze()[xPac][yPac].getObj());
                 switch(mMaze.getMaze()[xPac][yPac].getObj()){
+                        /*
                         case GHOST:
                                 // !!! Death sequence, Pacman and Ghost same tile. Which Ghost does not matter.
                                 if(mPacman.getPowerState() == false && mPacman.getPowerTimer() >= 0){
@@ -342,6 +346,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                         //mghost.moveTowardsTarget(  ); // Graveyard spawn coordinates.
                                 }
                                 break;
+                                */
                 	    case WALL: // Prevent movement here, but pacman MUST continue moving, Dealt within Pacman update.
                                 // TODO: Pacman collision here? Already done in update collision check?
                                 break;
@@ -349,9 +354,9 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                 // Placeholder, encounters pellet set empty.
                                 mMaze.getMaze()[xPac][yPac].updateLoc(xPac, yPac, mBlock.EMPTY);
                                 pellet++;
-                                Log.d("Debugging", "In Collision Interact: POWER_PELLET");
+                                Log.d("Debugging", "In Collision Interact: PELLET");
                                 if(pellet >= MAX_PELLETS){ // On game complete TODO: Allow maze to handle, instead "check no pellets exist"
-                                        Log.d("Debugging", "In Collision Interact: PELLET, STAGE COMPLETE");
+                                        //Log.d("Debugging", "In Collision Interact: PELLET, STAGE COMPLETE");
                                         draw();
                                         PacmanSounds.pacmanChomp(); // Consume pellet..
                                         pauseStartDeath(4000);
@@ -362,6 +367,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                 break;
                          case POWER_PELLET: // Encounter PowerPellet, set state
                                  Log.d("Debugging", "In Collision Interact: POWER_PELLET");
+                                 mMaze.getMaze()[xPac][yPac].updateLoc(xPac, yPac, mBlock.EMPTY);
                                  PacmanSounds.pacmanPowerup();
                                  mPacman.setPowerUpState(540,true); // 2000 is amount of frames time to be decremented EVERY FRAME
                                 break;
@@ -373,14 +379,15 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                 break;
                         case WARP_SPACE: // Swap Pacman's location depending on warp entrance.
                                 // Possible loop here? Updating Pacman's location on top of WARP location! Double check.
+                                Log.d("Pacman-Detect_Collision: ", "pacmanGridValues: " + "Location: " + xPac + "," + yPac);
                                 if(xPac == 0 && yPac == 14){
-                                        Log.d("Debugging", "In Collision Interact: WARP_SPACE, Pacman warped[Right->Left].");
-                                        mPacman.loc.setNewLoc(27, 14); // Change to locate grid coordinates, not screen position
+                                        //Log.d("Debugging", "In Collision Interact: WARP_SPACE, Pacman warped[Left->Right].");
+                                        mPacman.gridLocation.setNewLoc(27, 14); // Change to locate grid coordinates, not screen position
                                 }
                                 else{
                                         //Assumed opposite side. Change Pacman's location
-                                        Log.d("Debugging", "In Collision Interact: WARP_SPACE, Pacman warped[Left->Right].");
-                                        mPacman.loc.setNewLoc(0, 14);
+                                        //Log.d("Debugging", "In Collision Interact: WARP_SPACE, Pacman warped[Right->Left].");
+                                        mPacman.gridLocation.setNewLoc(0, 14);
                                 }
                                 Log.d("Debugging", "In Collision Interact: WARP_SPACE, Pacman warped.");
                                 break;
@@ -396,7 +403,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                 // TODO: Pacman collision here
                                 break;
                         case EMPTY: // empty space, Nothing happens. Continue movement.
-                                Log.d("Debugging", "In Collision Interact: EMPTY");
+                                //Log.d("Debugging", "In Collision Interact: EMPTY");
                                 break;
                         default:
                                 Log.d("Debugging", "In Collision Interact Default");
@@ -458,10 +465,12 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         Bitmap sizedB = Bitmap.createScaledBitmap(b, (int) PacGhostRadius * 2,
                                 (int) PacGhostRadius * 2, false);
 
-                       
 
-                        mCanvas.drawBitmap(sizedB, mPacman.loc.getX() - PacGhostRadius,
-                                mPacman.loc.getY() - PacGhostRadius, null);
+                        mCanvas.drawBitmap(sizedB, mPacman.gridLocation.getX() * 28 + xScaled - PacGhostRadius,
+                                mPacman.gridLocation.getY() * 28 + yScaled - PacGhostRadius, null);
+
+                        //mCanvas.drawBitmap(sizedB, mPacman.loc.getX() - PacGhostRadius,
+                         //       mPacman.loc.getY() - PacGhostRadius, null);
 
                         b = BitmapFactory.decodeResource(getResources(), R.drawable.blinky);
 
