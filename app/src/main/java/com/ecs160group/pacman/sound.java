@@ -3,47 +3,56 @@ package com.ecs160group.pacman;
 import android.content.Context;
 import android.media.MediaPlayer;
 
+import java.io.IOException;
+
+
 public class sound{
 
     Context context;
-    MediaPlayer mp;
+    public MediaPlayer mp, mpBeg, mpDeath, mpFruit, mpChomp, mpEatGhost, mpPower;
+    //mp.setOnPreparedListener(this);
+    //mp.prepareAsync();
+
     public sound(Context c){
         this.context = c;
+        mpBeg = MediaPlayer.create(context, R.raw.pacman_beginning);
+        mpDeath = MediaPlayer.create(context, R.raw.pacman_death);
+        mpFruit = MediaPlayer.create(context, R.raw.pacman_eatfruit);
+        mpChomp = MediaPlayer.create(context, R.raw.pacman_chomp);
+        mpEatGhost = MediaPlayer.create(context, R.raw.pacman_eatghost);
+        mpPower = MediaPlayer.create(context, R.raw.pacman_extrapac);
 
     }
 
     public void pacmanBeginning() {
-        //Context activityContext = getApplicationContext();
-        //Context activityContext = activityContext;
-        mp = MediaPlayer.create(context, R.raw.pacman_beginning);
-        mp.start();
+        //mpBeg.prepare();
+        mpBeg.start();
+
     }
     public void pacmanDeath() {
-        mp = MediaPlayer.create(context, R.raw.pacman_death);
-        mp.start();
+        mpDeath.start();
     }
     public void pacmanEatFruit() {
-        mp = MediaPlayer.create(context, R.raw.pacman_eatfruit);
-        mp.start();
+        mpFruit.start();
     }
     public void pacmanChomp() {
-        mp = MediaPlayer.create(context, R.raw.pacman_chomp);
-        mp.start();
-    }
+        mpChomp.start();
+        //mpChomp.setLooping(true);
+}
     public void pacmanEatGhost() {
-        mp = MediaPlayer.create(context, R.raw.pacman_eatghost);
-        mp.start();
+        mpEatGhost.start();
     }
     public void pacmanPowerup() {
-        mp = MediaPlayer.create(context, R.raw.pacman_extrapac);
-        mp.start();
+        mpPower.start();
     }
     public void pacmanIntermission() {
-        mp = MediaPlayer.create(context, R.raw.pacman_intermission);
-        mp.start();
+        //mp = MediaPlayer.create(context, R.raw.pacman_intermission);
+        //mp.start();
     }
 
-
+    public void onPrepared(MediaPlayer player) {
+        player.start();
+    }
     void playSong(MediaPlayer mp){
         mp.start();
     }

@@ -10,6 +10,16 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 
+/**
+ * Cited Site:
+ * https://www.instructables.com/id/A-Simple-Android-UI-Joystick/
+ *
+ * We took ideas of the joystick from this tutorial. We attempted to use a
+ * Surface view at first but then reconfigured it to work without it.
+ * This tutorial helped us draw and understand the constraints the balltop must have
+ * with the base of the virtual joystick.
+ */
+
 public class FakeJoy {
 
     public final float baseRadius;

@@ -231,14 +231,14 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         if (!mPaused) {
                                 //Boolean updateGhost = mGhost.wallDetection(mMaze);
 
-                                //if(frameStartTime % 2 == 0) {
+                                if(frameStartTime % 2 == 0) {
                                         updatePacman = mPacman.wallDetection(mMaze);
                                         update(updatePacman, true);
                                         detectCollisions();
                                         //Determines powerup state of pacman powerTimer decrements on every frame.
                                         mPacman.checkPowerUpState();
                                         mGhost.checkDeathTimer();
-                                //}
+                                }
                         }
 
                         //redraw grid/ghosts/pacman/pellets
@@ -281,6 +281,24 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 // Eventually, must use Location to detect collion not screen position.
                 //if (mPacman.detectCollision(mGhost.loc, mScreenX, mScreenY)) {
 
+/*
+                if(mPacman.ghostCollision(mGhost, mScore) ||
+                mPacman.ghostCollision(mInky, mScore) ||
+                mPacman.ghostCollision(mPinky, mScore) ||
+                mPacman.ghostCollision(mBlinky,mScore) ||
+                mPacman.ghostCollision(mClyde, mScore)){
+  */
+                if(mPacman.ghostCollision(mGhost, mScore)){
+                        if(mPacman.getIsDead()){
+                                draw();
+                                pauseStartDeath(3000);
+                                mFakeJoy.setCenter();
+                                draw();
+                                deathRestart();
+                        }
+                }
+
+                /*
                 if (mPacman.getGridLoc().getX() == mGhost.getGridLoc().getX() &&
                         mPacman.getGridLoc().getY() == mGhost.getGridLoc().getY()) {
                         //Pacman dies, respawns without super mode
@@ -305,9 +323,10 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                 //mghost.moveTowardsTarget();
                         }
                 }
+                */
 
 
-                // Handle collisions with Pacman
+                // Handle collisions with Pacman TODO: remove ghosts from this interaction.
                 mPacman.collisionInteraction(null, null, null, null, mMaze, mScore); // Null for debugging.
                 //mPacman.collisionInteraction(mInky, mPinky, mBlinky, mClyde, mMaze);
                 // Check interactions, then win condition.
@@ -456,23 +475,13 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 float y = e.getY();
                 if (e.getAction() == e.ACTION_MOVE || e.getAction() == e.ACTION_DOWN) {
                         mFakeJoy.updateStick(x, y);
-                        mPacman.updateNextDirection(mFakeJoy.direction);
+                        //if(mPacman.wallDetection(mMaze) != true){
+                            mPacman.updateNextDirection(mFakeJoy.direction);
+                        //}
                 } else {
                         mFakeJoy.setCenter();
                 }
                 return true;
-        }
-
-        /**
-         * to detect if Pacman lost the game
-         * when all the 3 lives were used (lives = 0)
-         * @return if Pacman lost
-         */
-        public boolean hasLost()
-        {
-                if (mLives == 0)
-                        return true;
-                return false;
         }
 
         // In milliseconds..
@@ -485,8 +494,8 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         e.printStackTrace();
                 }
                 //mPaused = false;
-
         }
+
 }
 
 

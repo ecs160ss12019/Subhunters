@@ -37,6 +37,7 @@ public class Pacman //implements Collision
 	private PacmanGame game;
 
 	public Location spawnLoc;
+	private boolean isDead;
 	private Score score;
 
 	//Sounds to be played during gameplay.
@@ -89,6 +90,11 @@ public class Pacman //implements Collision
 	{
 		return powerTimer;
 	}
+	public boolean getIsDead()
+	{
+		return isDead;
+	}
+
 
 	/**
 	 * Gets whether Pacman is in power state
@@ -128,7 +134,8 @@ public class Pacman //implements Collision
 	 */
 	public void checkPowerUpState()
 	{
-		if (powerState == true || powerTimer > 0) {
+		Log.d("Debugging", "checkPowerUpState" + powerTimer);
+		if (powerState == true ||  powerTimer > 0) {
 			setPowerUpState(powerTimer - 1, true);
 			if (powerTimer <= 0) {
 				setPowerUpState(0, false);
@@ -144,7 +151,7 @@ public class Pacman //implements Collision
 	public boolean isSuper()
 	{
 		if (powerState == true && powerTimer > 0)
-			return powerState;
+			return true;
 		return false;
 	}
 
@@ -233,6 +240,31 @@ public class Pacman //implements Collision
 	}
 
 	/**
+	 * Handles the Pacman and ghost collisions using their location in the grid/maze
+	 * Depending on state pacman will eat the ghost or die (Player loses a life.)
+	 * @return Return death or ghost eaten
+	 */
+	public boolean ghostCollision(Ghost mGhost, Score mScore){
+		if(gridLocation.getX() == mGhost.gridLocation.getX() && gridLocation.getY() == mGhost.gridLocation.getY()){
+			if(isSuper())
+			{
+				mGhost.setDeathState(9000, true); // 9 seconds
+				PacmanSounds.pacmanEatGhost();
+				mGhost.gridLocation.setNewLoc(13, 11); // TODO: remove hardcoded values.
+				mScore.ateGhost();
+				pauseStartDeath(500);
+				return true;
+			}
+			else{ // pacman death.
+				PacmanSounds.pacmanDeath();
+				isDead = true;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Handles the interactions between the objects. States, maze updates, sounds.
 	 */
 	void collisionInteraction(Ghost inky, Ghost pinky, Ghost blinky, Ghost clyde, Maze mMaze, Score mScore){
@@ -240,9 +272,12 @@ public class Pacman //implements Collision
 
 		//Log.d("Pacman-Detect_Collision: ", "pacmanGridValues: " + "Location: " + pacGridX + "," + pacGridY);
 		//Log.d("Pacman-Detect_Collision: ", "detect collision OBJECT gameactivity: " + mMaze.getMaze()[xPac][yPac].getObj());
+
+
 		switch(mMaze.getMaze()[pacGridX][pacGridY].getObj()){
 			case PELLET:
 				// Placeholder, encounters pellet set empty.
+                PacmanSounds.pacmanChomp();
 				mMaze.getMaze()[pacGridX][pacGridY].updateLoc(pacGridX, pacGridY, block.EMPTY);
 				mScore.atePellet();
 				//Log.d("Debugging", "In Collision Interact: PELLET");
@@ -251,7 +286,7 @@ public class Pacman //implements Collision
 				//Log.d("Debugging", "In Collision Interact: POWER_PELLET");
 				mMaze.getMaze()[pacGridX][pacGridY].updateLoc(pacGridX, pacGridY, block.EMPTY);
 				PacmanSounds.pacmanPowerup();
-				setPowerUpState(50000,true);// 540 is amount of frames time to be decremented EVERY FRAME
+				setPowerUpState(280,true);// 540 is amount of frames time to be decremented EVERY FRAME
 				mScore.atePowerPellet();
 				break;
 			case FRUIT: // Adjust for different fruits.
@@ -259,6 +294,7 @@ public class Pacman //implements Collision
 				// Score(); // score class?
 				mMaze.getMaze()[pacGridX][pacGridY].updateLoc(pacGridX, pacGridY, block.FRUIT_SPAWN); // Reset fruit position. (FRUIT_SPAWN = Set empty)
 				PacmanSounds.pacmanEatFruit();
+				pauseStartDeath(100);
 				break;
 			case WARP_SPACE: // Swap Pacman's location depending on warp entrance.
 				// Possible loop here? Updating Pacman's location on top of WARP location! Double check.
@@ -298,6 +334,7 @@ public class Pacman //implements Collision
 		direction = 'l';
 		powerTimer = 0;
 		powerState = false;
+		isDead = false;
 
 	}
 
@@ -323,6 +360,7 @@ public class Pacman //implements Collision
 	 */
 	void updateNextDirection(char joyDirection)
 	{
+
 		if (joyDirection == 'l') {
 			direction = 'l';
 		} else if (joyDirection == 'r') {
@@ -345,4 +383,16 @@ public class Pacman //implements Collision
 	{
 		return m.getNumPelletsRemaining() == 0;
 	}
+	// In milliseconds..
+	void pauseStartDeath(int t){
+		try {
+			// mPaused = true;
+			Thread.sleep(t);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//mPaused = false;
+	}
+
 }
