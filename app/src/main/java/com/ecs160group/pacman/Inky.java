@@ -15,6 +15,7 @@ public class Inky extends Ghost
 	Inky(Blinky blinky)
 	{
 		this.maze = maze;
+		this.blinky = blinky;
 //		findBlinky();
 	}
 
@@ -29,6 +30,10 @@ public class Inky extends Ghost
 		return SCATTER_LOC;
 	}
 
+	/**
+	 * Finds Blinky if he doesn't already exist
+	 * @return blinky object
+	 */
 	private Blinky findBlinky()
 	{
 		if (blinky != null) // if blinky is saved as a variable already
@@ -36,8 +41,8 @@ public class Inky extends Ghost
 		for (int i = 0; i < maze.length; i++) {
 			for (int j = 0; j < maze[i].length; j++) {
 				if (maze[i][j].getObj() == Block.BLINKY) {
-					// TODO: get this obj at the location (i,j)
-//					blinkyLoc = new Location(i, j, Block.BLINKY);
+					// TODO: check this is right
+					return blinky = new Blinky();
 				}
 			}
 		}
@@ -53,8 +58,8 @@ public class Inky extends Ghost
 	 */
 	public Location getChaseLocation()
 	{
-		Location pacLoc = pacman.getLoc();
-		Location blinkyLoc = findBlinky().getLoc();
+		Location pacLoc = pacman.getGridLoc();
+		Location blinkyLoc = findBlinky().getGridLoc();
 		// once we have locations need to create new offsets for location to find
 		// if the location of blinky or pacman don't exist, use 0 for row and column
 		int pacRow = pacLoc != null ? pacLoc.getX() : 0;

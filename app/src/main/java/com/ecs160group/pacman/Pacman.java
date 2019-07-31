@@ -68,22 +68,37 @@ public class Pacman //implements Collision
 		velocity = screenX / 15;
 	}
 
-
+	/**
+	 * Gets the scaled grid location of Pacman
+	 * @return
+	 */
 	public Location getLoc()
 	{
 		return loc;
 	}
 
+	/**
+	 * Get's actual location of Pacman
+	 * @return
+	 */
 	public Location getGridLoc()
 	{
 		return gridLocation;
 	}
 
+	/**
+	 * Gets the time left on Pacman's super timer
+	 * @return
+	 */
 	public int getPowerTimer()
 	{
 		return powerTimer;
 	}
 
+	/**
+	 * Gets whether Pacman is in power state
+	 * @return
+	 */
 	public boolean getPowerState()
 	{
 		return powerState;
@@ -99,8 +114,8 @@ public class Pacman //implements Collision
 	}
 
 	/**
-	 *
-	 * @param pTimer
+	 * Sets the super state of Pacman
+	 * @param pTimer amount of time left on Pacman
 	 * @param pState sets the timer and powerup state of pacman
 	 */
 	public void setPowerUpState(int pTimer, boolean pState)
@@ -109,12 +124,14 @@ public class Pacman //implements Collision
 		powerState = pState;
 	}
 
+
+
 	/**
-	 *
+	 * Checks the power up state of Pacman and decrements the power timer
 	 */
 	public void checkPowerUpState()
 	{
-		if (powerState == true || powerTimer != 0) {
+		if (powerState == true || powerTimer > 0) {
 			setPowerUpState(powerTimer - 1, true);
 			if (powerTimer <= 0) {
 				setPowerUpState(0, false);
@@ -122,7 +139,10 @@ public class Pacman //implements Collision
 		}
 	}
 
-	// isSuper returns state of Pacmans power-up state
+	/**
+	 * Checks if pacman is super
+	 * @return if pacman is super
+	 */
 	public boolean isSuper()
 	{
 		if (powerState == true && powerTimer > 0)

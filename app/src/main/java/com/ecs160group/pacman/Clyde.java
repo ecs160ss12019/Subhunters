@@ -32,7 +32,7 @@ public class Clyde extends Blinky
 	 */
 	public void move()
 	{
-		if (Location.dist(loc, pacman.getLoc()) < MAX_CHASE_DIST && !pacman.isSuper()) {
+		if (Location.dist(loc, pacman.getGridLoc()) < MAX_CHASE_DIST && !pacman.isSuper()) {
 			// if within minimum distance and pacman isn't super, be like Blinky
 			super.move();
 		} else { // otherwise patrol scatter location

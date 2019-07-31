@@ -33,9 +33,9 @@ public class Pinky extends Ghost
 	public Location getChaseLocation()
 	{
 		char pacDir = pacman.getDirection();
-		Location pacLoc = pacman.getLoc();
+		Location pacLoc = pacman.getGridLoc();
 		// get spaces ahead of pacman if pacman exists, otherwise get location 4 ahead of self
-		Location adj1 = pacLoc != null ? pacLoc.getAdjacentLocation(pacDir) : getLoc();
+		Location adj1 = pacLoc != null ? pacLoc.getAdjacentLocation(pacDir) : getGridLoc();
 		Location adj2 = adj1.getAdjacentLocation(pacDir);
 		Location adj3 = adj2.getAdjacentLocation(pacDir);
 		Location adj4 = adj3.getAdjacentLocation(pacDir);

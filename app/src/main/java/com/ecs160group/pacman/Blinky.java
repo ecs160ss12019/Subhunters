@@ -13,6 +13,10 @@ public class Blinky extends Ghost
  	 */
 	private static final Location SCATTER_LOC = new Location(27, 0, Block.WALL);
 
+	public Blinky() {
+		super();
+	}
+
 	/**
 	 * Gets Blinky's scatter Location
 	 * @return the scatter target
@@ -31,7 +35,7 @@ public class Blinky extends Ghost
 	 */
 	public Location getChaseLocation()
 	{
-		return pacman.getLoc();
+		return pacman.getGridLoc();
 	}
 
 	/**
