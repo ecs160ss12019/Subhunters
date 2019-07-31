@@ -25,9 +25,7 @@ public class Ghost// implements Collision
 	protected Location loc;
 	protected Location scatterLoc;
 
-	private Location[][] maze;
-	//passing the scaledgrid so that we can move accordingly
-	private Location[][] scaledMaze;
+	protected Maze maze;
 
 	//ghost coords//directions
 	//private int direction;
@@ -75,8 +73,7 @@ public class Ghost// implements Collision
 	 * @param spawnLoc
 	 * @param maze
 	 */
-	public Ghost(int screenX, Location spawnLoc, Location[][] maze, Location[][] scaledMaze) {
-		this.scaledMaze = scaledMaze;
+	public Ghost(int screenX, Location spawnLoc, Maze maze) {
 		this.maze = maze;
 		paint.setColor(Color.argb(255, 0, 0, 255));
 		//pacman width/height 1% of screen (change later if needed)
@@ -229,7 +226,7 @@ public class Ghost// implements Collision
 		gridCoord.y = gridLocation.getY();
 		//Log.d("ghost update:", "Random:" + randDirection);
 		Log.d("Pacman-update: ", "Current_LOC: " + direction + " Location: " + gridCoord.x + "," + gridCoord.y);
-		if (randDirection == 0 && canMoveTo(maze[gridCoord.x - 1][gridCoord.y])) {
+		if (randDirection == 0 && canMoveTo(maze.getMaze()[gridCoord.x - 1][gridCoord.y])) {
 			loc.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
 			gridLocation.setNewLoc(gridCoord.x - 1, gridCoord.y);
 			directionCount++;
@@ -238,7 +235,7 @@ public class Ghost// implements Collision
 				randDirection = rand.nextInt(4);
 				directionCount = 0;
 			}
-		} else if (randDirection == 1 && canMoveTo(maze[gridCoord.x + 1][gridCoord.y])) {
+		} else if (randDirection == 1 && canMoveTo(maze.getMaze()[gridCoord.x + 1][gridCoord.y])) {
 			loc.setNewLoc((int) (loc.getX() + (velocity / fps)), loc.getY());
 			gridLocation.setNewLoc(gridCoord.x + 1, gridCoord.y);
 			directionCount++;
@@ -247,7 +244,7 @@ public class Ghost// implements Collision
 				randDirection = rand.nextInt(4);
 				directionCount = 0;
 			}
-		} else if (randDirection == 2 && canMoveTo(maze[gridCoord.x][gridCoord.y + 1])) {
+		} else if (randDirection == 2 && canMoveTo(maze.getMaze()[gridCoord.x][gridCoord.y + 1])) {
 			loc.setNewLoc(loc.getX(), (int) (loc.getY() + (velocity / fps)));
 			gridLocation.setNewLoc(gridCoord.x, gridCoord.y + 1);
 			directionCount++;
@@ -256,7 +253,7 @@ public class Ghost// implements Collision
 				randDirection = rand.nextInt(4);
 				directionCount = 0;
 			}
-		} else if (randDirection == 3 && canMoveTo(maze[gridCoord.x][gridCoord.y - 1])) {
+		} else if (randDirection == 3 && canMoveTo(maze.getMaze()[gridCoord.x][gridCoord.y - 1])) {
 			loc.setNewLoc(loc.getX(), (int) (loc.getY() - (velocity / fps)));
 			gridLocation.setNewLoc(gridCoord.x, gridCoord.y - 1);
 			directionCount++;
@@ -320,7 +317,7 @@ public class Ghost// implements Collision
 	void chase(Location chaseLocation)
 	{
 		// sets the object at the target location before scattering
-		chaseLocation.setObj(maze[chaseLocation.getX()][chaseLocation.getY()].getObj());
+		chaseLocation.setObj(maze.getMaze()[chaseLocation.getX()][chaseLocation.getY()].getObj());
 		moveTowardsTarget(chaseLocation);
 	}
 
@@ -331,7 +328,7 @@ public class Ghost// implements Collision
 	void scatter(Location scatterLocation)
 	{
 		// sets the object at the target location before scattering
-		scatterLocation.setObj(maze[scatterLocation.getX()][scatterLocation.getY()].getObj());
+		scatterLocation.setObj(maze.getMaze()[scatterLocation.getX()][scatterLocation.getY()].getObj());
 		moveTowardsTarget(scatterLocation);
 	}
 
@@ -346,13 +343,13 @@ public class Ghost// implements Collision
 		int minDist = 0;
 		Location next = loc.getAhead(direction);
 		// set object in maze after getting the location
-		next.setObj(maze[next.getX()][next.getY()].getObj());
+		next.setObj(maze.getMaze()[next.getX()][next.getY()].getObj());
 		if (canMoveTo(next)) {
 			minDist = Location.dist(next, target);
 		}
 		// compare with left
 		Location left = loc.getLeft(direction);
-		left.setObj(maze[left.getX()][left.getY()].getObj());
+		left.setObj(maze.getMaze()[left.getX()][left.getY()].getObj());
 		if (canMoveTo(left)) {
 			// get distance between left and target location
 			int distLeft = Location.dist(left, target);
@@ -363,7 +360,7 @@ public class Ghost// implements Collision
 		}
 		// compare with right
 		Location right = loc.getRight(direction);
-		right.setObj(maze[right.getX()][right.getY()].getObj());
+		right.setObj(maze.getMaze()[right.getX()][right.getY()].getObj());
 		if (canMoveTo(right)) {
 			int distRight = Location.dist(right, target);
 			if (distRight < minDist) {
@@ -407,7 +404,7 @@ public class Ghost// implements Collision
 	private void moveTowardsTarget(Location target)
 	{
 		// keep moving towards target if pacman hasn't won and isn't dead
-		if (pacman != null && !pacman.hasWon()) {
+		if (pacman != null && !pacman.hasWon(maze)) {
 			// target exists and ghost is initialized in the grid
 			if (target != null && isInGrid()) {
 				Location next = canMove(minDistance(target));
