@@ -235,9 +235,48 @@ public class Location
 		}
 	}
 
+	/**
+	 * Checks if the location is the current right direction
+	 *
+	 * @param dirFacing direction the object is facing
+	 * @return if the location is to the right of the object
+	 */
+	public boolean isRight(char dirFacing)
+	{
+		Location right = getRight(dirFacing);
+		return right.getX() == x && right.getY() == y;
+	}
+
+	/**
+	 * Checks if the location is the current left direction
+	 *
+	 * @param dirFacing direction the object is facing
+	 * @return if the location is to the left of the object
+	 */
+	public boolean isLeft(char dirFacing)
+	{
+		Location left = getLeft(dirFacing);
+		return left.getX() == x && left.getY() == y;
+	}
+
+
+	/**
+	 * Checks if a location is in bounds
+	 * @param l location to check
+	 * @return if location is in bounds
+	 */
 	public static boolean isValid(Location l)
 	{
 		return l != null || Maze.isInBounds(l);
 	}
 
+	/**
+	 * To String function for a location
+	 * @return string representation of a Location
+	 */
+	@Override
+	public String toString()
+	{
+		return "x=" + x + ",y=" + y;
+	}
 }
