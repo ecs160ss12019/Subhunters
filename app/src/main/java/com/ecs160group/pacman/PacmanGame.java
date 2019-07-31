@@ -134,7 +134,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 mMaze = new Maze(activityContext, mScreenX, mScreenY, blockSize);
 
                 mPacman = new Pacman(mScreenX, mMaze.pacSpawn, PacGhostRadius, mScore, activityContext);
-                mGhost = new Ghost(mScreenX, mMaze.ghostSpawn, mMaze.getMaze(), mMaze.scaledGrid);
+                mGhost = new Ghost(mScreenX, mMaze.ghostSpawn, mMaze);
                 //mInky = new Inky(mGhost);
                 //mPinky = new Pinky(mGhost);
                 //mBlinky = new Blinky(mGhost);
@@ -213,7 +213,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
             //mPinky.reset();
             //mBlinky.reset();
             //mClyde.reset();
-            //mPacman.reset();
+            mPacman.reset();
         }
 
         // When we start the thread with:
