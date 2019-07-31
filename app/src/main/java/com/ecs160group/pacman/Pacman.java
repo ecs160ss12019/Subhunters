@@ -1,6 +1,7 @@
 package com.ecs160group.pacman;
 
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -40,6 +41,9 @@ public class Pacman //implements Collision
 	public Location spawnLoc;
 	private Score score;
 
+	//Sounds to be played during gameplay.
+	private sound PacmanSounds;
+
 	// use an integer to temporarily replace the draw of Pacman
 	// this will be modified under the draw function
 	int pacImage = 1;
@@ -50,10 +54,10 @@ public class Pacman //implements Collision
 	private float radius;
 	final Paint paint = new Paint();
 
-	Pacman(int screenX, Location spawnLoc, float radius, Score score)
+	Pacman(int screenX, Location spawnLoc, float radius, Score score, Context activityContext)
 	{
 		this.score = score;
-
+		PacmanSounds = new sound(activityContext);
 		paint.setColor(Color.argb(255, 255, 255, 0));
 		//pacman width/height 1% of screen (change later if needed)
 		this.radius = radius;
@@ -229,6 +233,61 @@ public class Pacman //implements Collision
 		}
 		return update;
 	}
+
+	/**
+	 * Handles the interactions between the objects. States, maze updates, sounds.
+	 */
+	void collisionInteraction(Ghost inky, Ghost pinky, Ghost blinky, Ghost clyde, Maze mMaze, Score mScore){
+		// TODO: Need to fix pacman's update to also save/update the grid coordinate.
+
+		//Log.d("Pacman-Detect_Collision: ", "pacmanGridValues: " + "Location: " + pacGridX + "," + pacGridY);
+		//Log.d("Pacman-Detect_Collision: ", "detect collision OBJECT gameactivity: " + mMaze.getMaze()[xPac][yPac].getObj());
+		switch(mMaze.getMaze()[pacGridX][pacGridY].getObj()){
+			case PELLET:
+				// Placeholder, encounters pellet set empty.
+				mMaze.getMaze()[pacGridX][pacGridY].updateLoc(pacGridX, pacGridY, block.EMPTY);
+				mScore.atePellet();
+				//Log.d("Debugging", "In Collision Interact: PELLET");
+				break;
+			case POWER_PELLET: // Encounter PowerPellet, set state
+				//Log.d("Debugging", "In Collision Interact: POWER_PELLET");
+				mMaze.getMaze()[pacGridX][pacGridY].updateLoc(pacGridX, pacGridY, block.EMPTY);
+				PacmanSounds.pacmanPowerup();
+				setPowerUpState(50000,true);// 540 is amount of frames time to be decremented EVERY FRAME
+				mScore.atePowerPellet();
+				break;
+			case FRUIT: // Adjust for different fruits.
+				// TODO: give score depending on spawned fruit.
+				// Score(); // score class?
+				mMaze.getMaze()[pacGridX][pacGridY].updateLoc(pacGridX, pacGridY, block.FRUIT_SPAWN); // Reset fruit position. (FRUIT_SPAWN = Set empty)
+				PacmanSounds.pacmanEatFruit();
+				break;
+			case WARP_SPACE: // Swap Pacman's location depending on warp entrance.
+				// Possible loop here? Updating Pacman's location on top of WARP location! Double check.
+				Log.d("Pacman-Detect_Collision: ", "pacmanGridValues: " + "Location: " + pacGridX + "," + pacGridY);
+				if(pacGridX == 0 && pacGridY == 14){
+					//Log.d("Debugging", "In Collision Interact: WARP_SPACE, Pacman warped[Left->Right].");
+					gridLocation.setNewLoc(27, 14); // Change to locate grid coordinates, not screen position
+				}
+				else{
+					//Assumed opposite side. Change Pacman's location
+					//Log.d("Debugging", "In Collision Interact: WARP_SPACE, Pacman warped[Right->Left].");
+					gridLocation.setNewLoc(0, 14);
+				}
+				Log.d("Debugging", "In Collision Interact: WARP_SPACE, Pacman warped.");
+				break;
+			case EMPTY: // empty space, Nothing happens. Continue movement.
+				//Log.d("Debugging", "In Collision Interact: EMPTY");
+				break;
+			default:
+				Log.d("Debugging", "In Collision Interact Default");
+				break;
+		}
+
+
+	}
+
+
 
 
 	/**

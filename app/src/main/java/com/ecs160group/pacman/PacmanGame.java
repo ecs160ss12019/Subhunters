@@ -45,10 +45,10 @@ public class PacmanGame extends SurfaceView implements Runnable{
         private Ghost mGhost;
         private Maze mMaze;
         private FakeJoy mFakeJoy;
-/*      private Inky mInky;
+        private Inky mInky;
         private Pinky mPinky;
         private Blinky mBlinky;
-        private Clyde mClyde;*/
+        private Clyde mClyde;
         //GHOST WILL BE REPLACED LATER WITH BLINKY/INKY/CLYDE/PINKY
 
         private Score mScore; //users score/points by eating pellets/fruits/scared ghosts
@@ -79,10 +79,12 @@ public class PacmanGame extends SurfaceView implements Runnable{
         private int yPac;
         //int pacmanGridValues[];
         Location pacmanGridValues;
-        private int pellet; // Eventually needs to be deleted TODO: Let maze handle win condition, check if no more pellets.
-        private int MAX_PELLETS;
 
-        Block mBlock;
+        // Not needed anymore, Maze will deal with win condition.
+        ///private int pellet; // Eventually needs to be deleted TODO: Let maze handle win condition, check if no more pellets.
+        //private int MAX_PELLETS;
+
+       // Block mBlock;
 
         public float PacGhostRadius;
 
@@ -131,12 +133,14 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 //initialize maze first so pacman and ghost can use its grid to find initial location
                 mMaze = new Maze(activityContext, mScreenX, mScreenY, blockSize);
 
-
-                mPacman = new Pacman(mScreenX, mMaze.pacSpawn, PacGhostRadius, mScore);
+                mPacman = new Pacman(mScreenX, mMaze.pacSpawn, PacGhostRadius, mScore, activityContext);
                 mGhost = new Ghost(mScreenX, mMaze.ghostSpawn, mMaze.getMaze(), mMaze.scaledGrid);
+                //mInky = new Inky(mGhost);
+                //mPinky = new Pinky(mGhost);
+                //mBlinky = new Blinky(mGhost);
+                //mClyde = new Clyde(mGhost);
+
                 mFakeJoy = new FakeJoy(200, 100, blockSize, fakePosition);
-                pellet = 0;
-                MAX_PELLETS = 150; // testing purposes TODO: Update max pellets to maze.
                 //bitmap
                 bitmap = Bitmap.createBitmap(mScreenX, mScreenY, Bitmap.Config.ARGB_8888);
                 mCanvas = new Canvas(bitmap);
@@ -154,13 +158,11 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 //reset maze level
 
                 //initialize the position of pacman and ghosts, also resets timers and states
-                mPacman.reset();
-                mGhost.reset();
-
+                actorReset();
                 //resetting score/lives/direction/pellets
                 mScore.reset();
                 mLives = 3;
-                pellet = 0; // TODO: Have maze check for not pellets instead.
+                //pellet = 0; // TODO: Have maze check for not pellets instead.
                 mFakeJoy.setCenter();
                 mPacman.updateNextDirection('l');
 
@@ -169,19 +171,18 @@ public class PacmanGame extends SurfaceView implements Runnable{
 
                 //draw();
                 PacmanSounds.pacmanBeginning();
-                //pauseStartDeath(5000);
+                mPaused = true; // Resume on user touch
+                 //pauseStartDeath(5000);
                 //PacmanSounds.pacmanIntermission();
 
         }
 
         public void deathRestart(){
                 //reset maze level
-                mPaused = true; // Pause until touch
+                mPaused = true; // Resume on user touch
                 //initialize the position of pacman and ghosts, also resets timers and states
-                mPacman.reset();
-                mGhost.reset();
+                actorReset();
                 mLives--;
-
                 //Reset game if 0 lives.
                 if(mLives <= 0){ startNewGame(); }
                 //pauseStartDeath(3000); // In milliseconds
@@ -189,11 +190,10 @@ public class PacmanGame extends SurfaceView implements Runnable{
         }
         public void StageCleared(){
                 //initialize the position of pacman and ghosts, also resets timers and states
-                mPacman.reset();
-                mGhost.reset();
-
+                mPaused = true; // Resume on user touch
+                actorReset();
                 //resetting /States/Direction
-                pellet = 0; // New map, reset pellet counter
+                //pellet = 0; // New map, reset pellet counter
                 mGhost.setDeathState(0, false);
                 // Movement reset.
                 mFakeJoy.setCenter();
@@ -201,9 +201,19 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 // In this case we just reset the maze,
                 // TODO: Add more levels.
                 //mMaze = new Maze(activityContext, mScreenX, mScreenY);
-
+                //pauseStartDeath(5000);
                 PacmanSounds.pacmanBeginning();
 
+
+        }
+
+        public void actorReset(){
+            mGhost.reset(); // TODO: Remove later
+            //mInky.reset();
+            //mPinky.reset();
+            //mBlinky.reset();
+            //mClyde.reset();
+            //mPacman.reset();
         }
 
         // When we start the thread with:
@@ -296,63 +306,21 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         }
                 }
 
-                // TODO: Need to fix pacman's update to also save/update the grid coordinate.
-                //pacmanGridValues = mPacman.getLoc();
-                xPac = mPacman.gridLocation.getX();
-                yPac = mPacman.gridLocation.getY();
-                //Log.d("Pacman-Detect_Collision: ", "pacmanGridValues: " + "Location: " + xPac + "," + yPac);
-                //Log.d("Pacman-Detect_Collision: ", "detect collision OBJECT gameactivity: " + mMaze.getMaze()[xPac][yPac].getObj());
-                switch(mMaze.getMaze()[xPac][yPac].getObj()){
-                        case PELLET:
-                                // Placeholder, encounters pellet set empty.
-                                mMaze.getMaze()[xPac][yPac].updateLoc(xPac, yPac, mBlock.EMPTY);
-                                pellet++;
-                                mScore.atePellet();
-                                Log.d("Debugging", "In Collision Interact: PELLET");
-                                if(pellet >= MAX_PELLETS){ // On game complete TODO: Allow maze to handle, instead "check no pellets exist"
-                                        //Log.d("Debugging", "In Collision Interact: PELLET, STAGE COMPLETE");
-                                        draw();
-                                        PacmanSounds.pacmanChomp(); // Consume pellet..
-                                        pauseStartDeath(4000);
-                                        mFakeJoy.setCenter();
-                                        draw();
-                                        StageCleared();
-                                }
-                                break;
-                         case POWER_PELLET: // Encounter PowerPellet, set state
-                                 Log.d("Debugging", "In Collision Interact: POWER_PELLET");
-                                 mMaze.getMaze()[xPac][yPac].updateLoc(xPac, yPac, mBlock.EMPTY);
-                                 PacmanSounds.pacmanPowerup();
-                                 mPacman.setPowerUpState(540,true);// 540 is amount of frames time to be decremented EVERY FRAME
-                                 mScore.atePowerPellet();
-                                break;
-                        case FRUIT: // Adjust for different fruits.
-                                // TODO: give score depending on spawned fruit.
-                                // Score(); // score class?
-                                mMaze.getMaze()[xPac][yPac].updateLoc(xPac, yPac, mBlock.FRUIT_SPAWN); // Reset fruit position. (FRUIT_SPAWN = Set empty)
-                                PacmanSounds.pacmanEatFruit();
-                                break;
-                        case WARP_SPACE: // Swap Pacman's location depending on warp entrance.
-                                // Possible loop here? Updating Pacman's location on top of WARP location! Double check.
-                                Log.d("Pacman-Detect_Collision: ", "pacmanGridValues: " + "Location: " + xPac + "," + yPac);
-                                if(xPac == 0 && yPac == 14){
-                                        //Log.d("Debugging", "In Collision Interact: WARP_SPACE, Pacman warped[Left->Right].");
-                                        mPacman.gridLocation.setNewLoc(27, 14); // Change to locate grid coordinates, not screen position
-                                }
-                                else{
-                                        //Assumed opposite side. Change Pacman's location
-                                        //Log.d("Debugging", "In Collision Interact: WARP_SPACE, Pacman warped[Right->Left].");
-                                        mPacman.gridLocation.setNewLoc(0, 14);
-                                }
-                                Log.d("Debugging", "In Collision Interact: WARP_SPACE, Pacman warped.");
-                                break;
-                        case EMPTY: // empty space, Nothing happens. Continue movement.
-                                //Log.d("Debugging", "In Collision Interact: EMPTY");
-                                break;
-                        default:
-                                Log.d("Debugging", "In Collision Interact Default");
-                                break;
-                }
+
+                // Handle collisions with Pacman
+                mPacman.collisionInteraction(null, null, null, null, mMaze, mScore); // Null for debugging.
+                //mPacman.collisionInteraction(mInky, mPinky, mBlinky, mClyde, mMaze);
+                // Check interactions, then win condition.
+                if(mPacman.hasWon(mMaze) == true){
+                        //Log.d("Debugging", "In Collision Interact: PELLET, STAGE COMPLETE");
+                        draw();
+                        PacmanSounds.pacmanChomp(); // Consume pellet..
+                        pauseStartDeath(4000);
+                        mFakeJoy.setCenter();
+                        draw();
+                        StageCleared();
+                } // Win condition reached. All pellets cleared.
+
         }
 
         //called by PacmanActivity when player quits game
