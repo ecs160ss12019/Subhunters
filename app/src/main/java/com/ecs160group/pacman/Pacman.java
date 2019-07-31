@@ -134,7 +134,7 @@ public class Pacman //implements Collision
 	 */
 	public void checkPowerUpState()
 	{
-		Log.d("Debugging", "checkPowerUpState" + powerTimer);
+		//Log.d("Debugging", "checkPowerUpState" + powerTimer);
 		if (powerState == true ||  powerTimer > 0) {
 			setPowerUpState(powerTimer - 1, true);
 			if (powerTimer <= 0) {
@@ -277,7 +277,7 @@ public class Pacman //implements Collision
 		switch(mMaze.getMaze()[pacGridX][pacGridY].getObj()){
 			case PELLET:
 				// Placeholder, encounters pellet set empty.
-                PacmanSounds.pacmanChomp();
+                //PacmanSounds.pacmanChomp();
 				mMaze.getMaze()[pacGridX][pacGridY].updateLoc(pacGridX, pacGridY, block.EMPTY);
 				mScore.atePellet();
 				//Log.d("Debugging", "In Collision Interact: PELLET");
