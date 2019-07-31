@@ -51,7 +51,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
         private Clyde mClyde;*/
         //GHOST WILL BE REPLACED LATER WITH BLINKY/INKY/CLYDE/PINKY
 
-        private int mScore; //users score/points by eating pellets/fruits/scared ghosts
+        private Score mScore; //users score/points by eating pellets/fruits/scared ghosts
         private int mLives; //number lives user has left
 
         //variables to handle drawing
@@ -114,6 +114,8 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 //Setup sound
                 PacmanSounds = new sound(activityContext);
 
+                mScore = new Score();
+
                 mOurHolder = getHolder();
                 mPaint = new Paint();
                 joystickX = 0;
@@ -130,7 +132,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 mMaze = new Maze(activityContext, mScreenX, mScreenY, blockSize);
 
 
-                mPacman = new Pacman(mScreenX, mMaze.pacSpawn, PacGhostRadius);
+                mPacman = new Pacman(mScreenX, mMaze.pacSpawn, PacGhostRadius, mScore);
                 mGhost = new Ghost(mScreenX, mMaze.ghostSpawn, mMaze.getMaze(), mMaze.scaledGrid);
                 mFakeJoy = new FakeJoy(200, 100, blockSize, fakePosition);
                 pellet = 0;
@@ -156,7 +158,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 mGhost.reset();
 
                 //resetting score/lives/direction/pellets
-                mScore = 0;
+                mScore.reset();
                 mLives = 3;
                 pellet = 0; // TODO: Have maze check for not pellets instead.
                 mFakeJoy.setCenter();
@@ -284,6 +286,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         else{
                                 // Set timer as ghost touches Graveyard?
                                 PacmanSounds.pacmanEatGhost();
+                                mScore.ateGhost();
                                 pauseStartDeath(500);
                                 mGhost.setDeathState(9000, true);
                                 mGhost.gridLocation.setNewLoc(13, 11);
@@ -304,6 +307,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                 // Placeholder, encounters pellet set empty.
                                 mMaze.getMaze()[xPac][yPac].updateLoc(xPac, yPac, mBlock.EMPTY);
                                 pellet++;
+                                mScore.atePellet();
                                 Log.d("Debugging", "In Collision Interact: PELLET");
                                 if(pellet >= MAX_PELLETS){ // On game complete TODO: Allow maze to handle, instead "check no pellets exist"
                                         //Log.d("Debugging", "In Collision Interact: PELLET, STAGE COMPLETE");
@@ -319,8 +323,8 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                  Log.d("Debugging", "In Collision Interact: POWER_PELLET");
                                  mMaze.getMaze()[xPac][yPac].updateLoc(xPac, yPac, mBlock.EMPTY);
                                  PacmanSounds.pacmanPowerup();
-                                 mPacman.setPowerUpState(540,true); // 540 is amount of frames time to be decremented EVERY FRAME
-
+                                 mPacman.setPowerUpState(540,true);// 540 is amount of frames time to be decremented EVERY FRAME
+                                 mScore.atePowerPellet();
                                 break;
                         case FRUIT: // Adjust for different fruits.
                                 // TODO: give score depending on spawned fruit.
@@ -390,7 +394,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         mPaint.setTextSize(mFontSize);
 
                         //HUD
-                        mCanvas.drawText("Score:  " + mScore +
+                        mCanvas.drawText("Score:  " + mScore.getScore() +
                                         "  Lives: " + mLives,
                                 mFontMargin, mFontSize, mPaint);
 

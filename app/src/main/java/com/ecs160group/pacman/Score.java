@@ -14,6 +14,14 @@ public class Score
 	}
 
 	/**
+	 * reset function to set score back to 0
+	 */
+
+	void reset() {
+		score = 0;
+	}
+
+	/**
 	 * Ctor with score parameter for score class
 	 * Used for resetting score when Pacman respawns but no game over
 	 * or new level reached
