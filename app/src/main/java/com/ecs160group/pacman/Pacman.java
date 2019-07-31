@@ -1,7 +1,6 @@
 package com.ecs160group.pacman;
 
 import android.content.Context;
-import android.media.MediaPlayer;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -11,7 +10,6 @@ import android.graphics.Path;
 import android.util.Log;
 
 import java.lang.Math;
-import java.util.Random;
 
 /*
     protagonist of Pacman game
@@ -287,60 +285,6 @@ public class Pacman //implements Collision
 
 	}
 
-
-
-
-	/**
-	 * detects the collisions of pacman with ghost, pellets, fruits,
-	 * TODO: TESTING TO CHECK WALL DETECTION HERE
-	 */
-	// currently used for Pacman and ghost collision detection
-	public boolean detectCollision(Location loc, int mScreenX, int mScreenY)
-	{
-		boolean collided = false;
-		float radius = (mScreenX + mScreenY) / 200;
-		if (Math.abs(this.loc.getX() - loc.getX()) <= radius * 2
-				&& Math.abs(this.loc.getY() - loc.getY()) <= radius * 2) {
-			collided = true;
-		}
-		return collided;
-	}
-
-	/**
-	 * check if Pacman is inside the screen
-	 */
-	public void isInBounds(int mScreenX, int mScreenY)
-	{
-		float radius = (mScreenX + mScreenY) / 200;
-
-		//if pacman hits the right screen wall, stop
-		if ((loc.getX() + radius) > mScreenX) {
-			//Log.d("pacman has hit a wall:", "direction:" + direction);
-			loc.setNewLoc((int) (mScreenX - radius), loc.getY());
-		}
-
-		//if pacman hits the left screen wall, stop
-		//
-		if ((loc.getX() - radius) < 0) {
-			//Log.d("pacman has hit a wall:", "direction:" + direction);
-			loc.setNewLoc((int) (0 + radius), loc.getY());
-
-		}
-		//if pacman hits the bottom screen wall
-		if ((loc.getY() + radius) > mScreenY) {
-			//Log.d("pacman hit the bottom:", "direction:" + direction);
-			loc.setNewLoc(loc.getX(), (int) (mScreenY - radius));
-		}
-
-		if ((loc.getY() - radius) < 0)  //up
-		{
-			//Log.d("pacman hit upper wall:", "direction:" + direction);
-			loc.setNewLoc(loc.getX(), (int) (0 + radius));
-		}
-
-
-	}
-
 	/**
 	 * resets pacman's location to its original spawn
 	 * called at PacmanGame's startNewGame() and reset()
@@ -357,14 +301,6 @@ public class Pacman //implements Collision
 
 	}
 
-	/**
-	 * Checks if pacman is within bounds of maze
-	 */
-	void checkBounds()
-	{
-
-	}
-
 	//TODO: will use variable direction later on for image purposes
 
 	//circle for now, may need to be modified
@@ -378,7 +314,6 @@ public class Pacman //implements Collision
 		canvas.drawCircle(loc.getX(), loc.getY(), radius, mPaint);
 
 	}
-
 
 	/**
 	 * called by onTouchEvent in PacmanGame once user moves the stick
@@ -398,64 +333,6 @@ public class Pacman //implements Collision
 			direction = 'd';
 		}
 	}
-
-	/**
-	 * checking if the next move of Pacman is available
-	 *
-	 * @param x x coordinate of maze
-	 * @param y y coordinate of maze
-	 * @return true if doesn't collide with anything
-	 */
-	public boolean checkCollisionPacman(int x, int y)
-	{
-		// should be false by default
-		// for now we set it true for testing
-		boolean b; // Unable to traverse by default?
-		b = true;
-		    /*
-		    If(loc[x][y].block == EMPTY) {
-			    return true;
-		    }
-	        */
-		// maze[x][y] != walkable space... to return True.
-		//if()
-		return b;
-	}
-
-	/**
-	 * Constructor for Pacman's movement
-	 * Depending on direction given and traversability, Pacman will attempt to move.
-	 * Helper function checkCollision, checks next cell and deals with it. If pellet, ghost,fruit, ect..
-	 */
-	public void move() // Change direction to char? "Easier to Read" udlr
-	{
-		// TODO: extend this to introduce movement based on the direction given
-		int pacX = loc.getX();
-		int pacY = loc.getY();
-
-		// Check neighboring cell for collisions!!
-		if (direction == 'u' && checkCollisionPacman(pacX, pacY + 1)) { // GO to coordinate (x,y+1)
-			loc.setNewLoc(pacX, pacY - 1);
-			Log.d("Pacman-Moved: ", "Move: " + direction + "Location: " + pacX + "," + pacY);
-
-		}
-		if (direction == 'd' && checkCollisionPacman(pacX, pacY - 1)) {
-			loc.setNewLoc(pacX, pacY + 1);
-			Log.d("Pacman-Moved: ", "Move: " + direction + "Location: " + pacX + "," + pacY);
-
-		}
-		if (direction == 'l' && checkCollisionPacman(pacX - 1, pacY)) {
-			loc.setNewLoc(pacX - 1, pacY);
-			Log.d("Pacman-Moved: ", "Move: " + direction + "Location: " + pacX + "," + pacY);
-
-		}
-		if (direction == 'r' && checkCollisionPacman(pacX + 1, pacY)) {
-			loc.setNewLoc(pacX + 1, pacY);
-			Log.d("Pacman-Moved: ", "Move: " + direction + "Location: " + pacX + "," + pacY);
-
-		}
-	}
-
 
 	/**
 	 * Determines if Pacman has won

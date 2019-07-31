@@ -225,7 +225,7 @@ public class Ghost// implements Collision
 		gridCoord.x = gridLocation.getX();
 		gridCoord.y = gridLocation.getY();
 		//Log.d("ghost update:", "Random:" + randDirection);
-		Log.d("Pacman-update: ", "Current_LOC: " + direction + " Location: " + gridCoord.x + "," + gridCoord.y);
+		Log.d("Ghost-update: ", "Current_LOC: " + direction + " Location: " + gridCoord.x + "," + gridCoord.y);
 		if (randDirection == 0 && canMoveTo(maze.getMaze()[gridCoord.x - 1][gridCoord.y])) {
 			loc.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
 			gridLocation.setNewLoc(gridCoord.x - 1, gridCoord.y);
