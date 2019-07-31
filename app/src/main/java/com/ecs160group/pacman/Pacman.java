@@ -60,25 +60,17 @@ public class Pacman //implements Collision
 		this.spawnLoc = spawnLoc;
 		loc = new Location(spawnLoc.getX(), spawnLoc.getY(), Block.PACMAN);
 		gridLocation = new Location(13, 29, Block.PACMAN); // 13,29 Used to keep track of own grid position.
-		Log.d("Pacman-gridlocation: ",  "Location: " + gridLocation.getX() + "," + gridLocation.getY());
+		Log.d("Pacman-gridlocation: ", "Location: " + gridLocation.getX() + "," + gridLocation.getY());
 		direction = 'l';
 		next_direction = 'l';
 		powerState = false;
 		powerTimer = 0;
 		velocity = screenX / 15;
 	}
-
-	/**
-	 * Gets the scaled grid location of Pacman
-	 * @return
-	 */
-	public Location getLoc()
-	{
-		return loc;
-	}
-
+	
 	/**
 	 * Get's actual location of Pacman
+	 *
 	 * @return
 	 */
 	public Location getGridLoc()
@@ -88,6 +80,7 @@ public class Pacman //implements Collision
 
 	/**
 	 * Gets the time left on Pacman's super timer
+	 *
 	 * @return
 	 */
 	public int getPowerTimer()
@@ -97,6 +90,7 @@ public class Pacman //implements Collision
 
 	/**
 	 * Gets whether Pacman is in power state
+	 *
 	 * @return
 	 */
 	public boolean getPowerState()
@@ -106,6 +100,7 @@ public class Pacman //implements Collision
 
 	/**
 	 * Gives the current direction that Pacman is facing
+	 *
 	 * @return Pacman's current direction;
 	 */
 	public char getDirection()
@@ -115,6 +110,7 @@ public class Pacman //implements Collision
 
 	/**
 	 * Sets the super state of Pacman
+	 *
 	 * @param pTimer amount of time left on Pacman
 	 * @param pState sets the timer and powerup state of pacman
 	 */
@@ -123,7 +119,6 @@ public class Pacman //implements Collision
 		powerTimer = pTimer;
 		powerState = pState;
 	}
-
 
 
 	/**
@@ -141,6 +136,7 @@ public class Pacman //implements Collision
 
 	/**
 	 * Checks if pacman is super
+	 *
 	 * @return if pacman is super
 	 */
 	public boolean isSuper()
@@ -198,39 +194,39 @@ public class Pacman //implements Collision
 		boolean update;
 		update = true;
 		//read in Grid and grid indices of current location
-		Location [][] mGrid = maze.getMaze();
+		Location[][] mGrid = maze.getMaze();
 
 		// If current position is warp, DO NOT update position.
-        if(mGrid[gridLocation.getX()][gridLocation.getY()].getObj() != block.WARP_SPACE) {
+		if (mGrid[gridLocation.getX()][gridLocation.getY()].getObj() != block.WARP_SPACE) {
 			// if Pacman will hit the right wall, stop
 			if (direction == 'r') {
-                if (mGrid[gridLocation.getX() + 1][gridLocation.getY()].isWall()) {
-                    //Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
-                    update = false;
-                }
-            }
-            //if pacman will hit the left wall, stop
-            if (direction == 'l') {
-                if (mGrid[gridLocation.getX() - 1][gridLocation.getY()].isWall() ) {
-                    //Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
-                    update = false;
-                }
-            }
-            //if Pacman will hit the top wall, stop
-            if (direction == 'u') {
-                if (mGrid[gridLocation.getX()][gridLocation.getY() - 1].isWall()) {
-                    //Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
-                    update = false;
-                }
-            }
-            //if Pacman will hit the bottom wall, stop
-            if (direction == 'd') {
-                if (mGrid[gridLocation.getX()][gridLocation.getY() + 1].isWall()) {
-                    //Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
-                    update = false;
-                }
-            }
-        }
+				if (mGrid[gridLocation.getX() + 1][gridLocation.getY()].isWall()) {
+					//Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
+					update = false;
+				}
+			}
+			//if pacman will hit the left wall, stop
+			if (direction == 'l') {
+				if (mGrid[gridLocation.getX() - 1][gridLocation.getY()].isWall()) {
+					//Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
+					update = false;
+				}
+			}
+			//if Pacman will hit the top wall, stop
+			if (direction == 'u') {
+				if (mGrid[gridLocation.getX()][gridLocation.getY() - 1].isWall()) {
+					//Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
+					update = false;
+				}
+			}
+			//if Pacman will hit the bottom wall, stop
+			if (direction == 'd') {
+				if (mGrid[gridLocation.getX()][gridLocation.getY() + 1].isWall()) {
+					//Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
+					update = false;
+				}
+			}
+		}
 		return update;
 	}
 
@@ -296,9 +292,9 @@ public class Pacman //implements Collision
 
 		loc.setNewLoc(spawnLoc.getX(), spawnLoc.getY());
 		gridLocation.setNewLoc(13, 23); // TODO: Hard coded spawn, change later.
-        direction = 'l';
-        powerTimer = 0;
-        powerState = false;
+		direction = 'l';
+		powerTimer = 0;
+		powerState = false;
 
 	}
 
