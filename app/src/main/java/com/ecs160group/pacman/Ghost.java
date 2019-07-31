@@ -31,7 +31,7 @@ public class Ghost// implements Collision
 	//private int direction;
 	private int nextDirection;
 	private char direction;
-	private Block block;
+	private Location savedLoc;
 
 	// TODO: add explenations for these two vars here
 	private int deathTimer = 0;
@@ -62,7 +62,8 @@ public class Ghost// implements Collision
 	/**
 	 * Non-parameterized Ghost ctor
 	 */
-	public Ghost() {
+	public Ghost()
+	{
 
 	}
 
@@ -73,7 +74,8 @@ public class Ghost// implements Collision
 	 * @param spawnLoc
 	 * @param maze
 	 */
-	public Ghost(int screenX, Location spawnLoc, Maze maze) {
+	public Ghost(int screenX, Location spawnLoc, Maze maze)
+	{
 		this.maze = maze;
 		paint.setColor(Color.argb(255, 0, 0, 255));
 		//pacman width/height 1% of screen (change later if needed)
@@ -95,12 +97,15 @@ public class Ghost// implements Collision
 	 *
 	 * @return location of the ghost
 	 */
-	public Location getLoc() {
+	public Location getLoc()
+	{
 		return loc;
 	}
-    public Location getGridLoc() {
-        return gridLocation;
-    }
+
+	public Location getGridLoc()
+	{
+		return gridLocation;
+	}
 
 	/**
 	 * Sets the death state of the ghost
@@ -108,7 +113,8 @@ public class Ghost// implements Collision
 	 * @param dTimer amount of time left on the death timer
 	 * @param dState state of the ghost
 	 */
-	public void setDeathState(int dTimer, boolean dState) {
+	public void setDeathState(int dTimer, boolean dState)
+	{
 		deathTimer = dTimer;
 		isDead = dState;
 	}
@@ -116,7 +122,8 @@ public class Ghost// implements Collision
 	/**
 	 *
 	 */
-	public void checkDeathTimer() {
+	public void checkDeathTimer()
+	{
 		if (isDead == true || deathTimer != 0) {
 			setDeathState(deathTimer - 1, true);
 			if (deathTimer <= 0) {
@@ -130,7 +137,8 @@ public class Ghost// implements Collision
 	 *
 	 * @return if the ghost has been spawned
 	 */
-	private boolean isInGrid() {
+	private boolean isInGrid()
+	{
 		return started;
 	}
 
@@ -204,6 +212,7 @@ public class Ghost// implements Collision
 			//update(fps);
 		}
 */
+
 	/**
 	 * detects the collisions of pacman with ghost, pellets, fruits,
 	 * TODO: TESTING TO CHECK WALL DETECTION HERE
@@ -221,7 +230,8 @@ public class Ghost// implements Collision
 	}
 
 
-	void update(long fps) {
+	void update(long fps)
+	{
 		gridCoord.x = gridLocation.getX();
 		gridCoord.y = gridLocation.getY();
 		//Log.d("ghost update:", "Random:" + randDirection);
@@ -298,6 +308,16 @@ public class Ghost// implements Collision
 		isDead = false;
 		//mXVelocity = (float) (y / 3);
 		//mYVelocity = (float) -(y / 3);
+	}
+
+	/**
+	 * Called when the ghost is eaten
+	 * Sets the timer and moves ghost to waiting room
+	 */
+	void eaten()
+	{
+		setDeathState(9000, true);
+		// TODO: do more with this
 	}
 
 
@@ -409,7 +429,7 @@ public class Ghost// implements Collision
 			if (target != null && isInGrid()) {
 				Location next = canMove(minDistance(target));
 				if (next != null) {
-					move(next);
+					beginMove(next);
 				} else {
 					turn(next);
 				}
@@ -422,68 +442,58 @@ public class Ghost// implements Collision
 	 *
 	 * @param next the next
 	 */
-	private void move(Location next)
+	private void beginMove(Location next)
 	{
 		if (Location.isValid(next)) {
 			Location ahead = loc.getAdjacentLocation(direction);
-//			if (ahead.getX() == next.getX() && ahead.getY() == next.getY()) {
-				turn(next);
-		}
-			// TODO: do the movement
-	}
-
-	public boolean wallDetection(Maze maze)
-	{
-		// this value will be used for deciding update or not
-		boolean update;
-		update = true;
-		//read in Grid and grid indices of current location
-		Location [][] mGrid = maze.getMaze();
-		Location [][] scaledGrid = maze.scaledGrid;
-
-        // If current position is warp, DO NOT update position.
-		if(mGrid[gridLocation.getX()][gridLocation.getY()].getObj() != block.WARP_SPACE) {
-			//if ghost will hit the right wall, stop
-			if (direction == 'r') {
-				if (mGrid[gridLocation.getX() + 1][gridLocation.getY()].isWall()) {
-					Log.d("GHOST HAS HIT A WALL:", "direction:" + direction);
-					update = false;
-				}
-			}
-			//if ghost will hit the left wall, stop
-			if (direction == 'l') {
-				if (mGrid[gridLocation.getX() - 1][gridLocation.getY()].isWall()) {
-					Log.d("GHOST HAS HIT A WALL:", "direction:" + direction);
-					update = false;
-				}
-			}
-			//if ghost will hit the top wall, stop
-			if (direction == 'u') {
-				if (mGrid[gridLocation.getX()][gridLocation.getY() - 1].isWall()) {
-					Log.d("GHOST HAS HIT A WALL:", "direction:" + direction);
-					update = false;
-				}
-			}
-			//if ghost will hit the bottom wall, stop
-			if (direction == 'd') {
-				if (mGrid[gridLocation.getX()][gridLocation.getY() + 1].isWall()) {
-					Log.d("GHOST HAS HIT A WALL:", "direction:" + direction);
-					update = false;
-				}
+			if (ahead.getX() != next.getX() || ahead.getY() != next.getY()) {
+				turn(next); // change direction if the location is not directly ahead
 			}
 		}
-		return update;
+		moveTo(next);
 	}
 
 
 	/**
 	 * Helper to turn towards a direction
 	 * Gets the next location
-	 * @param next
+	 *
+	 * @param next next location to move to
 	 */
 	private void turn(Location next)
 	{
-
+		if (next == null) { // next could be null so just turn a random direction
+			direction = rand.nextBoolean() ? 'r' : 'l';
+		} else {
+			if (next.isRight(direction)) { // if next is right, change direction to right
+				direction = 'r';
+			} else if (next.isLeft(direction)) { // if next is left, change direction to left
+				direction = 'l';
+			}
+		}
 	}
 
+	/**
+	 * Moves the Ghost to the neighboring location
+	 *
+	 * @param loc location to move to
+	 */
+	private void moveTo(Location loc)
+	{
+		Log.d("Doing a Move: ", "Moving " + this + "to " + loc.toString());
+		gridLocation = loc;
+		gridLocation.setObj(Block.GHOST);
+	}
+
+
+	/**
+	 * To String representation of a Ghost
+	 *
+	 * @return string representation of a Ghost
+	 */
+	@Override
+	public String toString()
+	{
+		return "Ghost at x=" + getLoc().getX() + ", y=" + getLoc().getY();
+	}
 }
