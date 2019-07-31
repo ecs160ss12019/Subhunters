@@ -264,7 +264,7 @@ public class Pacman //implements Collision
 				break;
 			case WARP_SPACE: // Swap Pacman's location depending on warp entrance.
 				// Possible loop here? Updating Pacman's location on top of WARP location! Double check.
-				Log.d("Pacman-Detect_Collision: ", "pacmanGridValues: " + "Location: " + pacGridX + "," + pacGridY);
+				Log.d("Pac-Detect_Collision: ", "pacmanGridValues: " + "Location: " + pacGridX + "," + pacGridY);
 				if(pacGridX == 0 && pacGridY == 14){
 					//Log.d("Debugging", "In Collision Interact: WARP_SPACE, Pacman warped[Left->Right].");
 					gridLocation.setNewLoc(27, 14); // Change to locate grid coordinates, not screen position
