@@ -67,7 +67,7 @@ public class Pacman //implements Collision
 		powerTimer = 0;
 		velocity = screenX / 15;
 	}
-	
+
 	/**
 	 * Get's actual location of Pacman
 	 *
@@ -399,14 +399,14 @@ public class Pacman //implements Collision
 
 
 	/**
-	 * Stub of function to determine if Pacman has won
+	 * Determines if Pacman has won
 	 * Pacman wins when all the pellets and super pellets have been eaten
 	 *
 	 * @return if Pacman has won
 	 */
 	// TODO: make this not a stub, actually checks the pellets are all gone
-	public boolean hasWon()
+	public boolean hasWon(Maze m)
 	{
-		return false;
+		return m.getNumPelletsRemaining() == 0;
 	}
 }

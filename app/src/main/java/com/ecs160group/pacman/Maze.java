@@ -401,4 +401,16 @@ class Maze
 		return gridVal;
 	}
 
+	public int getNumPelletsRemaining()
+	{
+		int numPellets = 0;
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid[i].length; j++) {
+				if (grid[i][j].getObj() == Block.PELLET || grid[i][j].getObj() == Block.POWER_PELLET)
+					numPellets++;
+			}
+		}
+		return numPellets;
+	}
+
 }
