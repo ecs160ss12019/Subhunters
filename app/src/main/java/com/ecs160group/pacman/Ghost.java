@@ -490,6 +490,6 @@ public class Ghost// implements Collision
 	@Override
 	public String toString()
 	{
-		return "Ghost at x=" + getLoc().getX() + ", y=" + getLoc().getY();
+		return "Ghost at x=" + getGridLoc().getX() + ", y=" + getGridLoc().getY();
 	}
 }
