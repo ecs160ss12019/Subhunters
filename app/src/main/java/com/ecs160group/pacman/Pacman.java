@@ -304,7 +304,7 @@ public class Pacman //implements Collision
 		if(gridLocation.getX() == mGhost.gridLocation.getX() && gridLocation.getY() == mGhost.gridLocation.getY()){
 			if(isSuper())
 			{
-				mGhost.setDeathState(500, true); // 9 seconds
+				mGhost.setDeathState(200, true);
 				PacmanSounds.pacmanEatGhost();
 
 				mGhost.gridLocation.setNewLoc(13, 7); // TODO: remove hardcoded values.

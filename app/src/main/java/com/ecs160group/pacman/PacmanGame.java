@@ -92,7 +92,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 
 	public int xScaled;
 	public int yScaled;
-
+	public int deathGhostTimer;
 	//constructor
 	public PacmanGame(Context context, int x, int y)
 	{
@@ -144,7 +144,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 		mClyde = new Clyde(mScreenX,mMaze.ghostSpawn, mMaze, mPacman);
 		graveyard = new ArrayBlockingQueue<>(4);
 		addAllGhostsToGY();
-
+		deathGhostTimer = 200; // Death Timer for Ghost
 		mFakeJoy = new FakeJoy(200, 100, blockSize, fakePosition);
 		//bitmap
 		bitmap = Bitmap.createBitmap(mScreenX, mScreenY, Bitmap.Config.ARGB_8888);
@@ -170,11 +170,11 @@ public class PacmanGame extends SurfaceView implements Runnable
 			graveyard.clear();
 		}
 		// add all the ghosts in this order
-		mBlinky.setDeathState(500, true); // 9 seconds
-		mPinky.setDeathState(500, true); // 9 seconds
-		mInky.setDeathState(500, true); // 9 seconds
-		mClyde.setDeathState(500, true); // 9 seconds
-		mBlinky.gridLocation.setNewLoc(13, 14); // .
+		mBlinky.setDeathState(deathGhostTimer, true); //  ATM 200 frames?
+		mPinky.setDeathState(deathGhostTimer, true);
+		mInky.setDeathState(deathGhostTimer, true);
+		mClyde.setDeathState(deathGhostTimer, true);
+		mBlinky.gridLocation.setNewLoc(13, 14);
 		mPinky.gridLocation.setNewLoc(13, 14); // TODO: remove hardcoded values.
 		mInky.gridLocation.setNewLoc(13, 14);
 		mClyde.gridLocation.setNewLoc(13, 14);
@@ -198,7 +198,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 			Log.d("ghost-removeGhostGY: ", "NEW! x: " + temp.gridLocation.getX() + "y: " + temp.gridLocation.getY());
 			if(!graveyard.isEmpty() ) {
                 temp = graveyard.peek();
-                temp.setDeathState(500, true);
+                temp.setDeathState(deathGhostTimer, true);
             }
 		}
 		//graveyard.clear();
@@ -349,17 +349,19 @@ public class PacmanGame extends SurfaceView implements Runnable
 		}
 
 		//mGhost.update(mFPS);
+/*
 		mInky.update(mFPS);
 		mPinky.update(mFPS);
 		mBlinky.update(mFPS);
 		mClyde.update(mFPS);
+*/
 
-/*
+
 		mInky.move();
 		mPinky.move();
 		mBlinky.move();
 		mClyde.move();
-*/
+
 
 
 	}
