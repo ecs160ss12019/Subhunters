@@ -276,10 +276,10 @@ public class PacmanGame extends SurfaceView implements Runnable
 					mPacman.checkPowerUpState();
 
 					//mGhost.checkDeathTimer();
-					//mInky.checkDeathTimer();
-					//mPinky.checkDeathTimer();
+					mInky.checkDeathTimer();
+					mPinky.checkDeathTimer();
 					mBlinky.checkDeathTimer();
-					//mClyde.checkDeathTimer();
+					mClyde.checkDeathTimer();
 
 				}
 			}
@@ -313,10 +313,10 @@ public class PacmanGame extends SurfaceView implements Runnable
 			mPacman.update(mFPS);
 		}
 		//mGhost.update(mFPS);
-		//mInky.update(mFPS);
-		//mPinky.update(mFPS);
+		mInky.update(mFPS);
+		mPinky.update(mFPS);
 		mBlinky.update(mFPS);
-		//mClyde.update(mFPS);
+		mClyde.update(mFPS);
 
 	}
 
@@ -330,22 +330,19 @@ public class PacmanGame extends SurfaceView implements Runnable
 		// Eventually, must use Location to detect collion not screen position.
 		//if (mPacman.detectCollision(mGhost.loc, mScreenX, mScreenY)) {
 
-/*
-                if(mPacman.ghostCollision(mGhost, mScore) ||
-                mPacman.ghostCollision(mInky, mScore) ||
-                mPacman.ghostCollision(mPinky, mScore) ||
-                mPacman.ghostCollision(mBlinky,mScore) ||
-                mPacman.ghostCollision(mClyde, mScore)){
-  */
-		if (mPacman.ghostCollision(mBlinky, mScore)) {
-			if (mPacman.getIsDead()) {
-				draw();
-				pauseStartDeath(3000);
-				mFakeJoy.setCenter();
-				draw();
-				deathRestart();
-			}
-		}
+
+                if(mPacman.ghostCollision(mInky, mScore) ||
+                	mPacman.ghostCollision(mPinky, mScore) ||
+                	mPacman.ghostCollision(mBlinky,mScore) ||
+                	mPacman.ghostCollision(mClyde, mScore)){
+					if (mPacman.getIsDead()) {
+						draw();
+						pauseStartDeath(3000);
+						mFakeJoy.setCenter();
+						draw();
+						deathRestart();
+					}
+				}
 
                 /*
                 if (mPacman.getGridLoc().getX() == mGhost.getGridLoc().getX() &&
@@ -375,9 +372,8 @@ public class PacmanGame extends SurfaceView implements Runnable
                 */
 
 
-		// Handle collisions with Pacman TODO: remove ghosts from this interaction.
-		mPacman.collisionInteraction(null, null, null, null, mMaze, mScore); // Null for debugging.
-		//mPacman.collisionInteraction(mInky, mPinky, mBlinky, mClyde, mMaze);
+		//mPacman.collisionInteraction(null, null, null, null, mMaze, mScore); // Null for debugging.
+		mPacman.collisionInteraction(mInky, mPinky, mBlinky, mClyde, mMaze, mScore);
 		// Check interactions, then win condition.
 		if (mPacman.hasWon(mMaze) == true) {
 			//Log.d("Debugging", "In Collision Interact: PELLET, STAGE COMPLETE");
@@ -442,7 +438,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 			mMaze.draw(mCanvas, mPaint);
 			mFakeJoy.draw(mCanvas, mPaint);
 			//draws pac and all ghosts/specific ghosts null for now, will take out mGhost later
-			mBitmapDrawer.draw(mPacman, null, mBlinky, null, null, null, mCanvas);
+			mBitmapDrawer.draw(mPacman, null, mBlinky, mInky, mPinky, mClyde, mCanvas);
 
 			if (DEBUGGING) {
 				printDebuggingText();

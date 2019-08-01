@@ -30,6 +30,8 @@ public class BitmapDrawer {
     private final int inkyInt;
     private final int pinkyInt;
     private final int clydeInt;
+    private final int scaredInt;
+
 
     public BitmapDrawer(PacmanGame game) {
 
@@ -44,7 +46,8 @@ public class BitmapDrawer {
         inkyInt = 2;
         pinkyInt = 3;
         clydeInt = 4;
-        bitmaps = new Bitmap[5];
+        scaredInt = 5;
+        bitmaps = new Bitmap[6];
         initBitmaps();
 
     }
@@ -58,6 +61,8 @@ public class BitmapDrawer {
         findAndResizeBitmap(inkyInt);
         findAndResizeBitmap(pinkyInt);
         findAndResizeBitmap(clydeInt);
+        findAndResizeBitmap(scaredInt);
+
     }
 
     /**
@@ -99,6 +104,12 @@ public class BitmapDrawer {
                         (int) pacGhostRadius * 2, false);
                 bitmaps[4] = sizedB;
                 break;
+            case 5:
+                b = BitmapFactory.decodeResource(context.getResources(), R.drawable.scaredghost);
+                sizedB = Bitmap.createScaledBitmap(b, (int) pacGhostRadius * 2,
+                        (int) pacGhostRadius * 2, false);
+                bitmaps[5] = sizedB;
+                break;
             default:
                 break;
         }
@@ -128,7 +139,7 @@ public class BitmapDrawer {
      * @param blinky - from PacmanGame
      */
     private void draw(@NonNull Blinky blinky, Canvas canvas) {
-        canvas.drawBitmap(bitmaps[2], (blinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+        canvas.drawBitmap(bitmaps[1], (blinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
                 (blinky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
     }
 
@@ -137,7 +148,7 @@ public class BitmapDrawer {
      * @param inky - from PacmanGame
      */
     private void draw(@NonNull Inky inky, Canvas canvas ) {
-        canvas.drawBitmap(bitmaps[3], (inky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+        canvas.drawBitmap(bitmaps[2], (inky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
                 (inky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
     }
 
@@ -146,7 +157,7 @@ public class BitmapDrawer {
      * @param pinky - from PacmanGame
      */
     private void draw(@NonNull Pinky pinky, Canvas canvas) {
-        canvas.drawBitmap(bitmaps[4], (pinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+        canvas.drawBitmap(bitmaps[3], (pinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
                 (pinky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
     }
 
@@ -155,24 +166,33 @@ public class BitmapDrawer {
      * @param clyde - from PacmanGame
      */
     private void draw(@NonNull Clyde clyde, Canvas canvas) {
-        canvas.drawBitmap(bitmaps[5], (clyde.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+        canvas.drawBitmap(bitmaps[4], (clyde.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
                 (clyde.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
     }
-
     /**
-     * draws pacman and all the ghosts
-     * called from draw() method in PacmanGame
+     * Draw Scared Ghost depending on Pacman's State
      */
+    private void drawScared(@NonNull Ghost ghost, Canvas canvas) {
+        canvas.drawBitmap(bitmaps[5], (ghost.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                (ghost.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+    }
+
     public void draw(Pacman pacman, Ghost ghost, Blinky blinky, Inky inky, Pinky pinky, Clyde clyde, Canvas canvas) {
 
         draw(pacman, canvas);
         //draw(ghost, canvas);
-        draw(blinky, canvas);
-        //draw(inky, canvas);
-        //draw(pinky, canvas);
-        //draw(clyde, canvas);*/
-
-
+        if (pacman.isSuper()) {
+            drawScared(blinky, canvas);
+            drawScared(inky, canvas);
+            drawScared(pinky, canvas);
+            drawScared(clyde, canvas);
+        }
+        else {
+            draw(blinky, canvas);
+            draw(inky, canvas);
+            draw(pinky, canvas);
+            draw(clyde, canvas);
+        }
     }
     
 
