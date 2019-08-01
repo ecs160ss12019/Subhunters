@@ -1,12 +1,16 @@
 package com.ecs160group.pacman;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.drawable.AnimationDrawable;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import static android.icu.text.UnicodeSet.CASE;
 
@@ -16,175 +20,35 @@ public class BitmapDrawer {
     //needed to offset the bitmapdraw
     private final float pacGhostRadius;
 
-    //private Location[] locations;
-    public Bitmap[] bitmaps;
-
     public Context context;
 
     private final int xScaled;
     private final int yScaled;
 
-    //ints to keep track of where in the bitmaps array we are storing each specific bitmap
-    private final int pacInt;
-    private final int blinkyInt;
-    private final int inkyInt;
-    private final int pinkyInt;
-    private final int clydeInt;
-    private final int scaredInt;
+    private int pacFrameCounter;
+    private int ghostFrameCounter;
+
+    private Bitmap curBitmap;
+
+    private BitmapCreator bitmaps;
+
 
 
     public BitmapDrawer(PacmanGame game) {
-
         pacGhostRadius = game.PacGhostRadius;
 
         this.xScaled = game.xScaled;
         this.yScaled = game.yScaled;
 
-        this.context = game.activityContext;
-        pacInt = 0;
-        blinkyInt = 1;
-        inkyInt = 2;
-        pinkyInt = 3;
-        clydeInt = 4;
-        scaredInt = 5;
-        bitmaps = new Bitmap[6];
-        initBitmaps();
+        pacFrameCounter = 0;
+        context = game.activityContext;
+
+        bitmaps = new BitmapCreator(game);
 
     }
 
-    /**
-     * initializes the bitmaps by calling findAndResizeBitmap, which will store the bitmaps into bitmaps[]
-     */
-    private void initBitmaps() {
-        findAndResizeBitmap(pacInt);
-        findAndResizeBitmap(blinkyInt);
-        findAndResizeBitmap(inkyInt);
-        findAndResizeBitmap(pinkyInt);
-        findAndResizeBitmap(clydeInt);
-        findAndResizeBitmap(scaredInt);
+    public void draw(Pacman pacman, Ghost ghost, Blinky blinky, Inky inky, Pinky pinky, Clyde clyde, Canvas canvas, long frame) {
 
-    }
-
-    /**
-     * finds and resizes the bitmap, takes in a string that notifies what object it is (ghost or pacman)
-     * returns the bitmap
-     * @param bitmapIndex - takes in the object indices that notifies what object it is (ghost(s) or pacman)
-     */
-    private void findAndResizeBitmap(int bitmapIndex) {
-        Bitmap b;
-        Bitmap sizedB;
-        switch (bitmapIndex) {
-            case 0://-700016
-                b = BitmapFactory.decodeResource(context.getResources(), R.drawable.pacman);
-                sizedB = Bitmap.createScaledBitmap(b, (int) pacGhostRadius * 2,
-                        (int) pacGhostRadius * 2, false);
-                bitmaps[0] = sizedB;
-                break;
-            case 1:
-                b = BitmapFactory.decodeResource(context.getResources(), R.drawable.blinky);
-                sizedB = Bitmap.createScaledBitmap(b, (int) pacGhostRadius * 2,
-                        (int) pacGhostRadius * 2, false);
-                bitmaps[1] = sizedB;
-                break;
-            case 2:
-                b = BitmapFactory.decodeResource(context.getResources(), R.drawable.inky);
-                sizedB = Bitmap.createScaledBitmap(b, (int) pacGhostRadius * 2,
-                    (int) pacGhostRadius * 2, false);
-                bitmaps[2] = sizedB;
-                break;
-            case 3:
-                b = BitmapFactory.decodeResource(context.getResources(), R.drawable.pinky);
-                sizedB = Bitmap.createScaledBitmap(b, (int) pacGhostRadius * 2,
-                        (int) pacGhostRadius * 2, false);
-                bitmaps[3] = sizedB;
-                break;
-            case 4:
-                b = BitmapFactory.decodeResource(context.getResources(), R.drawable.clyde);
-                sizedB = Bitmap.createScaledBitmap(b, (int) pacGhostRadius * 2,
-                        (int) pacGhostRadius * 2, false);
-                bitmaps[4] = sizedB;
-                break;
-            case 5:
-                b = BitmapFactory.decodeResource(context.getResources(), R.drawable.scaredghost);
-                sizedB = Bitmap.createScaledBitmap(b, (int) pacGhostRadius * 2,
-                        (int) pacGhostRadius * 2, false);
-                bitmaps[5] = sizedB;
-                break;
-            default:
-                break;
-        }
-    }
-
-    /**
-     * draws pacman
-     * @param mPacman - from PacmanGame
-     */
-    public void draw(@NonNull Pacman mPacman, Canvas canvas) {
-        canvas.drawBitmap(bitmaps[0], (mPacman.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
-                (mPacman.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
-    }
-
-    /**
-     * draws ghost (this one is temporary for testing, will delete later and use the specific ghost draws
-     * @param ghost - from PacmanGame
-     */
-    private void draw (@NonNull Ghost ghost, Canvas canvas) {
-        canvas.drawBitmap(bitmaps[1], (ghost.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
-                (ghost.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
-
-    }
-
-    /**
-     * draws blinky
-     * @param blinky - from PacmanGame
-     */
-    private void draw(@NonNull Blinky blinky, Canvas canvas) {
-        canvas.drawBitmap(bitmaps[1], (blinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
-                (blinky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
-    }
-
-    /**
-     * draws inky
-     * @param inky - from PacmanGame
-     */
-    private void draw(@NonNull Inky inky, Canvas canvas ) {
-        canvas.drawBitmap(bitmaps[2], (inky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
-                (inky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
-    }
-
-    /**
-     * draws pinky
-     * @param pinky - from PacmanGame
-     */
-    private void draw(@NonNull Pinky pinky, Canvas canvas) {
-        canvas.drawBitmap(bitmaps[3], (pinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
-                (pinky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
-    }
-
-    /**
-     * draws clyde
-     * @param clyde - from PacmanGame
-     */
-    private void draw(@NonNull Clyde clyde, Canvas canvas) {
-        canvas.drawBitmap(bitmaps[4], (clyde.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
-                (clyde.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
-    }
-    /**
-     * Draw Scared Ghost depending on Pacman's State
-     */
-    private void drawScared(@NonNull Ghost ghost, Canvas canvas) {
-        canvas.drawBitmap(bitmaps[5], (ghost.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
-                (ghost.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
-    }
-
-    public void draw(Pacman pacman, Ghost ghost, Blinky blinky, Inky inky, Pinky pinky, Clyde clyde, Canvas canvas) {
-
-
-/*
-        if(pacman.direction == 'l'){
-            draw(pacman, canvas);
-        }
-*/
         draw(pacman, canvas);
         //draw(ghost, canvas);
         if (pacman.isSuper()) {
@@ -199,7 +63,448 @@ public class BitmapDrawer {
             draw(pinky, canvas);
             draw(clyde, canvas);
         }
+
+        pacFrameCounter++;
+        if (pacFrameCounter > 30) {
+            pacFrameCounter = 0;
+        }
+        ghostFrameCounter++;
+        if (ghostFrameCounter > 20) {
+            ghostFrameCounter = 0;
+        }
     }
+
+    /**
+     * Draw Scared Ghost depending on Pacman's State
+     */
+    private void drawScared(@NonNull Ghost ghost, Canvas canvas) {
+        if (ghostFrameCounter <= 10) {
+            canvas.drawBitmap(bitmaps.scaredGhostMaps[0], (ghost.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (ghost.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        } else if (ghostFrameCounter <= 20) {
+            canvas.drawBitmap(bitmaps.scaredGhostMaps[1], (ghost.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (ghost.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        }
+    }
+
+    /**
+     * draws pacman
+     * @param mPacman - from PacmanGame
+     */
+    public void draw(@NonNull Pacman mPacman, Canvas canvas) {
+        switch (mPacman.direction) {
+            case 'l':
+                leftDraw(canvas, mPacman);
+                break;
+            case 'r':
+                rightDraw(canvas, mPacman);
+                break;
+            case 'u':
+                upDraw(canvas, mPacman);
+                break;
+            case 'd':
+                downDraw(canvas, mPacman);
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * draws blinky
+     * @param blinky - from PacmanGame
+     */
+    private void draw(@NonNull Blinky blinky, Canvas canvas) {
+        switch (blinky.getDirection()) {
+            case 'l':
+                leftDraw(canvas, blinky);
+                break;
+            case 'r':
+                rightDraw(canvas, blinky);
+                break;
+            case 'u':
+                upDraw(canvas, blinky);
+                break;
+            case 'd':
+                downDraw(canvas, blinky);
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     *
+     * draws inky
+     * @param inky - from PacmanGame
+     *
+     */
+    private void draw(@NonNull Inky inky, Canvas canvas ) {
+        switch (inky.getDirection()) {
+            case 'l':
+                leftDraw(canvas, inky);
+                break;
+            case 'r':
+                rightDraw(canvas, inky);
+                break;
+            case 'u':
+                upDraw(canvas, inky);
+                break;
+            case 'd':
+                downDraw(canvas, inky);
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * draws pinky
+     * @param pinky - from PacmanGame
+     */
+    private void draw(@NonNull Pinky pinky, Canvas canvas) {
+        switch (pinky.getDirection()) {
+            case 'l':
+                leftDraw(canvas, pinky);
+                break;
+            case 'r':
+                rightDraw(canvas, pinky);
+                break;
+            case 'u':
+                upDraw(canvas, pinky);
+                break;
+            case 'd':
+                downDraw(canvas, pinky);
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    /**
+     * draws clyde
+     * @param clyde - from PacmanGame
+     */
+    private void draw(@NonNull Clyde clyde, Canvas canvas) {
+        switch (clyde.getDirection()) {
+            case 'l':
+                leftDraw(canvas, clyde);
+                break;
+            case 'r':
+                rightDraw(canvas, clyde);
+                break;
+            case 'u':
+                upDraw(canvas, clyde);
+                break;
+            case 'd':
+                downDraw(canvas, clyde);
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    /**
+     * draws the left direction animation
+     * decides on which image to draw depending on the frame passed down
+     */
+    private void leftDraw(Canvas canvas, Pacman mPacman) {
+        if (pacFrameCounter <= 10) {
+            canvas.drawBitmap(bitmaps.pacLeftMaps[0], (mPacman.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (mPacman.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        } else if (pacFrameCounter <= 20) {
+            canvas.drawBitmap(bitmaps.pacLeftMaps[1], (mPacman.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (mPacman.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        } else if (pacFrameCounter <= 30) {
+            canvas.drawBitmap(bitmaps.pacLeftMaps[2], (mPacman.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (mPacman.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        }
+    }
+
+    /**
+     * draws the right direction animation
+     * decides on which image to draw depending on the frame passed down
+     */
+    private void rightDraw(Canvas canvas, Pacman mPacman) {
+        if (pacFrameCounter <= 10) {
+            canvas.drawBitmap(bitmaps.pacRightMaps[0], (mPacman.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (mPacman.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        } else if (pacFrameCounter <= 20) {
+            canvas.drawBitmap(bitmaps.pacRightMaps[1], (mPacman.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (mPacman.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        } else if (pacFrameCounter <= 30) {
+            canvas.drawBitmap(bitmaps.pacRightMaps[2], (mPacman.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (mPacman.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        }
+    }
+
+    /**
+     * draws the up direction animation
+     * decides on which image to draw depending on the frame passed down
+     */
+    private void upDraw(Canvas canvas, Pacman mPacman) {
+        if (pacFrameCounter <= 10) {
+            canvas.drawBitmap(bitmaps.pacUpMaps[0], (mPacman.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (mPacman.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        } else if (pacFrameCounter <= 20) {
+            canvas.drawBitmap(bitmaps.pacUpMaps[1], (mPacman.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (mPacman.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        } else if (pacFrameCounter <= 30) {
+            canvas.drawBitmap(bitmaps.pacUpMaps[2], (mPacman.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (mPacman.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        }
+    }
+
+    /**
+     * draws the down direction animation
+     * decides on which image to draw depending on the frame passed down
+     */
+    private void downDraw(Canvas canvas, Pacman mPacman) {
+        if (pacFrameCounter <= 10) {
+            canvas.drawBitmap(bitmaps.pacDownMaps[0], (mPacman.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (mPacman.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        } else if (pacFrameCounter <= 20) {
+            canvas.drawBitmap(bitmaps.pacDownMaps[1], (mPacman.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (mPacman.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        } else if (pacFrameCounter <= 30) {
+            canvas.drawBitmap(bitmaps.pacDownMaps[2], (mPacman.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (mPacman.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        }
+    }
+
+
+    /**
+     * draws the left direction animation
+     * decides on which image to draw depending on the frame passed down
+     */
+    private void leftDraw(Canvas canvas, Blinky blinky) {
+        if (ghostFrameCounter <= 10) {
+            canvas.drawBitmap(bitmaps.blinkyLeftMaps[0], (blinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (blinky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        } else if (ghostFrameCounter <= 20) {
+            canvas.drawBitmap(bitmaps.blinkyLeftMaps[1], (blinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (blinky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        }
+    }
+
+    /**
+     * draws the right direction animation
+     * decides on which image to draw depending on the frame passed down
+     */
+    private void rightDraw(Canvas canvas, Blinky blinky) {
+        if (ghostFrameCounter <= 10) {
+            canvas.drawBitmap(bitmaps.blinkyRightMaps[0], (blinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (blinky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        } else if (ghostFrameCounter <= 20) {
+            canvas.drawBitmap(bitmaps.blinkyRightMaps[1], (blinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (blinky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        }
+    }
+
+    /**
+     * draws the up direction animation
+     * decides on which image to draw depending on the frame passed down
+     */
+    private void upDraw(Canvas canvas, Blinky blinky){
+        if (ghostFrameCounter <= 10) {
+            canvas.drawBitmap(bitmaps.blinkyUpMaps[0], (blinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (blinky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        } else if (ghostFrameCounter <= 20) {
+            canvas.drawBitmap(bitmaps.blinkyUpMaps[1], (blinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (blinky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        }
+    }
+
+    /**
+     * draws the down direction animation
+     * decides on which image to draw depending on the frame passed down
+     */
+    private void downDraw(Canvas canvas, Blinky blinky) {
+        if (ghostFrameCounter <= 10) {
+            canvas.drawBitmap(bitmaps.blinkyDownMaps[0], (blinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (blinky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        } else if (ghostFrameCounter <= 20) {
+            canvas.drawBitmap(bitmaps.blinkyDownMaps[1], (blinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (blinky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        }
+    }
+
+
+    /**
+     * draws the left direction animation
+     * decides on which image to draw depending on the frame passed down
+     */
+    private void leftDraw(Canvas canvas, Inky inky) {
+        if (ghostFrameCounter <= 10) {
+            canvas.drawBitmap(bitmaps.inkyLeftMaps[0], (inky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (inky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        } else if (ghostFrameCounter <= 20) {
+            canvas.drawBitmap(bitmaps.inkyLeftMaps[1], (inky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (inky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        }
+    }
+
+    /**
+     * draws the right direction animation
+     * decides on which image to draw depending on the frame passed down
+     */
+    private void rightDraw(Canvas canvas, Inky inky) {
+        if (ghostFrameCounter <= 10) {
+            canvas.drawBitmap(bitmaps.inkyRightMaps[0], (inky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (inky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        } else if (ghostFrameCounter <= 20) {
+            canvas.drawBitmap(bitmaps.inkyRightMaps[1], (inky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (inky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        }
+    }
+
+    /**
+     * draws the up direction animation
+     * decides on which image to draw depending on the frame passed down
+     */
+    private void upDraw(Canvas canvas, Inky inky){
+        if (ghostFrameCounter <= 10) {
+            canvas.drawBitmap(bitmaps.inkyUpMaps[0], (inky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (inky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        } else if (ghostFrameCounter <= 20) {
+            canvas.drawBitmap(bitmaps.inkyUpMaps[1], (inky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (inky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        }
+    }
+
+    /**
+     * draws the down direction animation
+     * decides on which image to draw depending on the frame passed down
+     */
+    private void downDraw(Canvas canvas, Inky inky) {
+        if (ghostFrameCounter <= 10) {
+            canvas.drawBitmap(bitmaps.inkyDownMaps[0], (inky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (inky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        } else if (ghostFrameCounter <= 20) {
+            canvas.drawBitmap(bitmaps.inkyDownMaps[1], (inky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (inky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        }
+    }
+
+
+    /**
+     * draws the left direction animation
+     * decides on which image to draw depending on the frame passed down
+     */
+    private void leftDraw(Canvas canvas, Pinky pinky) {
+        if (ghostFrameCounter <= 10) {
+            canvas.drawBitmap(bitmaps.pinkyLeftMaps[0], (pinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (pinky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        } else if (ghostFrameCounter <= 20) {
+            canvas.drawBitmap(bitmaps.pinkyLeftMaps[1], (pinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (pinky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        }
+    }
+
+    /**
+     * draws the right direction animation
+     * decides on which image to draw depending on the frame passed down
+     */
+    private void rightDraw(Canvas canvas, Pinky pinky) {
+        if (ghostFrameCounter <= 10) {
+            canvas.drawBitmap(bitmaps.pinkyRightMaps[0], (pinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (pinky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        } else if (ghostFrameCounter <= 20) {
+            canvas.drawBitmap(bitmaps.pinkyRightMaps[1], (pinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (pinky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        }
+    }
+
+    /**
+     * draws the up direction animation
+     * decides on which image to draw depending on the frame passed down
+     */
+    private void upDraw(Canvas canvas, Pinky pinky){
+        if (ghostFrameCounter <= 10) {
+            canvas.drawBitmap(bitmaps.pinkyUpMaps[0], (pinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (pinky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        } else if (ghostFrameCounter <= 20) {
+            canvas.drawBitmap(bitmaps.pinkyUpMaps[1], (pinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (pinky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        }
+    }
+
+    /**
+     * draws the down direction animation
+     * decides on which image to draw depending on the frame passed down
+     */
+    private void downDraw(Canvas canvas, Pinky pinky) {
+        if (ghostFrameCounter <= 10) {
+            canvas.drawBitmap(bitmaps.pinkyDownMaps[0], (pinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (pinky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        } else if (ghostFrameCounter <= 20) {
+            canvas.drawBitmap(bitmaps.pinkyDownMaps[1], (pinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (pinky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        }
+    }
+
+
+    /**
+     * draws the left direction animation
+     * decides on which image to draw depending on the frame passed down
+     */
+    private void leftDraw(Canvas canvas, Clyde clyde) {
+        if (ghostFrameCounter <= 10) {
+            canvas.drawBitmap(bitmaps.clydeLeftMaps[0], (clyde.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (clyde.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        } else if (ghostFrameCounter <= 20) {
+            canvas.drawBitmap(bitmaps.clydeLeftMaps[1], (clyde.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (clyde.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        }
+    }
+
+    /**
+     * draws the right direction animation
+     * decides on which image to draw depending on the frame passed down
+     */
+    private void rightDraw(Canvas canvas, Clyde clyde) {
+        if (ghostFrameCounter <= 10) {
+            canvas.drawBitmap(bitmaps.clydeRightMaps[0], (clyde.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (clyde.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        } else if (ghostFrameCounter <= 20) {
+            canvas.drawBitmap(bitmaps.clydeRightMaps[1], (clyde.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (clyde.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        }
+    }
+
+    /**
+     * draws the up direction animation
+     * decides on which image to draw depending on the frame passed down
+     */
+    private void upDraw(Canvas canvas, Clyde clyde){
+        if (ghostFrameCounter <= 10) {
+            canvas.drawBitmap(bitmaps.clydeUpMaps[0], (clyde.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (clyde.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        } else if (ghostFrameCounter <= 20) {
+            canvas.drawBitmap(bitmaps.clydeUpMaps[1], (clyde.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (clyde.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        }
+    }
+
+    /**
+     * draws the down direction animation
+     * decides on which image to draw depending on the frame passed down
+     */
+    private void downDraw(Canvas canvas, Clyde clyde) {
+        if (ghostFrameCounter <= 10) {
+            canvas.drawBitmap(bitmaps.clydeDownMaps[0], (clyde.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (clyde.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        } else if (ghostFrameCounter <= 20) {
+            canvas.drawBitmap(bitmaps.clydeDownMaps[1], (clyde.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                    (clyde.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+        }
+    }
+
+
+
+
     
 
 }
