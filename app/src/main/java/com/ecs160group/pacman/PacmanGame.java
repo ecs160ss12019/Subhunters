@@ -343,10 +343,10 @@ public class PacmanGame extends SurfaceView implements Runnable
 		mBlinky.update(mFPS);
 		mClyde.update(mFPS);
 */
-		mInky.move(mPacman);
-		mPinky.move(mPacman);
-		mBlinky.move(mPacman);
-		mClyde.move(mPacman);
+		mInky.move();
+		mPinky.move();
+		mBlinky.move();
+		mClyde.move();
 
 
 	}
