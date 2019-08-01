@@ -57,7 +57,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
         //variables to handle drawing
         private Bitmap bitmap;
         private SurfaceHolder mOurHolder;
-        private Canvas mCanvas;
+        public Canvas mCanvas;
         private Paint mPaint;
         private PointF blockSize;
         final private PointF fakePosition;
@@ -88,8 +88,10 @@ public class PacmanGame extends SurfaceView implements Runnable{
 
         public float PacGhostRadius;
 
-        private int xScaled;
-        private int yScaled;
+        private BitmapDrawer mBitmapDrawer;
+
+        public int xScaled;
+        public int yScaled;
 
         //constructor
         public PacmanGame(Context context, int x, int y) {
@@ -144,6 +146,10 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 //bitmap
                 bitmap = Bitmap.createBitmap(mScreenX, mScreenY, Bitmap.Config.ARGB_8888);
                 mCanvas = new Canvas(bitmap);
+
+                mBitmapDrawer = new BitmapDrawer(this);
+
+
 
                 //start the game LETS GET PACCING
               //  update(true, true);
@@ -390,6 +396,10 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         // draw all member objects
                         mMaze.draw(mCanvas, mPaint);
                         mFakeJoy.draw(mCanvas, mPaint);
+
+                       // mBitmapDrawer.draw(mPacman, mGhost, null, null, null, null);
+
+                        mBitmapDrawer.draw(mPacman);
 
                         Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.pacman);
 
