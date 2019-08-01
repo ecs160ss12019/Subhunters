@@ -42,6 +42,7 @@ public class Pacman //implements Collision
 
 	//Sounds to be played during gameplay.
 	private sound PacmanSounds;
+	public boolean wallHit;
 
 	// use an integer to temporarily replace the draw of Pacman
 	// this will be modified under the draw function
@@ -53,8 +54,15 @@ public class Pacman //implements Collision
 	private float radius;
 	final Paint paint = new Paint();
 
-	Pacman(int screenX, Location spawnLoc, float radius, Score score, Context activityContext)
+	Location[][] mGrid;
+	private Location leftOfPac;
+	private Location rightOfPac;
+	private Location bottomofPac;
+	private Location topOfPac;
+
+	Pacman(int screenX, Location spawnLoc, float radius, Score score, Context activityContext, Maze mMaze)
 	{
+		mGrid = mMaze.getMaze();
 		this.score = score;
 		PacmanSounds = new sound(activityContext);
 		paint.setColor(Color.argb(255, 255, 255, 0));
@@ -69,6 +77,10 @@ public class Pacman //implements Collision
 		powerState = false;
 		powerTimer = 0;
 		velocity = screenX / 15;
+		leftOfPac = new Location(gridLocation.getX() - 1, gridLocation.getY(), mGrid[gridLocation.getX() - 1][gridLocation.getY()].getObj());
+		rightOfPac = new Location(gridLocation.getX() + 1, gridLocation.getY(), mGrid[gridLocation.getX() + 1][gridLocation.getY()].getObj());
+		topOfPac = new Location(gridLocation.getX(), gridLocation.getY() - 1, mGrid[gridLocation.getX()][gridLocation.getY() - 1].getObj());
+		bottomofPac = new Location(gridLocation.getX(), gridLocation.getY() + 1, mGrid[gridLocation.getX()][gridLocation.getY() + 1].getObj());
 	}
 
 	/**
@@ -182,7 +194,22 @@ public class Pacman //implements Collision
 			gridLocation.setNewLoc(pacGridX, pacGridY + 1);
 		}
 		//Log.d("Pacman-update: ", "New_LOC: " + direction + " , Location: " + pacGridX + "," + pacGridY);
+		updateSurroundingSpaces();
+	}
 
+	/**
+	 * updates the surrounding spaces of pacman
+	 * is called in update() method (when we update pacman, we update its surroundings)
+	 */
+	void updateSurroundingSpaces(){
+
+		//only update surrounding spaces if we aren't going out of bounds
+		if (gridLocation.getX() - 1 >= 0 && gridLocation.getX() + 1 < mGrid.length && gridLocation.getY() - 1 >= 0 && gridLocation.getY() + 1 < 31 ) {
+			leftOfPac.updateLoc(gridLocation.getX() - 1, gridLocation.getY(), mGrid[gridLocation.getX() - 1][gridLocation.getY()].getObj());
+			rightOfPac.updateLoc(gridLocation.getX() + 1, gridLocation.getY(), mGrid[gridLocation.getX() + 1][gridLocation.getY()].getObj());
+			topOfPac.updateLoc(gridLocation.getX(), gridLocation.getY() - 1, mGrid[gridLocation.getX()][gridLocation.getY() - 1].getObj());
+			bottomofPac.updateLoc(gridLocation.getX(), gridLocation.getY() + 1, mGrid[gridLocation.getX()][gridLocation.getY() + 1].getObj());
+		}
 	}
 
 	void reverseVel()
@@ -197,40 +224,41 @@ public class Pacman //implements Collision
 	 * so we can predict whether a update is needed for Pacman
 	 */
 	// further can be used for pullet collision
-	public boolean wallDetection(Maze maze)
+	public boolean wallDetection()
 	{
+
+
 		// this value will be used for deciding update or not
 		boolean update;
 		update = true;
-		//read in Grid and grid indices of current location
-		Location[][] mGrid = maze.getMaze();
 
+		//read in Grid and grid indices of current location
 		// If current position is warp, DO NOT update position.
 		if (mGrid[gridLocation.getX()][gridLocation.getY()].getObj() != block.WARP_SPACE) {
 			// if Pacman will hit the right wall, stop
 			if (direction == 'r') {
-				if (mGrid[gridLocation.getX() + 1][gridLocation.getY()].isWall()) {
+				if (rightOfPac.isWall()) {
 					//Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
 					update = false;
 				}
 			}
 			//if pacman will hit the left wall, stop
 			if (direction == 'l') {
-				if (mGrid[gridLocation.getX() - 1][gridLocation.getY()].isWall()) {
+				if (leftOfPac.isWall()) {
 					//Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
 					update = false;
 				}
 			}
 			//if Pacman will hit the top wall, stop
 			if (direction == 'u') {
-				if (mGrid[gridLocation.getX()][gridLocation.getY() - 1].isWall()) {
+				if (topOfPac.isWall()) {
 					//Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
 					update = false;
 				}
 			}
 			//if Pacman will hit the bottom wall, stop
 			if (direction == 'd') {
-				if (mGrid[gridLocation.getX()][gridLocation.getY() + 1].isWall()) {
+				if (bottomofPac.isWall()) {
 					//Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
 					update = false;
 				}
@@ -238,6 +266,36 @@ public class Pacman //implements Collision
 		}
 		return update;
 	}
+
+	/**
+	 *
+	 * @return boolean to see if joystick's current direction is valid to move Pacman into a different direction
+	 *
+	 */
+
+	public void updateNextDirection(char joyStickDirection) {
+
+		//if (mGrid[gridLocation.getX()][gridLocation.getY()].getObj() != block.WARP_SPACE) {
+
+			if (joyStickDirection == 'l' && !(leftOfPac.isWall())) {
+				direction = 'l';
+			}
+
+			if (joyStickDirection == 'r' && !(rightOfPac.isWall())) {
+				direction = 'r';
+			}
+			if (joyStickDirection == 'u' && !(topOfPac.isWall())) {
+				direction = 'u';
+
+			}
+			if (joyStickDirection == 'd' && !(bottomofPac.isWall())) {
+				direction = 'd';
+			}
+		//}
+	}
+
+
+
 
 	/**
 	 * Handles the Pacman and ghost collisions using their location in the grid/maze
@@ -352,25 +410,6 @@ public class Pacman //implements Collision
 
 	}
 
-	/**
-	 * called by onTouchEvent in PacmanGame once user moves the stick
-	 * takes in the current direction of the joystick to update Pacman's next direction
-	 *
-	 * @param joyDirection - read in from the joystick's direction variable
-	 */
-	void updateNextDirection(char joyDirection)
-	{
-
-		if (joyDirection == 'l') {
-			direction = 'l';
-		} else if (joyDirection == 'r') {
-			direction = 'r';
-		} else if (joyDirection == 'u') {
-			direction = 'u';
-		} else if (joyDirection == 'd') {
-			direction = 'd';
-		}
-	}
 
 	/**
 	 * Determines if Pacman has won

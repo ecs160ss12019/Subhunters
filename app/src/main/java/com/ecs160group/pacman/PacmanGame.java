@@ -133,7 +133,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 //initialize maze first so pacman and ghost can use its grid to find initial location
                 mMaze = new Maze(activityContext, mScreenX, mScreenY, blockSize);
 
-                mPacman = new Pacman(mScreenX, mMaze.pacSpawn, PacGhostRadius, mScore, activityContext);
+                mPacman = new Pacman(mScreenX, mMaze.pacSpawn, PacGhostRadius, mScore, activityContext, mMaze);
                 mGhost = new Ghost(mScreenX, mMaze.ghostSpawn, mMaze);
                 //mInky = new Inky(mGhost);
                 //mPinky = new Pinky(mGhost);
@@ -232,8 +232,9 @@ public class PacmanGame extends SurfaceView implements Runnable{
                                 //Boolean updateGhost = mGhost.wallDetection(mMaze);
 
                                 if(frameStartTime % 2 == 0) {
-                                        updatePacman = mPacman.wallDetection(mMaze);
-                                        update(updatePacman, true);
+                                        mPacman.updateNextDirection(mFakeJoy.direction);
+                                        updatePacman = mPacman.wallDetection();
+                                        update(updatePacman);
                                         detectCollisions();
                                         //Determines powerup state of pacman powerTimer decrements on every frame.
                                         mPacman.checkPowerUpState();
@@ -256,7 +257,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
         }
 
         //updates pacman/ghosts/pellets/maze
-        private void update(boolean updatePacman, boolean updateGhost) {
+        private void update(boolean updatePacman) {
                 //TODO: add update methods to pacman/ghost/maze classes OR do it here
                 
                 // now has a if-condition to check whether Pacman and ghost will hit a wall
@@ -265,10 +266,10 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 //Log.d("update: ", "pacmanLoc: " + "Location: " + mPacman.loc.getX() + "," + mPacman.loc.getY());
                 //Log.d("update: ", "pacmanLoc: " + "GridLocation: " + mPacman.getGridLoc().getX() + "," + mPacman.getGridLoc().getY());
 
-                if (updatePacman)
+                if (updatePacman) {
                         mPacman.update(mFPS);
-                if (updateGhost)
-                        mGhost.update(mFPS);
+                }
+                mGhost.update(mFPS);
 
         }
 
@@ -475,9 +476,6 @@ public class PacmanGame extends SurfaceView implements Runnable{
                 float y = e.getY();
                 if (e.getAction() == e.ACTION_MOVE || e.getAction() == e.ACTION_DOWN) {
                         mFakeJoy.updateStick(x, y);
-                        //if(mPacman.wallDetection(mMaze) != true){
-                            mPacman.updateNextDirection(mFakeJoy.direction);
-                        //}
                 } else {
                         mFakeJoy.setCenter();
                 }
