@@ -44,8 +44,6 @@ public class Ghost// implements Collision
 	//RectF has four values (left, top, right, bottom)
 
 	float velocity;
-	float mXVelocity;
-	float mYVelocity;
 	float mGhostWidth;
 	float mGhostHeight;
 	Paint paint = new Paint();
@@ -132,7 +130,7 @@ public class Ghost// implements Collision
 	 */
 	public void decrementDeathTimer()
 	{
-		Log.d("ghost-decrementDeathTimer: ", "deathTimer: " + deathTimer + "isDead: " + isDead);
+		Log.d("ghost-decDeathTimer: ", "deathTimer: " + deathTimer + "isDead: " + isDead);
 		if (isDead == true || deathTimer > 0) {
 			setDeathState(deathTimer - 1, true);
 			if (deathTimer <= 0) {
@@ -163,64 +161,6 @@ public class Ghost// implements Collision
 
 	int directionCount = 15;
 	boolean newDir = false;
-
-	/*void update(long fps) {
-		gridCoord.x = gridLocation.getX();
-		gridCoord.y = gridLocation.getY();
-		Location l;
-		l = new Location(loc.getX(), loc.getY(), Block.GHOST);
-		//Log.d("ghost update:", "Random:" + randDirection);
-		if (randDirection == 0){
-			l.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
-			if (!detectCollision(l)) {
-				loc.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
-				gridLocation.setNewLoc(gridCoord.x - 1, gridCoord.y);
-				directionCount++;
-				direction = 'l';
-				if (directionCount > newRandDir) { // TODO: Add || on collision to change direction.
-					randDirection = rand.nextInt(4);
-					directionCount = 0;
-				}
-			}
-		} else if (randDirection == 1) {
-			loc.setNewLoc((int) (loc.getX() + (velocity / fps)), loc.getY());
-			gridLocation.setNewLoc(gridCoord.x + 1, gridCoord.y);
-			directionCount++;
-			direction = 'r';
-			if (directionCount > newRandDir) {
-				randDirection = rand.nextInt(4);
-				directionCount = 0;
-			}
-		} else if (randDirection == 2) {
-			loc.setNewLoc(loc.getX(), (int) (loc.getY() + (velocity / fps)));
-			gridLocation.setNewLoc(gridCoord.x, gridCoord.y + 1);
-			directionCount++;
-			direction = 'd';
-			if (directionCount > newRandDir) {
-				randDirection = rand.nextInt(4);
-				directionCount = 0;
-			}
-		} else if (randDirection == 3)  {
-			loc.setNewLoc(loc.getX(), (int) (loc.getY() - (velocity / fps)));
-			gridLocation.setNewLoc(gridCoord.x, gridCoord.y - 1);
-			directionCount++;
-			direction = 'u';
-			if (directionCount > newRandDir) {
-				randDirection = rand.nextInt(4);
-				directionCount = 0;
-			}
-		} else {
-			*//*loc.setNewLoc(loc.getX(), loc.getY());
-			directionCount++;
-			randDirection = rand.nextInt(4);
-			if (directionCount > newRandDir) {
-				randDirection = rand.nextInt(4);
-				directionCount = 0;*//*
-			}
-
-			//update(fps);
-		}
-*/
 
 
 	void update(long fps)
