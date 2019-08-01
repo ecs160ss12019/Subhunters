@@ -128,7 +128,7 @@ public class BitmapDrawer {
      * @param blinky - from PacmanGame
      */
     private void draw(@NonNull Blinky blinky, Canvas canvas) {
-        canvas.drawBitmap(bitmaps[0], (blinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+        canvas.drawBitmap(bitmaps[2], (blinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
                 (blinky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
     }
 
@@ -137,7 +137,7 @@ public class BitmapDrawer {
      * @param inky - from PacmanGame
      */
     private void draw(@NonNull Inky inky, Canvas canvas ) {
-        canvas.drawBitmap(bitmaps[0], (inky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+        canvas.drawBitmap(bitmaps[3], (inky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
                 (inky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
     }
 
@@ -146,7 +146,7 @@ public class BitmapDrawer {
      * @param pinky - from PacmanGame
      */
     private void draw(@NonNull Pinky pinky, Canvas canvas) {
-        canvas.drawBitmap(bitmaps[0], (pinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+        canvas.drawBitmap(bitmaps[4], (pinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
                 (pinky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
     }
 
@@ -155,7 +155,7 @@ public class BitmapDrawer {
      * @param clyde - from PacmanGame
      */
     private void draw(@NonNull Clyde clyde, Canvas canvas) {
-        canvas.drawBitmap(bitmaps[0], (clyde.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+        canvas.drawBitmap(bitmaps[5], (clyde.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
                 (clyde.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
     }
 
