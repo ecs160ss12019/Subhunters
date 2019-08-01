@@ -107,13 +107,17 @@ public class Ghost// implements Collision
 		deathTimer = dTimer;
 		isDead = dState;
 	}
+	public boolean getDeathState()
+	{
+		return isDead;
+	}
 
 	/**
 	 *
 	 */
 	public void checkDeathTimer()
 	{
-		if (isDead == true || deathTimer != 0) {
+		if (isDead == true || deathTimer > 0) {
 			setDeathState(deathTimer - 1, true);
 			if (deathTimer <= 0) {
 				setDeathState(0, false);
@@ -293,8 +297,8 @@ public class Ghost// implements Collision
 
 		loc.setNewLoc(spawnLoc.getX(), spawnLoc.getY());
 		gridLocation.setNewLoc(13, 11);
-		deathTimer = 0;
-		isDead = false;
+		//deathTimer = 0; // Dealt with when added and removed to Graveyard
+		//isDead = false;
 		//mXVelocity = (float) (y / 3);
 		//mYVelocity = (float) -(y / 3);
 	}
