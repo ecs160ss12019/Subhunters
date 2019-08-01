@@ -326,7 +326,10 @@ public class Ghost// implements Collision
 	void chase(Location chaseLocation)
 	{
 		// sets the object at the target location before scattering
-		chaseLocation.setObj(maze.getMaze()[chaseLocation.getX()][chaseLocation.getY()].getObj());
+		if (maze.isInBounds(chaseLocation)) {
+			// if ghost has a chase that's out of bounds(Inky), don't look for the object in the maze, it's empty
+			chaseLocation.setObj(maze.getMaze()[chaseLocation.getX()][chaseLocation.getY()].getObj());
+		}
 		moveTowardsTarget(chaseLocation);
 	}
 
