@@ -105,17 +105,30 @@ public class Ghost// implements Collision
 	public void setDeathState(int dTimer, boolean dState)
 	{
 		deathTimer = dTimer;
-		isDead = dState;
+		setState(dState);
 	}
+
+	/**
+	 * Gets the state of the ghost, if dead, ghost is in the graveyard
+	 * @return if the ghost is dead, in the graveyard
+	 */
 	public boolean getDeathState()
 	{
 		return isDead;
 	}
 
 	/**
-	 *
+	 * Sets the state of the ghost, whether it is dead/in the graveyard or in the maze
+	 * @param dState state of the ghost to set
 	 */
-	public void checkDeathTimer()
+	public void setState(boolean dState) {
+		isDead = dState;
+	}
+
+	/**
+	 * Increments the death timer by decreasing the time left on the timer
+	 */
+	public void incrementDeathTimer()
 	{
 		if (isDead == true || deathTimer > 0) {
 			setDeathState(deathTimer - 1, true);
@@ -132,7 +145,7 @@ public class Ghost// implements Collision
 	 */
 	private boolean isInGrid()
 	{
-		return started;
+		return !isDead;
 	}
 
 
@@ -206,22 +219,6 @@ public class Ghost// implements Collision
 		}
 */
 
-	/**
-	 * detects the collisions of pacman with ghost, pellets, fruits,
-	 * TODO: TESTING TO CHECK WALL DETECTION HERE
-	 */
-	// currently used for Pacman and ghost collision detection
-	public boolean detectCollision(Location loc)
-	{
-		boolean collided = false;
-		float radius = 29;
-		if (Math.abs(this.loc.getX() - loc.getX()) <= radius * 2
-				&& Math.abs(this.loc.getY() - loc.getY()) <= radius * 2) {
-			collided = true;
-		}
-		return collided;
-	}
-
 
 	void update(long fps)
 	{
@@ -277,16 +274,6 @@ public class Ghost// implements Collision
 		}
 	}
 
-
-	void reverseXVel()
-	{
-		mXVelocity = -mXVelocity;
-	}
-
-	void reverseYVel()
-	{
-		mYVelocity = -mYVelocity;
-	}
 
 	/**
 	 * Initializes four points of mRect(defines pacman)
