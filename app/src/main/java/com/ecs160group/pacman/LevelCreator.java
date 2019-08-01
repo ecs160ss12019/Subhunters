@@ -113,12 +113,6 @@ public class LevelCreator
 				maze[x][y] = new Location (x, y, Block.BOT_LEFT_TOP_RIGHT_WALL);
 				//maze[x][y] = new Location(x, y, Block.WALL);
 				break;
-			/*case '|': // vertical wall
-			case '-': // horizontal wall
-			case '/': // bottom right or top left corner wall
-			case '\\': // bottom left or top right corner wall
-				maze[x][y] = new Location(x, y, Block.WALL);
-				break;*/
 			case '.': // pellet
 				maze[x][y] = new Location(x, y, Block.PELLET);
 				break;
