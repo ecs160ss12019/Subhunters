@@ -5,16 +5,11 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.PointF;
-import android.graphics.PorterDuff;
-import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.graphics.BitmapFactory;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -313,11 +308,11 @@ public class PacmanGame extends SurfaceView implements Runnable
 					mPacman.checkPowerUpState();
 
 					// Checks states of ghosts, If dead decrements death timer by 1.
-					//mGhost.checkDeathTimer();
-					mInky.checkDeathTimer();
-					mPinky.checkDeathTimer();
-					mBlinky.checkDeathTimer();
-					mClyde.checkDeathTimer();
+					//mGhost.incrementDeathTimer();
+					mInky.incrementDeathTimer();
+					mPinky.incrementDeathTimer();
+					mBlinky.incrementDeathTimer();
+					mClyde.incrementDeathTimer();
 					removeGhostFromGY(); // Check if head of queue is finished. Pop off and update states.
 
 				//}
@@ -366,7 +361,8 @@ public class PacmanGame extends SurfaceView implements Runnable
 
 	}
 	private void sendToGY(Ghost tGhost){
-		if(mInky.getDeathState() && !graveyard.contains(tGhost)){
+		if(tGhost.getDeathState() && !graveyard.contains(tGhost)){
+				tGhost.setState(true); // makes ghost dead/in graveyard
 				graveyard.add(tGhost);
 			}
 	}
