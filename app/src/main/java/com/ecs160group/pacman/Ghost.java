@@ -63,7 +63,7 @@ public class Ghost// implements Collision
 	 * @param spawnLoc
 	 * @param maze
 	 */
-	public Ghost(int screenX, Location spawnLoc, Maze maze)
+	public Ghost(int screenX, Location spawnLoc, Maze maze, Pacman pacman)
 	{
 		this.maze = maze;
 		paint.setColor(Color.argb(255, 0, 0, 255));
@@ -78,7 +78,7 @@ public class Ghost// implements Collision
 		direction = 'l';
 
 		loc = new Location(spawnLoc.getX(), spawnLoc.getY(), Block.GHOST);
-
+		this.pacman = pacman;
 	}
 
 	/**

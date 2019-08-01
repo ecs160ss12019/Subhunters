@@ -11,11 +11,11 @@ public class Inky extends Ghost
 
 	private Blinky blinky;
 
-	Inky(Blinky blinky, int screenX, Location spawnLoc, Maze maze)
+	Inky(Blinky blinky, int screenX, Location spawnLoc, Maze maze, Pacman p)
 	{
-		super(screenX, spawnLoc, maze);
+		super(screenX, spawnLoc, maze, p);
 		this.maze = maze;
-		this.blinky = findBlinky();
+		this.blinky = blinky;
 	}
 
 
@@ -27,26 +27,6 @@ public class Inky extends Ghost
 	public Location getScatterLocation()
 	{
 		return SCATTER_LOC;
-	}
-
-	/**
-	 * Finds Blinky if he doesn't already exist
-	 * @return blinky object
-	 */
-	private Blinky findBlinky()
-	{
-		if (blinky != null) // if blinky is saved as a variable already
-			return blinky;
-		// TODO: don't know if I need below
-//		for (int i = 0; i < maze.getMaze().length; i++) {
-//			for (int j = 0; j < maze.getMaze()[i].length; j++) {
-//				if (maze.getMaze()[i][j].getObj() == Block.BLINKY) {
-//					// TODO: check this is right
-//					return blinky = new Blinky(screenX, spawnLoc, maze);
-//				}
-//			}
-//		}
-		return blinky;
 	}
 
 	/**
@@ -76,7 +56,7 @@ public class Inky extends Ghost
 	/**
 	 * Called when Inky needs to move
 	 */
-	public void move(Pacman pacman)
+	public void move()
 	{
 		if (pacman.isSuper()) {
 			scatter(getScatterLocation());

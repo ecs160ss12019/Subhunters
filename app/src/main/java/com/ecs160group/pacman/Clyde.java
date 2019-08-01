@@ -14,9 +14,9 @@ public class Clyde extends Blinky
 	private static final Location SCATTER_LOC = new Location(0, 30, Block.WALL);
 	private static final int MAX_CHASE_DIST = 8; // maximum distance clyde can be away to chase Pacman
 
-	Clyde(int screenX, Location spawnLoc, Maze m)
+	Clyde(int screenX, Location spawnLoc, Maze m, Pacman p)
 	{
-		super(screenX, spawnLoc, m);
+		super(screenX, spawnLoc, m, p);
 	}
 
 	/**
@@ -35,11 +35,11 @@ public class Clyde extends Blinky
 	 * Clyde goes to scatter location unless he's within the maximum manhattan distance to
 	 * chase pacman. Within that distance, Clyde behaves like Clyde
 	 */
-	public void move(Pacman pacman)
+	public void move()
 	{
 		if (Location.dist(loc, pacman.getGridLoc()) < MAX_CHASE_DIST && !pacman.isSuper()) {
 			// if within minimum distance and pacman isn't super, be like Blinky
-			super.move(pacman);
+			super.move();
 		} else { // otherwise patrol scatter location
 			scatter(getScatterLocation());
 		}

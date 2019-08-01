@@ -13,9 +13,9 @@ public class Blinky extends Ghost
 	 */
 	private static final Location SCATTER_LOC = new Location(27, 0, Block.WALL);
 
-	public Blinky(int screenX, Location spawnLoc, Maze maze)
+	public Blinky(int screenX, Location spawnLoc, Maze maze, Pacman p)
 	{
-		super(screenX, spawnLoc, maze);
+		super(screenX, spawnLoc, maze, p);
 	}
 
 	/**
@@ -43,7 +43,7 @@ public class Blinky extends Ghost
 	/**
 	 * Controls Blinky's movement around the board
 	 */
-	public void move(Pacman pacman)
+	public void move()
 	{
 		if (pacman.isSuper()) {
 			scatter(SCATTER_LOC);

@@ -11,9 +11,9 @@ public class Pinky extends Ghost
 	/**
 	 * Default ctor which inherits from the ghost class
 	 */
-	public Pinky(int screenX, Location spawnLoc, Maze m)
+	public Pinky(int screenX, Location spawnLoc, Maze m, Pacman p)
 	{
-		super(screenX, spawnLoc, m);
+		super(screenX, spawnLoc, m, p);
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class Pinky extends Ghost
 	/**
 	 * Called when Pinky needs to move
 	 */
-	public void move(Pacman pacman)
+	public void move()
 	{
 		if (pacman.isSuper()) {
 			scatter(getScatterLocation());
