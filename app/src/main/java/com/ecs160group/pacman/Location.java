@@ -214,6 +214,16 @@ public class Location
 	}
 
 	/**
+	 * CHecks if the location is a spawn location
+	 *
+	 * @return if the location is a spawn location
+	 */
+	public boolean isSpawn()
+	{
+		return block == Block.FRUIT_SPAWN || block == Block.GHOST_SPAWN || block == Block.PAC_SPAWN;
+	}
+
+	/**
 	 * Gets the location in front of the direction facing
 	 *
 	 * @param dirFacing Direction the object is facing
