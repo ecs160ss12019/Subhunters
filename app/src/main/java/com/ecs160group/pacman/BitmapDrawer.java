@@ -20,7 +20,6 @@ public class BitmapDrawer {
     public Bitmap[] bitmaps;
 
     public Context context;
-    private Canvas canvas;
 
     private final int xScaled;
     private final int yScaled;
@@ -40,31 +39,15 @@ public class BitmapDrawer {
         this.yScaled = game.yScaled;
 
         this.context = game.activityContext;
-        //this.blinky = game.blinky;
-        /*this.inky = inky;
-        this.pinky = pinky;
-        this.clyde = clyde;
-        mPacman = pacman;*/
-        //this.pacGhostRadius = pacGhostRadius;
         pacInt = 0;
         blinkyInt = 1;
         inkyInt = 2;
         pinkyInt = 3;
         clydeInt = 4;
-        this.canvas = game.mCanvas;
-       // initLocations();
         bitmaps = new Bitmap[5];
         initBitmaps();
 
     }
-
-   /* private void initLocations() {
-        locations[0] = mPacman.loc;
-        locations[1] = blinky.loc;
-        locations[2] = inky.loc;
-        locations[3] = pinky.loc;
-        locations[4] = clyde.loc;
-    }*/
 
     /**
      * initializes the bitmaps by calling findAndResizeBitmap, which will store the bitmaps into bitmaps[]
@@ -121,14 +104,6 @@ public class BitmapDrawer {
         }
     }
 
-   /* public void tempDraw(Pacman mPacman, Canvas mCanvas) {
-        Bitmap b = BitmapFactory.decodeResource(context.getResources(), R.drawable.pacman);
-        Bitmap sizedB = Bitmap.createScaledBitmap(b, (int) pacGhostRadius * 2,
-                (int) pacGhostRadius * 2, false);
-        mCanvas.drawBitmap(sizedB, (mPacman.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
-                (mPacman.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
-    }
-*/
     /**
      * draws pacman
      * @param mPacman - from PacmanGame
@@ -199,12 +174,7 @@ public class BitmapDrawer {
 
 
     }
-
-    /*public void setBitmap() {
-
-
-
-    }*/
+    
 
 }
 
