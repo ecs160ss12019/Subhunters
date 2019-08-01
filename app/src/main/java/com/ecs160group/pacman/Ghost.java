@@ -132,6 +132,7 @@ public class Ghost// implements Collision
 	 */
 	public void decrementDeathTimer()
 	{
+		Log.d("ghost-decrementDeathTimer: ", "deathTimer: " + deathTimer + "isDead: " + isDead);
 		if (isDead == true || deathTimer > 0) {
 			setDeathState(deathTimer - 1, true);
 			if (deathTimer <= 0) {
