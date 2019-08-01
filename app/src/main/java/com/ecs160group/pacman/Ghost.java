@@ -104,23 +104,26 @@ public class Ghost// implements Collision
 	public void setDeathState(int dTimer, boolean dState)
 	{
 		deathTimer = dTimer;
-		setDeathState(dState);
+		setInGYard(dState);
 	}
 
 	/**
 	 * Gets the state of the ghost, if dead, ghost is in the graveyard
+	 *
 	 * @return if the ghost is dead, in the graveyard
 	 */
-	public boolean getDeathState()
+	public boolean isInGYard()
 	{
 		return isDead;
 	}
 
 	/**
 	 * Sets the state of the ghost, whether it is dead/in the graveyard or in the maze
+	 *
 	 * @param dState state of the ghost to set
 	 */
-	public void setDeathState(boolean dState) {
+	public void setInGYard(boolean dState)
+	{
 		isDead = dState;
 	}
 

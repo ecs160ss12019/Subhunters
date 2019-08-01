@@ -189,7 +189,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 	 */
 	public void removeGhostFromGY() {
 		Ghost temp;
-		if (!graveyard.isEmpty() && graveyard.peek().getDeathState() == false) { // Not empty, a ghost exists in GY
+		if (!graveyard.isEmpty() && graveyard.peek().isInGYard() == false) { // Not empty, a ghost exists in GY
 			temp = graveyard.poll(); // Retrieve and removes head of queue
 			temp.loc.setNewLoc(13, 11); // Take head out of graveyard. Place at entrance.
 			// TODO: SET STARTED
@@ -361,8 +361,8 @@ public class PacmanGame extends SurfaceView implements Runnable
 
 	}
 	private void sendToGY(Ghost tGhost){
-		if(tGhost.getDeathState() && !graveyard.contains(tGhost)){
-				tGhost.setDeathState(true); // makes ghost dead/in graveyard
+		if(tGhost.isInGYard() && !graveyard.contains(tGhost)){
+				tGhost.setInGYard(true); // makes ghost dead/in graveyard
 				graveyard.add(tGhost);
 			}
 	}
