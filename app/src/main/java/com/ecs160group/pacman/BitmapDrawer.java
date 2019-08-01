@@ -87,7 +87,6 @@ public class BitmapDrawer {
         Bitmap sizedB;
         switch (bitmapIndex) {
             case 0://-700016
-                Log.d("finding pac bitmap: ", "hello");
                 b = BitmapFactory.decodeResource(context.getResources(), R.drawable.pacman);
                 sizedB = Bitmap.createScaledBitmap(b, (int) pacGhostRadius * 2,
                         (int) pacGhostRadius * 2, false);
@@ -122,11 +121,19 @@ public class BitmapDrawer {
         }
     }
 
+   /* public void tempDraw(Pacman mPacman, Canvas mCanvas) {
+        Bitmap b = BitmapFactory.decodeResource(context.getResources(), R.drawable.pacman);
+        Bitmap sizedB = Bitmap.createScaledBitmap(b, (int) pacGhostRadius * 2,
+                (int) pacGhostRadius * 2, false);
+        mCanvas.drawBitmap(sizedB, (mPacman.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                (mPacman.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
+    }
+*/
     /**
      * draws pacman
      * @param mPacman - from PacmanGame
      */
-    public void draw(@NonNull Pacman mPacman) {
+    public void draw(@NonNull Pacman mPacman, Canvas canvas) {
         canvas.drawBitmap(bitmaps[0], (mPacman.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
                 (mPacman.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
     }
@@ -135,7 +142,7 @@ public class BitmapDrawer {
      * draws ghost (this one is temporary for testing, will delete later and use the specific ghost draws
      * @param ghost - from PacmanGame
      */
-    private void draw (@NonNull Ghost ghost) {
+    private void draw (@NonNull Ghost ghost, Canvas canvas) {
         canvas.drawBitmap(bitmaps[1], (ghost.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
                 (ghost.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
 
@@ -145,7 +152,7 @@ public class BitmapDrawer {
      * draws blinky
      * @param blinky - from PacmanGame
      */
-    private void draw(Blinky blinky) {
+    private void draw(@NonNull Blinky blinky, Canvas canvas) {
         canvas.drawBitmap(bitmaps[0], (blinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
                 (blinky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
     }
@@ -154,7 +161,7 @@ public class BitmapDrawer {
      * draws inky
      * @param inky - from PacmanGame
      */
-    private void draw( Inky inky ) {
+    private void draw(@NonNull Inky inky, Canvas canvas ) {
         canvas.drawBitmap(bitmaps[0], (inky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
                 (inky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
     }
@@ -163,7 +170,7 @@ public class BitmapDrawer {
      * draws pinky
      * @param pinky - from PacmanGame
      */
-    private void draw( Pinky pinky) {
+    private void draw(@NonNull Pinky pinky, Canvas canvas) {
         canvas.drawBitmap(bitmaps[0], (pinky.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
                 (pinky.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
     }
@@ -172,7 +179,7 @@ public class BitmapDrawer {
      * draws clyde
      * @param clyde - from PacmanGame
      */
-    private void draw(Clyde clyde) {
+    private void draw(@NonNull Clyde clyde, Canvas canvas) {
         canvas.drawBitmap(bitmaps[0], (clyde.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
                 (clyde.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
     }
@@ -181,14 +188,14 @@ public class BitmapDrawer {
      * draws pacman and all the ghosts
      * called from draw() method in PacmanGame
      */
-    public void draw(Pacman pacman, Ghost ghost, Blinky blinky, Inky inky, Pinky pinky, Clyde clyde) {
+    public void draw(Pacman pacman, Ghost ghost, Blinky blinky, Inky inky, Pinky pinky, Clyde clyde, Canvas canvas) {
 
-        draw(pacman);
-        draw(ghost);
-       /* draw(blinky);
-        draw(inky);
-        draw(pinky);
-        draw(clyde);*/
+        draw(pacman, canvas);
+        draw(ghost, canvas);
+       /* draw(blinky, canvas);
+        draw(inky, canvas);
+        draw(pinky, canvas);
+        draw(clyde, canvas);*/
 
 
     }

@@ -396,36 +396,8 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         // draw all member objects
                         mMaze.draw(mCanvas, mPaint);
                         mFakeJoy.draw(mCanvas, mPaint);
-
-                       // mBitmapDrawer.draw(mPacman, mGhost, null, null, null, null);
-
-                        mBitmapDrawer.draw(mPacman);
-
-                        Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.pacman);
-
-
-                        Bitmap sizedB = Bitmap.createScaledBitmap(b, (int) PacGhostRadius * 2,
-                                (int) PacGhostRadius * 2, false);
-
-
-                        mCanvas.drawBitmap(sizedB, mPacman.gridLocation.getX() * 28 + xScaled - PacGhostRadius,
-                                mPacman.gridLocation.getY() * 28 + yScaled - PacGhostRadius, null);
-
-                        //mCanvas.drawBitmap(sizedB, mPacman.loc.getX() - PacGhostRadius,
-                         //       mPacman.loc.getY() - PacGhostRadius, null);
-
-                        b = BitmapFactory.decodeResource(getResources(), R.drawable.blinky);
-
-                        sizedB = Bitmap.createScaledBitmap(b, (int) PacGhostRadius * 2,
-                                (int) PacGhostRadius * 2, false);
-
-                        mCanvas.drawBitmap(sizedB, (mGhost.gridLocation.getX() * 28 + xScaled) - PacGhostRadius,
-                                (mGhost.gridLocation.getY() * 28 + yScaled) - PacGhostRadius, null);
-
-                        mPaint.setColor(Color.argb(255, 0, 0, 255));
-                        //redPaint.setColor(Color.argb(0,255, 0, 0));
-                        // Draw the vertical lines of the maze*/
-
+                        //draws pac and all ghosts/specific ghosts null for now, will take out mGhost later
+                       mBitmapDrawer.draw(mPacman, mGhost, null, null, null, null, mCanvas);
 
                         if (DEBUGGING) {
                                 printDebuggingText();
@@ -468,10 +440,10 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         10,debugStart + debugSize + 30, mPaint);
                 mCanvas.drawText("mGhost.loc.y: " + mGhost.loc.getY(),
                         10,debugStart + debugSize + 60, mPaint);
-               /* mCanvas.drawText("mPacman.loc.x: " + mPacman.loc.getX(),
+                mCanvas.drawText("mPacman.loc.x: " + mPacman.gridLocation.getX(),
                         10,debugStart + debugSize + 210, mPaint);
-                mCanvas.drawText("mPacman.loc.y: " + mPacman.loc.getY(),
-                        10,debugStart + debugSize + 240, mPaint);*/
+                mCanvas.drawText("mPacman.loc.y: " + mPacman.gridLocation.getY(),
+                        10,debugStart + debugSize + 240, mPaint);
                 mCanvas.drawText("mPacman.direction: " + mPacman.direction,
                         10,debugStart + debugSize + 270, mPaint);
                 mCanvas.drawText("mFakeJoy.direction: " + mFakeJoy.direction,
