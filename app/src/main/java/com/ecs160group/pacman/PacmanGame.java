@@ -175,6 +175,14 @@ public class PacmanGame extends SurfaceView implements Runnable
 			graveyard.clear();
 		}
 		// add all the ghosts in this order
+		mBlinky.setDeathState(500, true); // 9 seconds
+		mPinky.setDeathState(500, true); // 9 seconds
+		mInky.setDeathState(500, true); // 9 seconds
+		mClyde.setDeathState(500, true); // 9 seconds
+		mBlinky.gridLocation.setNewLoc(13, 14); // .
+		mPinky.gridLocation.setNewLoc(13, 14); // TODO: remove hardcoded values.
+		mInky.gridLocation.setNewLoc(13, 14);
+		mClyde.gridLocation.setNewLoc(13, 14);
 		graveyard.add(mBlinky);
 		graveyard.add(mPinky);
 		graveyard.add(mInky);
@@ -185,12 +193,18 @@ public class PacmanGame extends SurfaceView implements Runnable
 	 *
 	 */
 	public void removeGhostFromGY() {
-		if (!graveyard.isEmpty()) { // clear all ghosts from the graveyard
-			graveyard.clear();
-
-
+		Ghost temp;
+		if (!graveyard.isEmpty() && graveyard.peek().getDeathState() == false) { // Not empty, a ghost exists in GY
+			temp = graveyard.poll(); // Retrieve and removes head of queue
+			temp.loc.setNewLoc(13, 11); // Take head out of graveyard. Place at entrance.
+			// TODO: SET STARTED
+			temp.setDeathState(0, false);
+			if(!graveyard.isEmpty() ) {
+                temp = graveyard.peek();
+                temp.setDeathState(500, true);
+            }
 		}
-
+		//graveyard.clear();
 
 	}
 
@@ -205,7 +219,6 @@ public class PacmanGame extends SurfaceView implements Runnable
 
 		//TODO: ADD ghost back to GraveYard Queue
 		addAllGhostsToGY();
-
 
 		//resetting score/lives/direction/pellets
 		mScore.reset();
@@ -299,15 +312,16 @@ public class PacmanGame extends SurfaceView implements Runnable
 					//Determines powerup state of pacman powerTimer decrements on every frame.
 					mPacman.checkPowerUpState();
 
+					// Checks states of ghosts, If dead decrements death timer by 1.
 					//mGhost.checkDeathTimer();
 					mInky.checkDeathTimer();
 					mPinky.checkDeathTimer();
 					mBlinky.checkDeathTimer();
 					mClyde.checkDeathTimer();
+					removeGhostFromGY(); // Check if head of queue is finished. Pop off and update states.
 
 				//}
 			}
-
 			//redraw grid/ghosts/pacman/pellets
 			draw();
 
@@ -322,13 +336,13 @@ public class PacmanGame extends SurfaceView implements Runnable
 		}
 	}
 
-	//updates pacman/ghosts/pellets/maze
+	/**
+	 * This function is used to schedule the updates to location of pacman and the ghosts.
+ 	 * @param updatePacman Determines if pacman is moving to a valid location. if so update position/draw
+	 */
 	private void update(boolean updatePacman)
 	{
-		//TODO: add update methods to pacman/ghost/maze classes OR do it here
 
-		// now has a if-condition to check whether Pacman and ghost will hit a wall
-		// so there is no need for update
 		//Log.d("update: ", "Updating pacmman/ghost: ");
 		//Log.d("update: ", "pacmanLoc: " + "Location: " + mPacman.loc.getX() + "," + mPacman.loc.getY());
 		//Log.d("update: ", "pacmanLoc: " + "GridLocation: " + mPacman.getGridLoc().getX() + "," + mPacman.getGridLoc().getY());
@@ -336,19 +350,25 @@ public class PacmanGame extends SurfaceView implements Runnable
 		if (updatePacman) {
 			mPacman.update(mFPS);
 		}
+
 		//mGhost.update(mFPS);
-/*
 		mInky.update(mFPS);
 		mPinky.update(mFPS);
 		mBlinky.update(mFPS);
 		mClyde.update(mFPS);
-*/
+/*
 		mInky.move();
 		mPinky.move();
 		mBlinky.move();
 		mClyde.move();
+*/
 
 
+	}
+	private void sendToGY(Ghost tGhost){
+		if(mInky.getDeathState() && !graveyard.contains(tGhost)){
+				graveyard.add(tGhost);
+			}
 	}
 
 	//detects if pacman hit a pellet/ghost/wall
@@ -374,36 +394,11 @@ public class PacmanGame extends SurfaceView implements Runnable
 						deathRestart();
 					}
 				}
+                sendToGY(mInky); // Checks death state, send to Graveyard if eaten.
+				sendToGY(mPinky);
+				sendToGY(mBlinky);
+				sendToGY(mClyde);
 
-                /*
-                if (mPacman.getGridLoc().getX() == mGhost.getGridLoc().getX() &&
-                        mPacman.getGridLoc().getY() == mGhost.getGridLoc().getY()) {
-                        //Pacman dies, respawns without super mode
-                        if(mPacman.getPowerState() == false && mPacman.getPowerTimer() >= 0){
-                                PacmanSounds.pacmanDeath();
-                                draw();
-                                pauseStartDeath(3000);
-                                mFakeJoy.setCenter();
-                                draw();
-                                deathRestart();
-
-                        }
-                        else{
-                                // Set timer as ghost touches Graveyard?
-                                PacmanSounds.pacmanEatGhost();
-                                mScore.ateGhost();
-                                pauseStartDeath(500);
-                                mGhost.setDeathState(9000, true);
-                                mGhost.gridLocation.setNewLoc(13, 11);
-                                //Pacman is able to eat ghosts
-                                //Deal with ghost returning to graveyard.
-                                //mghost.moveTowardsTarget();
-                        }
-                }
-                */
-
-
-		//mPacman.collisionInteraction(null, null, null, null, mMaze, mScore); // Null for debugging.
 		mPacman.collisionInteraction(mInky, mPinky, mBlinky, mClyde, mMaze, mScore);
 		// Check interactions, then win condition.
 		if (mPacman.hasWon(mMaze) == true) {
@@ -454,7 +449,6 @@ public class PacmanGame extends SurfaceView implements Runnable
 			mCanvas.drawColor(Color.argb(255, 0, 0, 0));
 
 			mPaint.setStyle(Paint.Style.FILL);
-
 			mPaint.setColor(Color.argb(255, 255, 255, 0));
 
 			//font size

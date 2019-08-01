@@ -10,6 +10,7 @@ import android.graphics.Path;
 import android.util.Log;
 
 import java.lang.Math;
+import java.util.concurrent.BlockingQueue;
 
 /*
     protagonist of Pacman game
@@ -303,9 +304,10 @@ public class Pacman //implements Collision
 		if(gridLocation.getX() == mGhost.gridLocation.getX() && gridLocation.getY() == mGhost.gridLocation.getY()){
 			if(isSuper())
 			{
-				mGhost.setDeathState(9000, true); // 9 seconds
+				mGhost.setDeathState(500, true); // 9 seconds
 				PacmanSounds.pacmanEatGhost();
-				mGhost.gridLocation.setNewLoc(13, 11); // TODO: remove hardcoded values.
+
+				mGhost.gridLocation.setNewLoc(13, 7); // TODO: remove hardcoded values.
 				mScore.ateGhost();
 				pauseStartDeath(500);
 				return true;
