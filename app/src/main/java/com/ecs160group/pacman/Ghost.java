@@ -130,7 +130,7 @@ public class Ghost// implements Collision
 	/**
 	 * Increments the death timer by decreasing the time left on the timer
 	 */
-	public void incrementDeathTimer()
+	public void decrementDeathTimer()
 	{
 		if (isDead == true || deathTimer > 0) {
 			setDeathState(deathTimer - 1, true);

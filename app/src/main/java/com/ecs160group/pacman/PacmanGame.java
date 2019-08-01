@@ -192,7 +192,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 		if (!graveyard.isEmpty() && graveyard.peek().isInGYard() == false) { // Not empty, a ghost exists in GY
 			temp = graveyard.poll(); // Retrieve and removes head of queue
 			temp.loc.setNewLoc(13, 11); // Take head out of graveyard. Place at entrance.
-			// TODO: SET STARTED
+			temp.setInGYard(false);
 			temp.setDeathState(0, false);
 			if(!graveyard.isEmpty() ) {
                 temp = graveyard.peek();
@@ -308,11 +308,11 @@ public class PacmanGame extends SurfaceView implements Runnable
 					mPacman.checkPowerUpState();
 
 					// Checks states of ghosts, If dead decrements death timer by 1.
-					//mGhost.incrementDeathTimer();
-					mInky.incrementDeathTimer();
-					mPinky.incrementDeathTimer();
-					mBlinky.incrementDeathTimer();
-					mClyde.incrementDeathTimer();
+					//mGhost.decrementDeathTimer();
+					mInky.decrementDeathTimer();
+					mPinky.decrementDeathTimer();
+					mBlinky.decrementDeathTimer();
+					mClyde.decrementDeathTimer();
 					removeGhostFromGY(); // Check if head of queue is finished. Pop off and update states.
 
 				//}
@@ -351,6 +351,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 		mPinky.update(mFPS);
 		mBlinky.update(mFPS);
 		mClyde.update(mFPS);
+
 /*
 		mInky.move();
 		mPinky.move();
