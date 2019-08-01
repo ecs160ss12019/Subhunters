@@ -362,7 +362,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 	}
 	private void sendToGY(Ghost tGhost){
 		if(tGhost.getDeathState() && !graveyard.contains(tGhost)){
-				tGhost.setState(true); // makes ghost dead/in graveyard
+				tGhost.setDeathState(true); // makes ghost dead/in graveyard
 				graveyard.add(tGhost);
 			}
 	}

@@ -4,7 +4,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.PointF;
 import android.util.Log;
 
 import java.util.Random;
@@ -105,7 +104,7 @@ public class Ghost// implements Collision
 	public void setDeathState(int dTimer, boolean dState)
 	{
 		deathTimer = dTimer;
-		setState(dState);
+		setDeathState(dState);
 	}
 
 	/**
@@ -121,7 +120,7 @@ public class Ghost// implements Collision
 	 * Sets the state of the ghost, whether it is dead/in the graveyard or in the maze
 	 * @param dState state of the ghost to set
 	 */
-	public void setState(boolean dState) {
+	public void setDeathState(boolean dState) {
 		isDead = dState;
 	}
 
