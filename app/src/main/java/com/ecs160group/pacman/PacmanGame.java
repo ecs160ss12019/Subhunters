@@ -143,10 +143,10 @@ public class PacmanGame extends SurfaceView implements Runnable
 
 		mPacman = new Pacman(mScreenX, mMaze.pacSpawn, PacGhostRadius, mScore, activityContext, mMaze);
 //		mGhost = new Ghost(mScreenX, mMaze.ghostSpawn, mMaze);
-		mBlinky = new Blinky(mScreenX,mMaze.ghostSpawn, mMaze);
-		mInky = new Inky(mBlinky, mScreenX, mMaze.ghostSpawn, mMaze);
-		mPinky = new Pinky(mScreenX,mMaze.ghostSpawn, mMaze);
-		mClyde = new Clyde(mScreenX,mMaze.ghostSpawn, mMaze);
+		mBlinky = new Blinky(mScreenX,mMaze.ghostSpawn, mMaze, mPacman);
+		mInky = new Inky(mBlinky, mScreenX, mMaze.ghostSpawn, mMaze, mPacman);
+		mPinky = new Pinky(mScreenX,mMaze.ghostSpawn, mMaze, mPacman);
+		mClyde = new Clyde(mScreenX,mMaze.ghostSpawn, mMaze, mPacman);
 		graveyard = new ArrayBlockingQueue<>(4);
 		addAllGhostsToGY();
 
