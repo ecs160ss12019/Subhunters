@@ -179,6 +179,12 @@ public class BitmapDrawer {
 
     public void draw(Pacman pacman, Ghost ghost, Blinky blinky, Inky inky, Pinky pinky, Clyde clyde, Canvas canvas) {
 
+
+/*
+        if(pacman.direction == 'l'){
+            draw(pacman, canvas);
+        }
+*/
         draw(pacman, canvas);
         //draw(ghost, canvas);
         if (pacman.isSuper()) {

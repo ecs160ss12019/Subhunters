@@ -181,7 +181,20 @@ public class PacmanGame extends SurfaceView implements Runnable
 		graveyard.add(mClyde);
 	}
 
-	//runs when a player lost all lives and restarts
+	/**
+	 *
+	 */
+	public void removeGhostFromGY() {
+		if (!graveyard.isEmpty()) { // clear all ghosts from the graveyard
+			graveyard.clear();
+
+
+		}
+
+
+	}
+
+		//runs when a player lost all lives and restarts
 	//or starting the first game
 	public void startNewGame()
 	{
@@ -189,6 +202,11 @@ public class PacmanGame extends SurfaceView implements Runnable
 
 		//initialize the position of pacman and ghosts, also resets timers and states
 		actorReset();
+
+		//TODO: ADD ghost back to GraveYard Queue
+		addAllGhostsToGY();
+
+
 		//resetting score/lives/direction/pellets
 		mScore.reset();
 		mLives = 3;
@@ -213,6 +231,10 @@ public class PacmanGame extends SurfaceView implements Runnable
 		mPaused = true; // Resume on user touch
 		//initialize the position of pacman and ghosts, also resets timers and states
 		actorReset();
+
+		//TODO: ADD ghost back to GraveYard Queue
+		addAllGhostsToGY();
+
 		mLives--;
 		//Reset game if 0 lives.
 		if (mLives <= 0) {
@@ -227,6 +249,9 @@ public class PacmanGame extends SurfaceView implements Runnable
 		//initialize the position of pacman and ghosts, also resets timers and states
 		mPaused = true; // Resume on user touch
 		actorReset();
+
+		//TODO: ADD ghost back to GraveYard Queue
+
 		//resetting /States/Direction
 		//pellet = 0; // New map, reset pellet counter
 		// Movement reset.
@@ -235,9 +260,8 @@ public class PacmanGame extends SurfaceView implements Runnable
 		// In this case we just reset the maze,
 		// TODO: Add more levels.
 		mMaze = new Maze(activityContext, mScreenX, mScreenY, blockSize);
-		//pauseStartDeath(5000);
+		pauseStartDeath(5000);
 		PacmanSounds.pacmanBeginning();
-
 
 	}
 
@@ -267,7 +291,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 			if (!mPaused) {
 				//Boolean updateGhost = mGhost.wallDetection(mMaze);
 
-				if (frameStartTime % 2 == 0) {
+				// (frameStartTime % 2 == 0) {
 					mPacman.updateNextDirection(mFakeJoy.direction);
 					updatePacman = mPacman.wallDetection();
 					update(updatePacman);
@@ -281,7 +305,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 					mBlinky.checkDeathTimer();
 					mClyde.checkDeathTimer();
 
-				}
+				//}
 			}
 
 			//redraw grid/ghosts/pacman/pellets
@@ -313,10 +337,17 @@ public class PacmanGame extends SurfaceView implements Runnable
 			mPacman.update(mFPS);
 		}
 		//mGhost.update(mFPS);
+/*
 		mInky.update(mFPS);
 		mPinky.update(mFPS);
 		mBlinky.update(mFPS);
 		mClyde.update(mFPS);
+*/
+		mInky.move(mPacman);
+		mPinky.move(mPacman);
+		mBlinky.move(mPacman);
+		mClyde.move(mPacman);
+
 
 	}
 

@@ -55,7 +55,7 @@ public class Pinky extends Ghost
 	/**
 	 * Called when Pinky needs to move
 	 */
-	public void move()
+	public void move(Pacman pacman)
 	{
 		if (pacman.isSuper()) {
 			scatter(getScatterLocation());

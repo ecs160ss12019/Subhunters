@@ -76,7 +76,7 @@ public class Inky extends Ghost
 	/**
 	 * Called when Inky needs to move
 	 */
-	public void move()
+	public void move(Pacman pacman)
 	{
 		if (pacman.isSuper()) {
 			scatter(getScatterLocation());

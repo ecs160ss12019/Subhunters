@@ -35,11 +35,11 @@ public class Clyde extends Blinky
 	 * Clyde goes to scatter location unless he's within the maximum manhattan distance to
 	 * chase pacman. Within that distance, Clyde behaves like Clyde
 	 */
-	public void move()
+	public void move(Pacman pacman)
 	{
 		if (Location.dist(loc, pacman.getGridLoc()) < MAX_CHASE_DIST && !pacman.isSuper()) {
 			// if within minimum distance and pacman isn't super, be like Blinky
-			super.move();
+			super.move(pacman);
 		} else { // otherwise patrol scatter location
 			scatter(getScatterLocation());
 		}

@@ -43,7 +43,7 @@ public class Blinky extends Ghost
 	/**
 	 * Controls Blinky's movement around the board
 	 */
-	public void move()
+	public void move(Pacman pacman)
 	{
 		if (pacman.isSuper()) {
 			scatter(SCATTER_LOC);
