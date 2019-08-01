@@ -22,7 +22,6 @@ public class Ghost// implements Collision
 	//pixel(maze) coords
 	protected Pacman pacman;
 	protected Location loc;
-	protected Location scatterLoc;
 
 	protected Maze maze;
 
@@ -78,15 +77,22 @@ public class Ghost// implements Collision
 		this.pacman = pacman;
 	}
 
+	public char getDirection()
+	{
+		return direction;
+	}
+
 	/**
 	 * Gets the location of the ghost
 	 *
 	 * @return location of the ghost
 	 */
-	public Location getLoc()
-	{
-		return loc;
-	}
+//	public Location getLoc()
+//	{
+//		return loc;
+//	}
+
+
 
 	public Location getGridLoc()
 	{
@@ -162,60 +168,60 @@ public class Ghost// implements Collision
 	int directionCount = 15;
 	boolean newDir = false;
 
-
-	void update(long fps)
-	{
-		gridCoord.x = gridLocation.getX();
-		gridCoord.y = gridLocation.getY();
-		//Log.d("ghost update:", "Random:" + randDirection);
-		//Log.d("Ghost-update: ", "Current_LOC: " + direction + " Location: " + gridCoord.x + "," + gridCoord.y);
-		if (randDirection == 0 && canMoveTo(maze.getMaze()[gridCoord.x - 1][gridCoord.y])) {
-			loc.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
-			gridLocation.setNewLoc(gridCoord.x - 1, gridCoord.y);
-			directionCount++;
-			direction = 'l';
-			if (directionCount > newRandDir) { // TODO: Add || on collision to change direction.
-				randDirection = rand.nextInt(4);
-				directionCount = 0;
-			}
-		} else if (randDirection == 1 && canMoveTo(maze.getMaze()[gridCoord.x + 1][gridCoord.y])) {
-			loc.setNewLoc((int) (loc.getX() + (velocity / fps)), loc.getY());
-			gridLocation.setNewLoc(gridCoord.x + 1, gridCoord.y);
-			directionCount++;
-			direction = 'r';
-			if (directionCount > newRandDir) {
-				randDirection = rand.nextInt(4);
-				directionCount = 0;
-			}
-		} else if (randDirection == 2 && canMoveTo(maze.getMaze()[gridCoord.x][gridCoord.y + 1])) {
-			loc.setNewLoc(loc.getX(), (int) (loc.getY() + (velocity / fps)));
-			gridLocation.setNewLoc(gridCoord.x, gridCoord.y + 1);
-			directionCount++;
-			direction = 'd';
-			if (directionCount > newRandDir) {
-				randDirection = rand.nextInt(4);
-				directionCount = 0;
-			}
-		} else if (randDirection == 3 && canMoveTo(maze.getMaze()[gridCoord.x][gridCoord.y - 1])) {
-			loc.setNewLoc(loc.getX(), (int) (loc.getY() - (velocity / fps)));
-			gridLocation.setNewLoc(gridCoord.x, gridCoord.y - 1);
-			directionCount++;
-			direction = 'u';
-			if (directionCount > newRandDir) {
-				randDirection = rand.nextInt(4);
-				directionCount = 0;
-			}
-		} else {
-			loc.setNewLoc(loc.getX(), loc.getY());
-			directionCount++;
-			randDirection = rand.nextInt(4);
-			if (directionCount > newRandDir) {
-				randDirection = rand.nextInt(4);
-				directionCount = 0;
-			}
-			//update(fps);
-		}
-	}
+//
+//	void update(long fps)
+//	{
+//		gridCoord.x = gridLocation.getX();
+//		gridCoord.y = gridLocation.getY();
+//		//Log.d("ghost update:", "Random:" + randDirection);
+//		//Log.d("Ghost-update: ", "Current_LOC: " + direction + " Location: " + gridCoord.x + "," + gridCoord.y);
+//		if (randDirection == 0 && canMoveTo(maze.getMaze()[gridCoord.x - 1][gridCoord.y])) {
+//			loc.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
+//			gridLocation.setNewLoc(gridCoord.x - 1, gridCoord.y);
+//			directionCount++;
+//			direction = 'l';
+//			if (directionCount > newRandDir) { // TODO: Add || on collision to change direction.
+//				randDirection = rand.nextInt(4);
+//				directionCount = 0;
+//			}
+//		} else if (randDirection == 1 && canMoveTo(maze.getMaze()[gridCoord.x + 1][gridCoord.y])) {
+//			loc.setNewLoc((int) (loc.getX() + (velocity / fps)), loc.getY());
+//			gridLocation.setNewLoc(gridCoord.x + 1, gridCoord.y);
+//			directionCount++;
+//			direction = 'r';
+//			if (directionCount > newRandDir) {
+//				randDirection = rand.nextInt(4);
+//				directionCount = 0;
+//			}
+//		} else if (randDirection == 2 && canMoveTo(maze.getMaze()[gridCoord.x][gridCoord.y + 1])) {
+//			loc.setNewLoc(loc.getX(), (int) (loc.getY() + (velocity / fps)));
+//			gridLocation.setNewLoc(gridCoord.x, gridCoord.y + 1);
+//			directionCount++;
+//			direction = 'd';
+//			if (directionCount > newRandDir) {
+//				randDirection = rand.nextInt(4);
+//				directionCount = 0;
+//			}
+//		} else if (randDirection == 3 && canMoveTo(maze.getMaze()[gridCoord.x][gridCoord.y - 1])) {
+//			loc.setNewLoc(loc.getX(), (int) (loc.getY() - (velocity / fps)));
+//			gridLocation.setNewLoc(gridCoord.x, gridCoord.y - 1);
+//			directionCount++;
+//			direction = 'u';
+//			if (directionCount > newRandDir) {
+//				randDirection = rand.nextInt(4);
+//				directionCount = 0;
+//			}
+//		} else {
+//			loc.setNewLoc(loc.getX(), loc.getY());
+//			directionCount++;
+//			randDirection = rand.nextInt(4);
+//			if (directionCount > newRandDir) {
+//				randDirection = rand.nextInt(4);
+//				directionCount = 0;
+//			}
+//			//update(fps);
+//		}
+//	}
 
 
 	/**
@@ -287,7 +293,7 @@ public class Ghost// implements Collision
 	private Location minDistance(Location target)
 	{
 		int minDist = 0;
-		Location next = loc.getAhead(direction);
+		Location next = gridLocation.getAhead(direction);
 		// set object in maze after getting the location
 		if (maze.isInBounds(next))
 			next.setObj(maze.getMaze()[next.getX()][next.getY()].getObj());
@@ -295,7 +301,7 @@ public class Ghost// implements Collision
 			minDist = Location.dist(next, target);
 		}
 		// compare with left
-		Location left = loc.getLeft(direction);
+		Location left = gridLocation.getLeft(direction);
 		if (maze.isInBounds(left))
 			left.setObj(maze.getMaze()[left.getX()][left.getY()].getObj());
 		if (canMoveTo(left)) {
@@ -307,7 +313,7 @@ public class Ghost// implements Collision
 			}
 		}
 		// compare with right
-		Location right = loc.getRight(direction);
+		Location right = gridLocation.getRight(direction);
 		if (maze.isInBounds(right))
 			right.setObj(maze.getMaze()[right.getX()][right.getY()].getObj());
 		if (canMoveTo(right)) {
@@ -374,7 +380,7 @@ public class Ghost// implements Collision
 	private void beginMove(Location next)
 	{
 		if (Location.isValid(next)) {
-			Location ahead = loc.getAdjacentLocation(direction);
+			Location ahead = gridLocation.getAdjacentLocation(direction);
 			if (ahead.getX() != next.getX() || ahead.getY() != next.getY()) {
 				turn(next); // change direction if the location is not directly ahead
 			}
