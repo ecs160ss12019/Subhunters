@@ -289,13 +289,15 @@ public class Ghost// implements Collision
 		int minDist = 0;
 		Location next = loc.getAhead(direction);
 		// set object in maze after getting the location
-		next.setObj(maze.getMaze()[next.getX()][next.getY()].getObj());
+		if (maze.isInBounds(next))
+			next.setObj(maze.getMaze()[next.getX()][next.getY()].getObj());
 		if (canMoveTo(next)) {
 			minDist = Location.dist(next, target);
 		}
 		// compare with left
 		Location left = loc.getLeft(direction);
-		left.setObj(maze.getMaze()[left.getX()][left.getY()].getObj());
+		if (maze.isInBounds(left))
+			left.setObj(maze.getMaze()[left.getX()][left.getY()].getObj());
 		if (canMoveTo(left)) {
 			// get distance between left and target location
 			int distLeft = Location.dist(left, target);
@@ -306,7 +308,8 @@ public class Ghost// implements Collision
 		}
 		// compare with right
 		Location right = loc.getRight(direction);
-		right.setObj(maze.getMaze()[right.getX()][right.getY()].getObj());
+		if (maze.isInBounds(right))
+			right.setObj(maze.getMaze()[right.getX()][right.getY()].getObj());
 		if (canMoveTo(right)) {
 			int distRight = Location.dist(right, target);
 			if (distRight < minDist) {
