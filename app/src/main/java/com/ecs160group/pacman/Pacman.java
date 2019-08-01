@@ -27,14 +27,13 @@ public class Pacman //implements Collision
 	Location gridLocation;
 	private int pacGridX;
 	private int pacGridY;
-	private Block block;
 	public char direction;
-	private char next_direction;
+
 
 	// Pacman's power-up state and timer.
 	private boolean powerState;
 	private int powerTimer;
-	private PacmanGame game;
+	Block block;
 
 	public Location spawnLoc;
 	private boolean isDead;
@@ -42,7 +41,6 @@ public class Pacman //implements Collision
 
 	//Sounds to be played during gameplay.
 	private sound PacmanSounds;
-	public boolean wallHit;
 
 	// use an integer to temporarily replace the draw of Pacman
 	// this will be modified under the draw function
@@ -57,7 +55,7 @@ public class Pacman //implements Collision
 	Location[][] mGrid;
 	private Location leftOfPac;
 	private Location rightOfPac;
-	private Location bottomofPac;
+	private Location bottomOfPac;
 	private Location topOfPac;
 
 	Pacman(int screenX, Location spawnLoc, float radius, Score score, Context activityContext, Maze mMaze)
@@ -73,14 +71,13 @@ public class Pacman //implements Collision
 		gridLocation = new Location(13, 29, Block.PACMAN); // 13,29 Used to keep track of own grid position.
 		Log.d("Pacman-gridlocation: ", "Location: " + gridLocation.getX() + "," + gridLocation.getY());
 		direction = 'l';
-		next_direction = 'l';
 		powerState = false;
 		powerTimer = 0;
 		velocity = screenX / 15;
 		leftOfPac = new Location(gridLocation.getX() - 1, gridLocation.getY(), mGrid[gridLocation.getX() - 1][gridLocation.getY()].getObj());
 		rightOfPac = new Location(gridLocation.getX() + 1, gridLocation.getY(), mGrid[gridLocation.getX() + 1][gridLocation.getY()].getObj());
 		topOfPac = new Location(gridLocation.getX(), gridLocation.getY() - 1, mGrid[gridLocation.getX()][gridLocation.getY() - 1].getObj());
-		bottomofPac = new Location(gridLocation.getX(), gridLocation.getY() + 1, mGrid[gridLocation.getX()][gridLocation.getY() + 1].getObj());
+		bottomOfPac = new Location(gridLocation.getX(), gridLocation.getY() + 1, mGrid[gridLocation.getX()][gridLocation.getY() + 1].getObj());
 	}
 
 	/**
@@ -180,17 +177,17 @@ public class Pacman //implements Collision
 		// Move();
 		//Log.d("Pacman-update: ", "Current_LOC: " + direction + " Location: " + pacGridX + "," + pacGridY);
 		if (direction == 'l') {
-			loc.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
+			//loc.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
 			gridLocation.setNewLoc(pacGridX - 1, pacGridY);
 		} else if (direction == 'r') {
-			loc.setNewLoc((int) (loc.getX() + (velocity / fps)), loc.getY());
+			//loc.setNewLoc((int) (loc.getX() + (velocity / fps)), loc.getY());
 			gridLocation.setNewLoc(pacGridX + 1, pacGridY);
 		} else if (direction == 'u') {
-			loc.setNewLoc(loc.getX(), (int) (loc.getY() - (velocity / fps)));
+			//loc.setNewLoc(loc.getX(), (int) (loc.getY() - (velocity / fps)));
 			gridLocation.setNewLoc(pacGridX, pacGridY - 1);
 
 		} else if (direction == 'd') {
-			loc.setNewLoc(loc.getX(), (int) (loc.getY() + (velocity / fps)));
+			//loc.setNewLoc(loc.getX(), (int) (loc.getY() + (velocity / fps)));
 			gridLocation.setNewLoc(pacGridX, pacGridY + 1);
 		}
 		//Log.d("Pacman-update: ", "New_LOC: " + direction + " , Location: " + pacGridX + "," + pacGridY);
@@ -208,7 +205,7 @@ public class Pacman //implements Collision
 			leftOfPac.updateLoc(gridLocation.getX() - 1, gridLocation.getY(), mGrid[gridLocation.getX() - 1][gridLocation.getY()].getObj());
 			rightOfPac.updateLoc(gridLocation.getX() + 1, gridLocation.getY(), mGrid[gridLocation.getX() + 1][gridLocation.getY()].getObj());
 			topOfPac.updateLoc(gridLocation.getX(), gridLocation.getY() - 1, mGrid[gridLocation.getX()][gridLocation.getY() - 1].getObj());
-			bottomofPac.updateLoc(gridLocation.getX(), gridLocation.getY() + 1, mGrid[gridLocation.getX()][gridLocation.getY() + 1].getObj());
+			bottomOfPac.updateLoc(gridLocation.getX(), gridLocation.getY() + 1, mGrid[gridLocation.getX()][gridLocation.getY() + 1].getObj());
 		}
 	}
 
@@ -258,7 +255,7 @@ public class Pacman //implements Collision
 			}
 			//if Pacman will hit the bottom wall, stop
 			if (direction == 'd') {
-				if (bottomofPac.isWall()) {
+				if (bottomOfPac.isWall()) {
 					//Log.d("PACMAN HAS HIT A WALL:", "direction:" + direction);
 					update = false;
 				}
@@ -288,7 +285,7 @@ public class Pacman //implements Collision
 				direction = 'u';
 
 			}
-			if (joyStickDirection == 'd' && !(bottomofPac.isWall())) {
+			if (joyStickDirection == 'd' && !(bottomOfPac.isWall())) {
 				direction = 'd';
 			}
 		//}
@@ -387,7 +384,7 @@ public class Pacman //implements Collision
 	void reset()
 	{
 
-		loc.setNewLoc(spawnLoc.getX(), spawnLoc.getY());
+		//loc.setNewLoc(spawnLoc.getX(), spawnLoc.getY());
 		gridLocation.setNewLoc(13, 23); // TODO: Hard coded spawn, change later.
 		direction = 'l';
 		powerTimer = 0;
@@ -406,7 +403,7 @@ public class Pacman //implements Collision
 	public void draw(Canvas canvas, Paint mPaint, float radius)
 	{
 		mPaint.setColor(Color.argb(255, 255, 255, 0));
-		canvas.drawCircle(loc.getX(), loc.getY(), radius, mPaint);
+		//canvas.drawCircle(loc.getX(), loc.getY(), radius, mPaint);
 
 	}
 

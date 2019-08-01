@@ -200,7 +200,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
 
                 // In this case we just reset the maze,
                 // TODO: Add more levels.
-                //mMaze = new Maze(activityContext, mScreenX, mScreenY);
+                mMaze = new Maze(activityContext, mScreenX, mScreenY, blockSize);
                 //pauseStartDeath(5000);
                 PacmanSounds.pacmanBeginning();
 
@@ -339,6 +339,7 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         mFakeJoy.setCenter();
                         draw();
                         StageCleared();
+
                 } // Win condition reached. All pellets cleared.
 
         }
@@ -457,10 +458,10 @@ public class PacmanGame extends SurfaceView implements Runnable{
                         10,debugStart + debugSize + 30, mPaint);
                 mCanvas.drawText("mGhost.loc.y: " + mGhost.loc.getY(),
                         10,debugStart + debugSize + 60, mPaint);
-                mCanvas.drawText("mPacman.loc.x: " + mPacman.loc.getX(),
+               /* mCanvas.drawText("mPacman.loc.x: " + mPacman.loc.getX(),
                         10,debugStart + debugSize + 210, mPaint);
                 mCanvas.drawText("mPacman.loc.y: " + mPacman.loc.getY(),
-                        10,debugStart + debugSize + 240, mPaint);
+                        10,debugStart + debugSize + 240, mPaint);*/
                 mCanvas.drawText("mPacman.direction: " + mPacman.direction,
                         10,debugStart + debugSize + 270, mPaint);
                 mCanvas.drawText("mFakeJoy.direction: " + mFakeJoy.direction,
