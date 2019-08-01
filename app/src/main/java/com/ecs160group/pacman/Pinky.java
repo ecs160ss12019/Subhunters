@@ -6,18 +6,19 @@ package com.ecs160group.pacman;
 public class Pinky extends Ghost
 {
 	// scatters to the top left
-	private static final Location SCATTER_LOC = new Location(0,0,Block.WALL);
+	private static final Location SCATTER_LOC = new Location(0, 0, Block.WALL);
 
 	/**
 	 * Default ctor which inherits from the ghost class
 	 */
-	public Pinky()
+	public Pinky(int screenX, Location spawnLoc, Maze m)
 	{
-		super();
+		super(screenX, spawnLoc, m);
 	}
 
 	/**
 	 * Gives the scatter location
+	 *
 	 * @return scatter location
 	 */
 	public Location getScatterLocation()
@@ -27,7 +28,8 @@ public class Pinky extends Ghost
 
 	/**
 	 * Gives the location to target as the chase location
-	 *  Pinky tries to cut off pacman by being ahead of him 4 in bounds spaces ahead
+	 * Pinky tries to cut off pacman by being ahead of him 4 in bounds spaces ahead
+	 *
 	 * @return
 	 */
 	public Location getChaseLocation()

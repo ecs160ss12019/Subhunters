@@ -14,9 +14,9 @@ public class Clyde extends Blinky
 	private static final Location SCATTER_LOC = new Location(0, 30, Block.WALL);
 	private static final int MAX_CHASE_DIST = 8; // maximum distance clyde can be away to chase Pacman
 
-	Clyde()
+	Clyde(int screenX, Location spawnLoc, Maze m)
 	{
-		super();
+		super(screenX, spawnLoc, m);
 	}
 
 	/**

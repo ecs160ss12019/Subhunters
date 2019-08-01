@@ -11,8 +11,9 @@ public class Inky extends Ghost
 
 	private Blinky blinky;
 
-	Inky(Blinky blinky, Maze maze)
+	Inky(Blinky blinky, int screenX, Location spawnLoc, Maze maze)
 	{
+		super(screenX, spawnLoc, maze);
 		this.maze = maze;
 		this.blinky = findBlinky();
 	}
@@ -36,14 +37,15 @@ public class Inky extends Ghost
 	{
 		if (blinky != null) // if blinky is saved as a variable already
 			return blinky;
-		for (int i = 0; i < maze.getMaze().length; i++) {
-			for (int j = 0; j < maze.getMaze()[i].length; j++) {
-				if (maze.getMaze()[i][j].getObj() == Block.BLINKY) {
-					// TODO: check this is right
-					return blinky = new Blinky();
-				}
-			}
-		}
+		// TODO: don't know if I need below
+//		for (int i = 0; i < maze.getMaze().length; i++) {
+//			for (int j = 0; j < maze.getMaze()[i].length; j++) {
+//				if (maze.getMaze()[i][j].getObj() == Block.BLINKY) {
+//					// TODO: check this is right
+//					return blinky = new Blinky(screenX, spawnLoc, maze);
+//				}
+//			}
+//		}
 		return blinky;
 	}
 

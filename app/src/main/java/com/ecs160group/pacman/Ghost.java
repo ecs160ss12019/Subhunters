@@ -29,11 +29,9 @@ public class Ghost// implements Collision
 
 	//ghost coords//directions
 	//private int direction;
-	private int nextDirection;
 	private char direction;
-	private Location savedLoc;
 
-	// TODO: add explenations for these two vars here
+	// TODO: add explanations for these two vars here
 	private int deathTimer = 0;
 	private boolean isDead = false;
 
@@ -57,15 +55,6 @@ public class Ghost// implements Collision
 
 	private Point gridCoord;
 	public Location gridLocation;
-
-
-	/**
-	 * Non-parameterized Ghost ctor
-	 */
-	public Ghost()
-	{
-
-	}
 
 	/**
 	 * Parameterized Ghost ctor
