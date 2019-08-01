@@ -356,12 +356,12 @@ public class Pacman //implements Collision
 				Log.d("Pac-Detect_Collision: ", "pacmanGridValues: " + "Location: " + pacGridX + "," + pacGridY);
 				if(pacGridX == 0 && pacGridY == 14){
 					//Log.d("Debugging", "In Collision Interact: WARP_SPACE, Pacman warped[Left->Right].");
-					gridLocation.setNewLoc(27, 14); // Change to locate grid coordinates, not screen position
+					gridLocation.setNewLoc(26, 14); // Change to locate grid coordinates, not screen position
 				}
 				else{
 					//Assumed opposite side. Change Pacman's location
 					//Log.d("Debugging", "In Collision Interact: WARP_SPACE, Pacman warped[Right->Left].");
-					gridLocation.setNewLoc(0, 14);
+					gridLocation.setNewLoc(1, 14);
 				}
 				Log.d("Debugging", "In Collision Interact: WARP_SPACE, Pacman warped.");
 				break;

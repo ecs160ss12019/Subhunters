@@ -229,7 +229,6 @@ public class PacmanGame extends SurfaceView implements Runnable
 		actorReset();
 		//resetting /States/Direction
 		//pellet = 0; // New map, reset pellet counter
-		mGhost.setDeathState(0, false);
 		// Movement reset.
 		mFakeJoy.setCenter();
 
@@ -244,11 +243,11 @@ public class PacmanGame extends SurfaceView implements Runnable
 
 	public void actorReset()
 	{
-		mGhost.reset(); // TODO: Remove later
-		//mInky.reset();
-		//mPinky.reset();
-		//mBlinky.reset();
-		//mClyde.reset();
+		//mGhost.reset(); // TODO: Remove later
+		mInky.reset();
+		mPinky.reset();
+		mBlinky.reset();
+		mClyde.reset();
 		mPacman.reset();
 	}
 
@@ -275,7 +274,13 @@ public class PacmanGame extends SurfaceView implements Runnable
 					detectCollisions();
 					//Determines powerup state of pacman powerTimer decrements on every frame.
 					mPacman.checkPowerUpState();
-					mGhost.checkDeathTimer();
+
+					//mGhost.checkDeathTimer();
+					//mInky.checkDeathTimer();
+					//mPinky.checkDeathTimer();
+					mBlinky.checkDeathTimer();
+					//mClyde.checkDeathTimer();
+
 				}
 			}
 
@@ -307,7 +312,11 @@ public class PacmanGame extends SurfaceView implements Runnable
 		if (updatePacman) {
 			mPacman.update(mFPS);
 		}
-		mGhost.update(mFPS);
+		//mGhost.update(mFPS);
+		//mInky.update(mFPS);
+		//mPinky.update(mFPS);
+		mBlinky.update(mFPS);
+		//mClyde.update(mFPS);
 
 	}
 
@@ -328,7 +337,7 @@ public class PacmanGame extends SurfaceView implements Runnable
                 mPacman.ghostCollision(mBlinky,mScore) ||
                 mPacman.ghostCollision(mClyde, mScore)){
   */
-		if (mPacman.ghostCollision(mGhost, mScore)) {
+		if (mPacman.ghostCollision(mBlinky, mScore)) {
 			if (mPacman.getIsDead()) {
 				draw();
 				pauseStartDeath(3000);
@@ -433,7 +442,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 			mMaze.draw(mCanvas, mPaint);
 			mFakeJoy.draw(mCanvas, mPaint);
 			//draws pac and all ghosts/specific ghosts null for now, will take out mGhost later
-			mBitmapDrawer.draw(mPacman, mGhost, null, null, null, null, mCanvas);
+			mBitmapDrawer.draw(mPacman, null, mBlinky, null, null, null, mCanvas);
 
 			if (DEBUGGING) {
 				printDebuggingText();
@@ -465,18 +474,22 @@ public class PacmanGame extends SurfaceView implements Runnable
                 mCanvas.drawText("basebaseCenter.y: " + mFakeJoy.baseCenter.y,
                         10,debugStart + debugSize + 180, mPaint);
                 */
+/*
 		mCanvas.drawText("mGhost.gridLocation.x: " + mGhost.gridLocation.getX(),
 				10, debugStart + debugSize + 90, mPaint);
 		mCanvas.drawText("mGhost.gridLocation.x: " + mGhost.gridLocation.getY(),
 				10, debugStart + debugSize + 120, mPaint);
+*/
 		mCanvas.drawText("xScaled: " + xScaled,
 				10, debugStart + debugSize + 150, mPaint);
 		mCanvas.drawText("yScaled: " + yScaled,
 				10, debugStart + debugSize + 180, mPaint);
+/*
 		mCanvas.drawText("mGhost.loc.x: " + mGhost.loc.getX(),
 				10, debugStart + debugSize + 30, mPaint);
 		mCanvas.drawText("mGhost.loc.y: " + mGhost.loc.getY(),
 				10, debugStart + debugSize + 60, mPaint);
+*/
 		mCanvas.drawText("mPacman.loc.x: " + mPacman.gridLocation.getX(),
 				10, debugStart + debugSize + 210, mPaint);
 		mCanvas.drawText("mPacman.loc.y: " + mPacman.gridLocation.getY(),
