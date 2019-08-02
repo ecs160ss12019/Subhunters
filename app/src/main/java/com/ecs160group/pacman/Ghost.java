@@ -92,7 +92,6 @@ public class Ghost// implements Collision
 	}
 
 
-
 	public Location getGridLoc()
 	{
 		return gridLocation;
@@ -151,7 +150,7 @@ public class Ghost// implements Collision
 	 */
 	private boolean isInGrid()
 	{
-		return !isDead;
+		return isDead == false;
 	}
 
 
@@ -291,7 +290,7 @@ public class Ghost// implements Collision
 	 */
 	private Location minDistance(Location target)
 	{
-		int minDist = 0;
+		int minDist = Integer.MAX_VALUE;
 		Location next = gridLocation.getAhead(direction);
 		// set object in maze after getting the location
 		if (maze.isInBounds(next))
@@ -332,17 +331,19 @@ public class Ghost// implements Collision
 	 */
 	private boolean canMoveTo(Location l)
 	{
-		if (!Location.isValid(l) || l.isWall() || l.isGhostGate()) { // location exists, is not in bounds, or is a wall
+		// can move to if location exists in maze, is not in bounds, or is a wall, or is a ghost
+		if (!Location.isValid(l) || l.isWall() || l.isGhostGate() || l.isGhost()) {
 			return false;
 		}
-		return l.isEmpty() || l.isPellet() || (l.isPacman() && !pacman.isSuper());
+		return l.isEmpty() || l.isPellet() || l.isFruit() || l.isWarp()
+				|| l.isSpawn() || (l.isPacman() && !pacman.isSuper());
 	}
 
 	/**
 	 * Private helper to find is Ghost can move to the next space
 	 *
 	 * @param next nex location to move to
-	 * @return
+	 * @return location that can be moved to
 	 */
 	private Location canMove(Location next)
 	{
@@ -410,12 +411,12 @@ public class Ghost// implements Collision
 	/**
 	 * Moves the Ghost to the neighboring location
 	 *
-	 * @param loc location to move to
+	 * @param l location to move to
 	 */
-	private void moveTo(Location loc)
+	private void moveTo(Location l)
 	{
-		Log.d("Doing a Move: ", "Moving " + this + "to " + loc.toString());
-		gridLocation = loc;
+		Log.d("Doing a Move: ", "Moving " + this + "to " + l.toString());
+		gridLocation = l;
 		gridLocation.setObj(Block.GHOST);
 	}
 
