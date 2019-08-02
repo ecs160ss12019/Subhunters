@@ -194,7 +194,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 	public void removeGhostFromGY()
 	{
 		Ghost temp;
-		if (!graveyard.isEmpty() && graveyard.peek().isInGYard() == false) { // Not empty, a ghost exists in GY
+		if (!graveyard.isEmpty() && !graveyard.peek().isInGYard()) { // Not empty, a ghost exists in GY
 			temp = graveyard.poll(); // Retrieve and removes head of queue
 			//Log.d("ghost-removeGhostGY: ", "OLD! x: " + temp.gridLocation.getX() + "y: " + temp.gridLocation.getY());
 			temp.gridLocation.setNewLoc(13, 11); // Take head out of graveyard. Place at entrance.
@@ -319,9 +319,9 @@ public class PacmanGame extends SurfaceView implements Runnable
 
 					// Checks states of ghosts, If dead decrements death timer by 1.
 					//mGhost.decrementDeathTimer();
-					mInky.decrementDeathTimer();
-					mPinky.decrementDeathTimer();
 					mBlinky.decrementDeathTimer();
+					mPinky.decrementDeathTimer();
+					mInky.decrementDeathTimer();
 					mClyde.decrementDeathTimer();
 					removeGhostFromGY(); // Check if head of queue is finished. Pop off and update states.
 
@@ -369,9 +369,9 @@ public class PacmanGame extends SurfaceView implements Runnable
 */
 
 
-		mInky.move();
-		mPinky.move();
 		mBlinky.move();
+		mPinky.move();
+		mInky.move();
 		mClyde.move();
 
 
