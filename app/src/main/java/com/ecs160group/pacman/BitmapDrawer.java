@@ -51,7 +51,7 @@ public class BitmapDrawer {
 
     }
 
-    public void draw(Pacman pacman, Ghost ghost, Blinky blinky, Inky inky, Pinky pinky, Clyde clyde, Canvas canvas) {
+    public void draw(Pacman pacman, Ghost ghost, Blinky blinky, Inky inky, Pinky pinky, Clyde clyde, Canvas canvas, int lives) {
 
         if (pacman.direction != ' ') {
             draw(pacman, canvas);
@@ -72,6 +72,7 @@ public class BitmapDrawer {
             draw(pinky, canvas);
             draw(clyde, canvas);
         }
+        drawLives(lives, canvas);
        counter();
     }
 
@@ -84,15 +85,48 @@ public class BitmapDrawer {
         if (updatePac) {
             pacFrameCounter++;
         }
-            if (pacFrameCounter > 30) {
-                pacFrameCounter = 0;
-            }
+        if (pacFrameCounter > 30) {
+            pacFrameCounter = 0;
+        }
 
         ghostFrameCounter++;
         if (ghostFrameCounter > 20) {
             ghostFrameCounter = 0;
         }
 
+    }
+
+    public void drawLives(int lives, Canvas canvas) {
+        if (lives == 1) {
+           /* canvas.drawBitmap(bitmaps.livesMap, (float) xScaled / 2,
+                    (float) yScaled / 5, null);*/
+            drawFirstLife(canvas);
+        }
+
+        else if (lives == 2) {
+            drawFirstLife(canvas);
+            drawSecondLife(canvas);
+        }
+
+        else if (lives == 3) {
+            drawFirstLife(canvas);
+            drawSecondLife(canvas);
+            drawThirdLife(canvas);
+        }
+    }
+
+    private void drawFirstLife(Canvas canvas) {
+        canvas.drawBitmap(bitmaps.livesMap, (float) (xScaled / 4) + (pacGhostRadius / 2) ,
+                (float) yScaled - (pacGhostRadius / 2), null);
+    }
+
+    private void drawSecondLife(Canvas canvas) {
+        canvas.drawBitmap(bitmaps.livesMap,  ((float)(xScaled / 4) + (pacGhostRadius / 2)) + (bitmaps.livesMap.getWidth() * 2),
+                (float) yScaled - (pacGhostRadius / 2), null);
+    }
+    private void drawThirdLife(Canvas canvas) {
+        canvas.drawBitmap(bitmaps.livesMap,  ((float)(xScaled / 4) + (pacGhostRadius / 2)) + (bitmaps.livesMap.getWidth() * 4),
+                (float) yScaled - (pacGhostRadius / 2), null);
     }
 
     /**

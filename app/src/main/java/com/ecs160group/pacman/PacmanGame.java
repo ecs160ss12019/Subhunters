@@ -468,15 +468,17 @@ public class PacmanGame extends SurfaceView implements Runnable
 			mPaint.setTextSize(mFontSize);
 
 			//HUD
-			mCanvas.drawText("Score:  " + mScore.getScore() +
-							"  Lives: " + mLives,
+			mCanvas.drawText("Score:  " + mScore.getScore(),
 					mFontMargin, mFontSize, mPaint);
+			mCanvas.drawText("Lives: ",
+					(float) xScaled / blockSize.x, yScaled + blockSize.y, mPaint);
+
 
 			// draw all member objects
 			mMaze.draw(mCanvas, mPaint);
 			mFakeJoy.draw(mCanvas, mPaint);
 			//draws pac and all ghosts/specific ghosts null for now, will take out mGhost later
-			mBitmapDrawer.draw(mPacman, null, mBlinky, mInky, mPinky, mClyde, mCanvas);
+			mBitmapDrawer.draw(mPacman, null, mBlinky, mInky, mPinky, mClyde, mCanvas, mLives);
 
 			if (DEBUGGING) {
 				printDebuggingText();

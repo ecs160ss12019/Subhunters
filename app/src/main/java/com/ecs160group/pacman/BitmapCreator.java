@@ -47,6 +47,8 @@ public class BitmapCreator {
 
     public Bitmap[] scaredGhostMaps;
 
+    public Bitmap livesMap;
+
     public BitmapCreator(PacmanGame game) {
 
         this.context = game.activityContext;
@@ -81,6 +83,8 @@ public class BitmapCreator {
 
         scaredGhostMaps = new Bitmap[2];
 
+        livesMap = null;
+
         //initialize all bitmaps
         initAllMaps();
 
@@ -97,6 +101,14 @@ public class BitmapCreator {
         initAllPinkyMaps();
         initAllClydeMaps();
         initScaredGhostMaps();
+        initLivesMap();
+    }
+
+    private void initLivesMap(){
+        Bitmap b = BitmapFactory.decodeResource(context.getResources(), R.drawable.pacmanl2);
+        Bitmap sizedB = Bitmap.createScaledBitmap(b, (int) pacGhostRadius * 3,
+                (int) pacGhostRadius * 3, false);
+        livesMap = sizedB;
     }
 
     /**
