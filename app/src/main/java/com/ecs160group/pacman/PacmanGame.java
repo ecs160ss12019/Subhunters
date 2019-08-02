@@ -222,7 +222,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 		mLives = 3;
 		//pellet = 0; // TODO: Have maze check for not pellets instead.
 		mFakeJoy.setCenter();
-		mPacman.updateNextDirection('l');
+		mPacman.updateNextDirection(' ');
 
 		// Should reset the Maze, refresh pellets
 		mMaze = new Maze(activityContext, mScreenX, mScreenY, blockSize);
@@ -301,9 +301,10 @@ public class PacmanGame extends SurfaceView implements Runnable
 			if (!mPaused) {
 				//Boolean updateGhost = mGhost.wallDetection(mMaze);
 
-				// (frameStartTime % 2 == 0) {
+				//if (frameStartTime % 2 == 0) {
 					mPacman.updateNextDirection(mFakeJoy.direction);
 					updatePacman = mPacman.wallDetection();
+					mBitmapDrawer.updatePac = updatePacman;
 					update(updatePacman);
 					detectCollisions();
 					//Determines powerup state of pacman powerTimer decrements on every frame.

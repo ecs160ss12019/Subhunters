@@ -32,6 +32,8 @@ public class BitmapDrawer {
 
     private BitmapCreator bitmaps;
 
+    public boolean updatePac;
+
 
 
     public BitmapDrawer(PacmanGame game) {
@@ -45,11 +47,18 @@ public class BitmapDrawer {
 
         bitmaps = new BitmapCreator(game);
 
+        updatePac = true;
+
     }
 
     public void draw(Pacman pacman, Ghost ghost, Blinky blinky, Inky inky, Pinky pinky, Clyde clyde, Canvas canvas) {
 
-        draw(pacman, canvas);
+        if (pacman.direction != ' ') {
+            draw(pacman, canvas);
+        }
+        else {
+            drawStillPacman(pacman, canvas);
+        }
         //draw(ghost, canvas);
         if (pacman.isSuper()) {
             drawScared(blinky, canvas);
@@ -63,15 +72,27 @@ public class BitmapDrawer {
             draw(pinky, canvas);
             draw(clyde, canvas);
         }
+       counter();
+    }
 
-        pacFrameCounter++;
-        if (pacFrameCounter > 30) {
-            pacFrameCounter = 0;
+
+
+    /**
+     * increments and keeps track of pacFrameCounter and ghostFrameCounter
+     */
+    private void counter() {
+        if (updatePac) {
+            pacFrameCounter++;
         }
+            if (pacFrameCounter > 30) {
+                pacFrameCounter = 0;
+            }
+
         ghostFrameCounter++;
         if (ghostFrameCounter > 20) {
             ghostFrameCounter = 0;
         }
+
     }
 
     /**
@@ -272,6 +293,14 @@ public class BitmapDrawer {
             canvas.drawBitmap(bitmaps.pacDownMaps[2], (mPacman.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
                     (mPacman.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
         }
+    }
+
+    /**
+     * draws pacman before user has input direction
+     */
+    private void drawStillPacman( Pacman mPacman, Canvas canvas){
+        canvas.drawBitmap(bitmaps.pacLeftMaps[0], (mPacman.gridLocation.getX() * 28 + xScaled) - pacGhostRadius,
+                (mPacman.gridLocation.getY() * 28 + yScaled) - pacGhostRadius, null);
     }
 
 
