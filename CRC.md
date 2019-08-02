@@ -10,3 +10,4 @@ Sprint 2:
 Sprint 3:
 
 ![Link to Sprint Chart](https://github.com/ecs160ss12019/Subhunters/blob/master/CRC/CRC_3.PNG)
+![Link to Sprint Chart](https://github.com/ecs160ss12019/Subhunters/blob/master/CRC/CRC_3-2.PNG)
