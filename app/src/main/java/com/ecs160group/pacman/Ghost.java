@@ -125,7 +125,7 @@ public class Ghost
 	 */
 	public void decrementDeathTimer()
 	{
-		Log.d("ghost-decDeathTimer: ", "deathTimer: " + deathTimer + "isDead: " + isDead);
+		//Log.d("ghost-decDeathTimer: ", "deathTimer: " + deathTimer + "isDead: " + isDead);
 		if (isInGYard() || deathTimer > 0) {
 			setDeathState(deathTimer - 1, true);
 			if (deathTimer <= 0) {

@@ -25,7 +25,7 @@ import java.util.concurrent.BlockingQueue;
 public class PacmanGame extends SurfaceView implements Runnable
 {
 	//for debugging purposes
-	private final boolean DEBUGGING = true;
+	private final boolean DEBUGGING = false;
 	private long mFPS; //frames per second
 	private final int MILLIS_IN_SECOND = 1000;
 
@@ -405,12 +405,11 @@ public class PacmanGame extends SurfaceView implements Runnable
 			PacmanSounds.pacmanChomp(); // Consume pellet..
 			pauseStartDeath(4000);
 			mFakeJoy.setCenter();
-			draw();
 			StageCleared();
 
 		} // Win condition reached. All pellets cleared.
 
-		Log.d("Pacman-ghostCollision: ", "pacValues: " + "Location: " + mPacman.gridLocation.getX() + "," + mPacman.gridLocation.getY());
+		//Log.d("Pacman-ghostCollision: ", "pacValues: " + "Location: " + mPacman.gridLocation.getX() + "," + mPacman.gridLocation.getY());
 
 		if (mPacman.ghostCollision(mBlinky, mScore) ||
 				mPacman.ghostCollision(mPinky, mScore) ||
