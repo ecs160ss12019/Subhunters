@@ -42,8 +42,7 @@ public class Ghost// implements Collision
 	Paint paint = new Paint();
 	private Location spawnLoc;
 
-
-	private Location gridLocation;
+	public Location gridLocation;
 
 	/**
 	 * Parameterized Ghost ctor
@@ -62,7 +61,6 @@ public class Ghost// implements Collision
 		velocity = screenX / 15;
 
 		gridLocation = new Location(13, 11, Block.GHOST);
-		gridCoord = new Point(gridLocation.getX(), gridLocation.getY());
 		this.spawnLoc = spawnLoc;
 		direction = 'l';
 
