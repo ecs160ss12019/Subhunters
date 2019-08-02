@@ -124,7 +124,7 @@ public class Ghost// implements Collision
 	 *
 	 * @param dState state of the ghost to set
 	 */
-	public void setInGYard(boolean dState)
+	private void setInGYard(boolean dState)
 	{
 		isDead = dState;
 	}
@@ -135,7 +135,7 @@ public class Ghost// implements Collision
 	public void decrementDeathTimer()
 	{
 		Log.d("ghost-decDeathTimer: ", "deathTimer: " + deathTimer + "isDead: " + isDead);
-		if (isDead == true || deathTimer > 0) {
+		if (isInGYard() || deathTimer > 0) {
 			setDeathState(deathTimer - 1, true);
 			if (deathTimer <= 0) {
 				setDeathState(0, false);
@@ -150,7 +150,7 @@ public class Ghost// implements Collision
 	 */
 	private boolean isInGrid()
 	{
-		return isDead == false;
+		return !isInGYard();
 	}
 
 
@@ -293,14 +293,14 @@ public class Ghost// implements Collision
 		int minDist = Integer.MAX_VALUE;
 		Location next = gridLocation.getAhead(direction);
 		// set object in maze after getting the location
-		if (maze.isInBounds(next))
+		if (Maze.isInBounds(next))
 			next.setObj(maze.getMaze()[next.getX()][next.getY()].getObj());
 		if (canMoveTo(next)) {
 			minDist = Location.dist(next, target);
 		}
 		// compare with left
 		Location left = gridLocation.getLeft(direction);
-		if (maze.isInBounds(left))
+		if (Maze.isInBounds(left))
 			left.setObj(maze.getMaze()[left.getX()][left.getY()].getObj());
 		if (canMoveTo(left)) {
 			// get distance between left and target location
@@ -312,7 +312,7 @@ public class Ghost// implements Collision
 		}
 		// compare with right
 		Location right = gridLocation.getRight(direction);
-		if (maze.isInBounds(right))
+		if (Maze.isInBounds(right))
 			right.setObj(maze.getMaze()[right.getX()][right.getY()].getObj());
 		if (canMoveTo(right)) {
 			int distRight = Location.dist(right, target);
