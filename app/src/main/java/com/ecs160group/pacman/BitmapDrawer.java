@@ -47,7 +47,7 @@ public class BitmapDrawer {
 
     }
 
-    public void draw(Pacman pacman, Ghost ghost, Blinky blinky, Inky inky, Pinky pinky, Clyde clyde, Canvas canvas, long frame) {
+    public void draw(Pacman pacman, Ghost ghost, Blinky blinky, Inky inky, Pinky pinky, Clyde clyde, Canvas canvas) {
 
         draw(pacman, canvas);
         //draw(ghost, canvas);
