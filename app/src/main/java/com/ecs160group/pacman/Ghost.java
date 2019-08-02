@@ -415,17 +415,17 @@ public class Ghost// implements Collision
 	 */
 	private void moveTo(Location l)
 	{
-		if (l.getObj() == Block.WARP_SPACE) {
-			if (gridLocation.getX() == 0 && gridLocation.getY() == 14) { // is left warp
-				gridLocation.setNewLoc(26, 14); // move to one past the right warp
-			} else { // is right warp
-				gridLocation.setNewLoc(1, 14); // Change to locate grid coordinates, not screen position
+		gridLocation = l;
+		if (gridLocation.isWarp()) {
+			if (gridLocation.getX() == 0 && gridLocation.getY() == 14) {
+				// on left warp, move to after right warp
+				gridLocation.setNewLoc(26, 14);
+			} else { // on right warp, move to after left warp
+				gridLocation.setNewLoc(1, 14);
 			}
-		} else {
-			gridLocation = l;
 			gridLocation.setObj(Block.GHOST);
+			Log.d("Doing a Move: ", "Moving " + this + "to " + gridLocation.toString());
 		}
-		Log.d("Doing a Move: ", "Moving " + this + "to " + gridLocation.toString());
 	}
 
 
@@ -442,7 +442,8 @@ public class Ghost// implements Collision
 
 	/**
 	 * Gets the new direction for the Ghost to face
-	 * @param dirFacing direction currently facing
+	 *
+	 * @param dirFacing                direction currently facing
 	 * @param nextWayToLookFromCurrent next direction from current direction to turn to
 	 * @return next way to look
 	 */
@@ -457,6 +458,7 @@ public class Ghost// implements Collision
 
 	/**
 	 * Gets the new right direction to turn to given the current direction
+	 *
 	 * @param dirFacing current direction facing
 	 * @return new right direction
 	 */
@@ -477,6 +479,7 @@ public class Ghost// implements Collision
 
 	/**
 	 * Gets the new left direction to turn to given the current direction
+	 *
 	 * @param dirFacing current direction facing
 	 * @return new left direction
 	 */
