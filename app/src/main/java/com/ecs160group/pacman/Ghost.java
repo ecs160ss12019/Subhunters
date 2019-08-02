@@ -16,9 +16,8 @@ import java.util.Random;
  * turn left or right since one will be closer to target if forward is not possible
  * Only time a Ghost will turn 180 degrees is when pacman initially turns super
  */
-public class Ghost// implements Collision
-{ // TODO: check if really needs/fix interface
-
+public class Ghost
+{
 	//pixel(maze) coords
 	protected Pacman pacman;
 	protected Location loc;
@@ -29,7 +28,7 @@ public class Ghost// implements Collision
 	private char direction;
 
 
-	// TODO: add explanations for these two vars here
+	// for updating ghost's time and state as dead/in the graveyard
 	private int deathTimer = 0;
 	private boolean isDead = false;
 
@@ -341,18 +340,6 @@ public class Ghost// implements Collision
 		}
 	}
 
-
-	/**
-	 * To String representation of a Ghost
-	 *
-	 * @return string representation of a Ghost
-	 */
-	@Override
-	public String toString()
-	{
-		return "Ghost at x=" + getGridLoc().getX() + ", y=" + getGridLoc().getY();
-	}
-
 	/**
 	 * Gets the new direction for the Ghost to face
 	 *
@@ -411,4 +398,14 @@ public class Ghost// implements Collision
 		}
 	}
 
+	/**
+	 * To String representation of a Ghost
+	 *
+	 * @return string representation of a Ghost
+	 */
+	@Override
+	public String toString()
+	{
+		return "Ghost at x=" + getGridLoc().getX() + ", y=" + getGridLoc().getY();
+	}
 }
