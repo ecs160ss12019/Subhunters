@@ -368,8 +368,8 @@ public class PacmanGame extends SurfaceView implements Runnable
 		mClyde.update(mFPS);
 */
 
-		if(frameC % 4 == 0 && mPacman.isSuper()) {
-		}else {
+		if (frameC % 4 == 0 && mPacman.isSuper()) {
+		} else {
 			mBlinky.move();
 			mPinky.move();
 			mInky.move();
@@ -416,7 +416,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 				mPacman.ghostCollision(mInky, mScore) ||
 				mPacman.ghostCollision(mClyde, mScore)) {
 			if (mPacman.getIsDead()) {
-				Log.d("Pacman-getIsDead: ", "IS DEAD" );
+				Log.d("Pacman-getIsDead: ", "IS DEAD");
 				draw();
 				pauseStartDeath(3000);
 				mFakeJoy.setCenter();
@@ -481,7 +481,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 			mMaze.draw(mCanvas, mPaint);
 			mFakeJoy.draw(mCanvas, mPaint);
 			//draws pac and all ghosts/specific ghosts null for now, will take out mGhost later
-			mBitmapDrawer.draw(mPacman,mBlinky, mInky, mPinky, mClyde, mCanvas, mLives);
+			mBitmapDrawer.draw(mPacman, mBlinky, mInky, mPinky, mClyde, mCanvas, mLives);
 
 			if (DEBUGGING) {
 				printDebuggingText();
