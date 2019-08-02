@@ -21,7 +21,7 @@ import java.util.concurrent.BlockingQueue;
  */
 
 
-public class Pacman //implements Collision
+public class Pacman
 {
 	//pacman coords//directions
 	Location loc;
