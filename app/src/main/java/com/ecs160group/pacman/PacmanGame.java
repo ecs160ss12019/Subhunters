@@ -75,6 +75,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 	private Boolean updatePacman;
 
 	private Location mGrid;
+	private int frameCount;
 	private int xPac; // Sote loc.x & loc.y coordinates
 	private int yPac;
 	//int pacmanGridValues[];
@@ -151,7 +152,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 		mCanvas = new Canvas(bitmap);
 
 		mBitmapDrawer = new BitmapDrawer(this);
-
+		frameCount =0;
 
 		//start the game LETS GET PACCING
 		//  update(true, true);
@@ -227,7 +228,8 @@ public class PacmanGame extends SurfaceView implements Runnable
 		// Should reset the Maze, refresh pellets
 		mMaze = new Maze(activityContext, mScreenX, mScreenY, blockSize);
 
-		//draw();
+
+		draw();
 		PacmanSounds.pacmanBeginning();
 		mPaused = true; // Resume on user touch
 		//pauseStartDeath(5000);
@@ -270,8 +272,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 		// In this case we just reset the maze,
 		// TODO: Add more levels.
 		mMaze = new Maze(activityContext, mScreenX, mScreenY, blockSize);
-		pauseStartDeath(5000);
-		PacmanSounds.pacmanBeginning();
+		pauseStartDeath(3000);
 
 	}
 
@@ -297,11 +298,13 @@ public class PacmanGame extends SurfaceView implements Runnable
 		while (mPlaying) {
 			//time at start of loop
 			long frameStartTime = System.currentTimeMillis();
-
+			frameCount++;
 			if (!mPaused) {
 				//Boolean updateGhost = mGhost.wallDetection(mMaze);
 
-				//if (frameStartTime % 2 == 0) {
+				if (frameCount % 4 == 0 || frameCount == 0) {
+					//Log.d("run: ", "frameStartTime: " + frameCount);
+
 					mPacman.updateNextDirection(mFakeJoy.direction);
 					updatePacman = mPacman.wallDetection();
 					mBitmapDrawer.updatePac = updatePacman;
@@ -318,7 +321,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 					mClyde.decrementDeathTimer();
 					removeGhostFromGY(); // Check if head of queue is finished. Pop off and update states.
 
-				//}
+				}
 			}
 			//redraw grid/ghosts/pacman/pellets
 			draw();
@@ -331,6 +334,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 				mFPS = MILLIS_IN_SECOND / frameTime;
 				//store in mFPS to pass to update methods of pacman/ghosts
 			}
+			if(frameCount > 10000){frameCount=0;}
 		}
 	}
 
