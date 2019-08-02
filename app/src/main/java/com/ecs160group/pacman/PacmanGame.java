@@ -94,6 +94,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 	public int xScaled;
 	public int yScaled;
 	public int deathGhostTimer;
+
 	//constructor
 	public PacmanGame(Context context, int x, int y)
 	{
@@ -139,10 +140,10 @@ public class PacmanGame extends SurfaceView implements Runnable
 
 		mPacman = new Pacman(mScreenX, mMaze.pacSpawn, PacGhostRadius, mScore, activityContext, mMaze);
 //		mGhost = new Ghost(mScreenX, mMaze.ghostSpawn, mMaze);
-		mBlinky = new Blinky(mScreenX,mMaze.ghostSpawn, mMaze, mPacman);
+		mBlinky = new Blinky(mScreenX, mMaze.ghostSpawn, mMaze, mPacman);
 		mInky = new Inky(mBlinky, mScreenX, mMaze.ghostSpawn, mMaze, mPacman);
-		mPinky = new Pinky(mScreenX,mMaze.ghostSpawn, mMaze, mPacman);
-		mClyde = new Clyde(mScreenX,mMaze.ghostSpawn, mMaze, mPacman);
+		mPinky = new Pinky(mScreenX, mMaze.ghostSpawn, mMaze, mPacman);
+		mClyde = new Clyde(mScreenX, mMaze.ghostSpawn, mMaze, mPacman);
 
 		graveyard = new ArrayBlockingQueue<>(4);
 		addAllGhostsToGY();
@@ -154,7 +155,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 		mCanvas = new Canvas(bitmap);
 
 		mBitmapDrawer = new BitmapDrawer(this);
-		frameCount =0;
+		frameCount = 0;
 
 		//start the game LETS GET PACCING
 		//  update(true, true);
@@ -190,7 +191,8 @@ public class PacmanGame extends SurfaceView implements Runnable
 	/**
 	 *
 	 */
-	public void removeGhostFromGY() {
+	public void removeGhostFromGY()
+	{
 		Ghost temp;
 		if (!graveyard.isEmpty() && graveyard.peek().isInGYard() == false) { // Not empty, a ghost exists in GY
 			temp = graveyard.poll(); // Retrieve and removes head of queue
@@ -199,16 +201,16 @@ public class PacmanGame extends SurfaceView implements Runnable
 			//temp.setInGYard(true);
 			temp.setDeathState(0, false);
 			//Log.d("ghost-removeGhostGY: ", "NEW! x: " + temp.gridLocation.getX() + "y: " + temp.gridLocation.getY());
-			if(!graveyard.isEmpty() ) {
-                temp = graveyard.peek();
-                temp.setDeathState(deathGhostTimer, true);
-            }
+			if (!graveyard.isEmpty()) {
+				temp = graveyard.peek();
+				temp.setDeathState(deathGhostTimer, true);
+			}
 		}
 		//graveyard.clear();
 
 	}
 
-		//runs when a player lost all lives and restarts
+	//runs when a player lost all lives and restarts
 	//or starting the first game
 	public void startNewGame()
 	{
@@ -336,13 +338,16 @@ public class PacmanGame extends SurfaceView implements Runnable
 				mFPS = MILLIS_IN_SECOND / frameTime;
 				//store in mFPS to pass to update methods of pacman/ghosts
 			}
-			if(frameCount > 10000){frameCount=0;}
+			if (frameCount > 10000) {
+				frameCount = 0;
+			}
 		}
 	}
 
 	/**
 	 * This function is used to schedule the updates to location of pacman and the ghosts.
- 	 * @param updatePacman Determines if pacman is moving to a valid location. if so update position/draw
+	 *
+	 * @param updatePacman Determines if pacman is moving to a valid location. if so update position/draw
 	 */
 	private void update(boolean updatePacman)
 	{
@@ -370,13 +375,14 @@ public class PacmanGame extends SurfaceView implements Runnable
 		mClyde.move();
 
 
-
 	}
-	private void sendToGY(Ghost tGhost){
-		if(tGhost.isInGYard() && !graveyard.contains(tGhost)){
-				tGhost.setInGYard(true); // makes ghost dead/in graveyard
-				graveyard.add(tGhost);
-			}
+
+	private void sendToGY(Ghost tGhost)
+	{
+		if (tGhost.isInGYard() && !graveyard.contains(tGhost)) {
+//			tGhost.setInGYard(true); // makes ghost dead/in graveyard
+			graveyard.add(tGhost);
+		}
 	}
 
 	//detects if pacman hit a pellet/ghost/wall
@@ -390,22 +396,22 @@ public class PacmanGame extends SurfaceView implements Runnable
 		//if (mPacman.detectCollision(mGhost.loc, mScreenX, mScreenY)) {
 
 
-                if(mPacman.ghostCollision(mInky, mScore) ||
-                	mPacman.ghostCollision(mPinky, mScore) ||
-                	mPacman.ghostCollision(mBlinky,mScore) ||
-                	mPacman.ghostCollision(mClyde, mScore)){
-					if (mPacman.getIsDead()) {
-						draw();
-						pauseStartDeath(3000);
-						mFakeJoy.setCenter();
-						draw();
-						deathRestart();
-					}
-				}
-                sendToGY(mInky); // Checks death state, send to Graveyard if eaten.
-				sendToGY(mPinky);
-				sendToGY(mBlinky);
-				sendToGY(mClyde);
+		if (mPacman.ghostCollision(mInky, mScore) ||
+				mPacman.ghostCollision(mPinky, mScore) ||
+				mPacman.ghostCollision(mBlinky, mScore) ||
+				mPacman.ghostCollision(mClyde, mScore)) {
+			if (mPacman.getIsDead()) {
+				draw();
+				pauseStartDeath(3000);
+				mFakeJoy.setCenter();
+				draw();
+				deathRestart();
+			}
+		}
+		sendToGY(mInky); // Checks death state, send to Graveyard if eaten.
+		sendToGY(mPinky);
+		sendToGY(mBlinky);
+		sendToGY(mClyde);
 
 		mPacman.collisionInteraction(mInky, mPinky, mBlinky, mClyde, mMaze, mScore);
 		// Check interactions, then win condition.
