@@ -415,9 +415,17 @@ public class Ghost// implements Collision
 	 */
 	private void moveTo(Location l)
 	{
-		Log.d("Doing a Move: ", "Moving " + this + "to " + l.toString());
-		gridLocation = l;
-		gridLocation.setObj(Block.GHOST);
+		if (l.getObj() == Block.WARP_SPACE) {
+			if (gridLocation.getX() == 0 && gridLocation.getY() == 14) { // is left warp
+				gridLocation.setNewLoc(26, 14); // move to one past the right warp
+			} else { // is right warp
+				gridLocation.setNewLoc(1, 14); // Change to locate grid coordinates, not screen position
+			}
+		} else {
+			gridLocation = l;
+			gridLocation.setObj(Block.GHOST);
+		}
+		Log.d("Doing a Move: ", "Moving " + this + "to " + gridLocation.toString());
 	}
 
 
