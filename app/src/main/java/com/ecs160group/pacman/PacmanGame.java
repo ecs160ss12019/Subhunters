@@ -147,7 +147,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 
 		graveyard = new ArrayBlockingQueue<>(4);
 		addAllGhostsToGY();
-		deathGhostTimer = 30; // Death Timer for Ghost
+		deathGhostTimer = 40; // Death Timer for Ghost
 
 		mFakeJoy = new FakeJoy(200, 100, blockSize, fakePosition);
 		//bitmap

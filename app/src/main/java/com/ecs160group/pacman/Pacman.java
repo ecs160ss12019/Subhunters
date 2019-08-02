@@ -145,7 +145,7 @@ public class Pacman //implements Collision
 	public void checkPowerUpState()
 	{
 		//Log.d("Debugging", "checkPowerUpState" + powerTimer);
-		if (powerState == true ||  powerTimer >= 0) {
+		if (powerState == true ||  powerTimer > 0) {
 			setPowerUpState(powerTimer - 1, true);
 			if (powerTimer <= 0) {
 				setPowerUpState(0, false);
@@ -342,7 +342,7 @@ public class Pacman //implements Collision
 				//Log.d("Debugging", "In Collision Interact: POWER_PELLET");
 				mMaze.getMaze()[pacGridX][pacGridY].updateLoc(pacGridX, pacGridY, block.EMPTY);
 				PacmanSounds.pacmanPowerup();
-				setPowerUpState(40,true);// 540 is amount of frames time to be decremented EVERY FRAME
+				setPowerUpState(45,true);// 540 is amount of frames time to be decremented EVERY FRAME
 				mScore.atePowerPellet();
 				break;
 			case FRUIT: // Adjust for different fruits.
