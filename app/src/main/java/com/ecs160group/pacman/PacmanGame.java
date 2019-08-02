@@ -478,7 +478,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 			mMaze.draw(mCanvas, mPaint);
 			mFakeJoy.draw(mCanvas, mPaint);
 			//draws pac and all ghosts/specific ghosts null for now, will take out mGhost later
-			mBitmapDrawer.draw(mPacman, null, mBlinky, mInky, mPinky, mClyde, mCanvas, mLives);
+			mBitmapDrawer.draw(mPacman,mBlinky, mInky, mPinky, mClyde, mCanvas, mLives);
 
 			if (DEBUGGING) {
 				printDebuggingText();

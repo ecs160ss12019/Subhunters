@@ -51,16 +51,34 @@ public class BitmapDrawer {
 
     }
 
-    public void draw(Pacman pacman, Ghost ghost, Blinky blinky, Inky inky, Pinky pinky, Clyde clyde, Canvas canvas, int lives) {
+    public void draw(Pacman pacman, Blinky blinky, Inky inky, Pinky pinky, Clyde clyde, Canvas canvas, int lives) {
+        drawPac(pacman, canvas);
+        drawGhost(pacman.isSuper(),blinky, inky,  pinky, clyde, canvas);
+        drawLives(lives, canvas);
+        //keep track of counter to see which frame of pac/ghost animation to draw
+        counter();
+    }
 
+
+    /**
+     * draws pacman depending on movement/frame
+     */
+    private void drawPac(Pacman pacman, Canvas canvas) {
         if (pacman.direction != ' ') {
             draw(pacman, canvas);
         }
         else {
             drawStillPacman(pacman, canvas);
         }
-        //draw(ghost, canvas);
-        if (pacman.isSuper()) {
+
+    }
+
+    /**
+     * draws the ghosts depending on if pac is super or not
+     * @param pacIsSuper - boolean to check if pac is super
+     */
+    private void drawGhost(boolean pacIsSuper,Blinky blinky, Inky inky, Pinky pinky, Clyde clyde, Canvas canvas){
+        if (pacIsSuper) {
             drawScared(blinky, canvas);
             drawScared(inky, canvas);
             drawScared(pinky, canvas);
@@ -72,11 +90,8 @@ public class BitmapDrawer {
             draw(pinky, canvas);
             draw(clyde, canvas);
         }
-        drawLives(lives, canvas);
-       counter();
+
     }
-
-
 
     /**
      * increments and keeps track of pacFrameCounter and ghostFrameCounter
@@ -96,6 +111,11 @@ public class BitmapDrawer {
 
     }
 
+    /**
+     * function draws the lives represented as pac images depending on how many lives left
+     * @param lives - user's lives
+     * @param canvas - to draw
+     */
     public void drawLives(int lives, Canvas canvas) {
         if (lives == 1) {
            /* canvas.drawBitmap(bitmaps.livesMap, (float) xScaled / 2,
