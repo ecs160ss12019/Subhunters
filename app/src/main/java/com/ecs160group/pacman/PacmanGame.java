@@ -311,9 +311,9 @@ public class PacmanGame extends SurfaceView implements Runnable
 
 					mPacman.updateNextDirection(mFakeJoy.direction);
 					updatePacman = mPacman.wallDetection();
-					mBitmapDrawer.updatePac = updatePacman;
 					update(updatePacman);
-					detectCollisions();
+					//detectCollisions();
+					mBitmapDrawer.updatePac = updatePacman;
 					//Determines powerup state of pacman powerTimer decrements on every frame.
 					mPacman.checkPowerUpState();
 
