@@ -306,14 +306,14 @@ public class PacmanGame extends SurfaceView implements Runnable
 			if (!mPaused) {
 				//Boolean updateGhost = mGhost.wallDetection(mMaze);
 
-				if (frameCount % 4 == 0 || frameCount == 0) {
+				if (frameCount % 5 == 0 || frameCount == 0) {
 					//Log.d("run: ", "frameStartTime: " + frameCount);
 
 					mPacman.updateNextDirection(mFakeJoy.direction);
 					updatePacman = mPacman.wallDetection();
 					mBitmapDrawer.updatePac = updatePacman;
 					update(updatePacman);
-					detectCollisions();
+					//detectCollisions();
 					//Determines powerup state of pacman powerTimer decrements on every frame.
 					mPacman.checkPowerUpState();
 
@@ -327,6 +327,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 
 				}
 			}
+			detectCollisions();
 			//redraw grid/ghosts/pacman/pellets
 			draw();
 

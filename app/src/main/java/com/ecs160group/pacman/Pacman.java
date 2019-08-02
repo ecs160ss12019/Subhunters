@@ -308,7 +308,7 @@ public class Pacman //implements Collision
 				PacmanSounds.pacmanEatGhost();
 				mGhost.gridLocation.setNewLoc(13, 14); // TODO: remove hardcoded values.
 				mScore.ateGhost();
-				pauseStartDeath(500);
+				pauseStartDeath(300);
 				return true;
 			}
 			else{ // pacman death.
