@@ -401,9 +401,9 @@ public class Ghost// implements Collision
 			direction = rand.nextBoolean() ? 'r' : 'l';
 		} else {
 			if (next.isRight(direction)) { // if next is right, change direction to right
-				direction = 'r';
+				direction = getNewDir(direction, 'r');
 			} else if (next.isLeft(direction)) { // if next is left, change direction to left
-				direction = 'l';
+				direction = getNewDir(direction, 'l');
 			}
 		}
 	}
@@ -439,4 +439,60 @@ public class Ghost// implements Collision
 	{
 		return "Ghost at x=" + getGridLoc().getX() + ", y=" + getGridLoc().getY();
 	}
+
+	/**
+	 * Gets the new direction for the Ghost to face
+	 * @param dirFacing direction currently facing
+	 * @param nextWayToLookFromCurrent next direction from current direction to turn to
+	 * @return next way to look
+	 */
+	private char getNewDir(char dirFacing, char nextWayToLookFromCurrent)
+	{
+		if (nextWayToLookFromCurrent == 'r') {
+			return getNewRightDir(dirFacing);
+		} else { // nextWayToLookFromCurrent == 'l'
+			return getNewLeftDir(dirFacing);
+		}
+	}
+
+	/**
+	 * Gets the new right direction to turn to given the current direction
+	 * @param dirFacing current direction facing
+	 * @return new right direction
+	 */
+	private char getNewRightDir(char dirFacing)
+	{
+		switch (dirFacing) {
+			case 'u':
+				return 'r';
+			case 'r':
+				return 'd';
+			case 'd':
+				return 'l';
+			case 'l':
+			default:
+				return 'u';
+		}
+	}
+
+	/**
+	 * Gets the new left direction to turn to given the current direction
+	 * @param dirFacing current direction facing
+	 * @return new left direction
+	 */
+	private char getNewLeftDir(char dirFacing)
+	{
+		switch (dirFacing) {
+			case 'u':
+				return 'l';
+			case 'l':
+				return 'd';
+			case 'd':
+				return 'r';
+			case 'r':
+			default:
+				return 'u';
+		}
+	}
+
 }
