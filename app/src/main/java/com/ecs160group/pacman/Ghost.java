@@ -28,28 +28,22 @@ public class Ghost// implements Collision
 	//ghost coords//directions
 	private char direction;
 
+
 	// TODO: add explanations for these two vars here
 	private int deathTimer = 0;
 	private boolean isDead = false;
 
-	// tells if ghost has been initialized into the grid and is not in waiting room
-	private boolean started;
+	Random rand = new Random();
 
 
-	//the draw image of ghost
-	int ghostImage = 1;
-
-	//RectF has four values (left, top, right, bottom)
-
-	float velocity;
-	float mGhostWidth;
-	float mGhostHeight;
+	private float velocity;
+	private float mGhostWidth;
+	private float mGhostHeight;
 	Paint paint = new Paint();
-	public Location spawnLoc;
+	private Location spawnLoc;
 
 
-	private Point gridCoord;
-	public Location gridLocation;
+	private Location gridLocation;
 
 	/**
 	 * Parameterized Ghost ctor
@@ -159,94 +153,15 @@ public class Ghost// implements Collision
 	 * called each frame/loop from PacmanGame update() method
 	 * moves ghost based on x/y velocities and fps
 	 */
-	Random rand = new Random();
-	int randDirection = rand.nextInt(4);
-	int newRandDir = rand.nextInt(100);
-
-	int directionCount = 15;
-	boolean newDir = false;
-
-//
-//	void update(long fps)
-//	{
-//		gridCoord.x = gridLocation.getX();
-//		gridCoord.y = gridLocation.getY();
-//		//Log.d("ghost update:", "Random:" + randDirection);
-//		//Log.d("Ghost-update: ", "Current_LOC: " + direction + " Location: " + gridCoord.x + "," + gridCoord.y);
-//		if (randDirection == 0 && canMoveTo(maze.getMaze()[gridCoord.x - 1][gridCoord.y])) {
-//			loc.setNewLoc((int) (loc.getX() - (velocity / fps)), loc.getY());
-//			gridLocation.setNewLoc(gridCoord.x - 1, gridCoord.y);
-//			directionCount++;
-//			direction = 'l';
-//			if (directionCount > newRandDir) { // TODO: Add || on collision to change direction.
-//				randDirection = rand.nextInt(4);
-//				directionCount = 0;
-//			}
-//		} else if (randDirection == 1 && canMoveTo(maze.getMaze()[gridCoord.x + 1][gridCoord.y])) {
-//			loc.setNewLoc((int) (loc.getX() + (velocity / fps)), loc.getY());
-//			gridLocation.setNewLoc(gridCoord.x + 1, gridCoord.y);
-//			directionCount++;
-//			direction = 'r';
-//			if (directionCount > newRandDir) {
-//				randDirection = rand.nextInt(4);
-//				directionCount = 0;
-//			}
-//		} else if (randDirection == 2 && canMoveTo(maze.getMaze()[gridCoord.x][gridCoord.y + 1])) {
-//			loc.setNewLoc(loc.getX(), (int) (loc.getY() + (velocity / fps)));
-//			gridLocation.setNewLoc(gridCoord.x, gridCoord.y + 1);
-//			directionCount++;
-//			direction = 'd';
-//			if (directionCount > newRandDir) {
-//				randDirection = rand.nextInt(4);
-//				directionCount = 0;
-//			}
-//		} else if (randDirection == 3 && canMoveTo(maze.getMaze()[gridCoord.x][gridCoord.y - 1])) {
-//			loc.setNewLoc(loc.getX(), (int) (loc.getY() - (velocity / fps)));
-//			gridLocation.setNewLoc(gridCoord.x, gridCoord.y - 1);
-//			directionCount++;
-//			direction = 'u';
-//			if (directionCount > newRandDir) {
-//				randDirection = rand.nextInt(4);
-//				directionCount = 0;
-//			}
-//		} else {
-//			loc.setNewLoc(loc.getX(), loc.getY());
-//			directionCount++;
-//			randDirection = rand.nextInt(4);
-//			if (directionCount > newRandDir) {
-//				randDirection = rand.nextInt(4);
-//				directionCount = 0;
-//			}
-//			//update(fps);
-//		}
-//	}
-
 
 	/**
-	 * Initializes four points of mRect(defines pacman)
 	 * Initializes x and y velocities (can change later)
 	 */
 	void reset()
 	{
-
 		loc.setNewLoc(spawnLoc.getX(), spawnLoc.getY());
 		gridLocation.setNewLoc(13, 11);
-		//deathTimer = 0; // Dealt with when added and removed to Graveyard
-		//isDead = false;
-		//mXVelocity = (float) (y / 3);
-		//mYVelocity = (float) -(y / 3);
 	}
-
-	/**
-	 * Called when the ghost is eaten
-	 * Sets the timer and moves ghost to waiting room
-	 */
-	void eaten()
-	{
-		setDeathState(9000, true);
-		// TODO: do more with this
-	}
-
 
 	//function to draw the ghosts
 	//can draw all four at once here or can implement functions for each of the four
