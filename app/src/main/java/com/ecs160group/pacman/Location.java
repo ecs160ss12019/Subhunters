@@ -128,10 +128,10 @@ public class Location
 			case 'r': // location to the right of current
 				return new Location(x + 1, y, Block.EMPTY);
 			case 'u': // location above current
-				return new Location(x, y + 1, Block.EMPTY);
+				return new Location(x, y - 1, Block.EMPTY);
 			case 'd': // location below current, only option left
 			default:
-				return new Location(x, y - 1, Block.EMPTY);
+				return new Location(x, y + 1, Block.EMPTY);
 		}
 	}
 
@@ -214,7 +214,7 @@ public class Location
 	}
 
 	/**
-	 * CHecks if the location is a spawn location
+	 * Checks if the location is a spawn location
 	 *
 	 * @return if the location is a spawn location
 	 */
@@ -320,6 +320,6 @@ public class Location
 	@Override
 	public String toString()
 	{
-		return "x=" + x + ",y=" + y;
+		return "x=" + x + ",y=" + y + ",obj=" + block;
 	}
 }
