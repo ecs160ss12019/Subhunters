@@ -396,6 +396,18 @@ public class PacmanGame extends SurfaceView implements Runnable
 		// Eventually, must use Location to detect collion not screen position.
 		//if (mPacman.detectCollision(mGhost.loc, mScreenX, mScreenY)) {
 
+		mPacman.collisionInteraction(mInky, mPinky, mBlinky, mClyde, mMaze, mScore);
+		// Check interactions, then win condition.
+		if (mPacman.hasWon(mMaze) == true) {
+			//Log.d("Debugging", "In Collision Interact: PELLET, STAGE COMPLETE");
+			draw();
+			PacmanSounds.pacmanChomp(); // Consume pellet..
+			pauseStartDeath(4000);
+			mFakeJoy.setCenter();
+			draw();
+			StageCleared();
+
+		} // Win condition reached. All pellets cleared.
 
 		if (mPacman.ghostCollision(mInky, mScore) ||
 				mPacman.ghostCollision(mPinky, mScore) ||
@@ -413,20 +425,6 @@ public class PacmanGame extends SurfaceView implements Runnable
 		sendToGY(mPinky);
 		sendToGY(mBlinky);
 		sendToGY(mClyde);
-
-		mPacman.collisionInteraction(mInky, mPinky, mBlinky, mClyde, mMaze, mScore);
-		// Check interactions, then win condition.
-		if (mPacman.hasWon(mMaze) == true) {
-			//Log.d("Debugging", "In Collision Interact: PELLET, STAGE COMPLETE");
-			draw();
-			PacmanSounds.pacmanChomp(); // Consume pellet..
-			pauseStartDeath(4000);
-			mFakeJoy.setCenter();
-			draw();
-			StageCleared();
-
-		} // Win condition reached. All pellets cleared.
-
 	}
 
 	//called by PacmanActivity when player quits game
