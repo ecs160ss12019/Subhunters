@@ -63,7 +63,7 @@ public class FakeJoy {
         stick.addCircle(baseCenter.x, baseCenter.y,
                 stickRadius, Path.Direction.CW);
 
-        direction = 'l'; //initialize as left, doesn't matter since pacman wont move until user touches joystick
+        direction = ' '; //initialize as left, doesn't matter since pacman wont move until user touches joystick
 
 
     }

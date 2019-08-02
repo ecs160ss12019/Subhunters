@@ -71,7 +71,7 @@ public class Pacman //implements Collision
 		loc = new Location(spawnLoc.getX(), spawnLoc.getY(), Block.PACMAN);
 		gridLocation = new Location(13, 29, Block.PACMAN); // 13,29 Used to keep track of own grid position.
 		Log.d("Pacman-gridlocation: ", "Location: " + gridLocation.getX() + "," + gridLocation.getY());
-		direction = 'l';
+		direction = ' ';
 		powerState = false;
 		powerTimer = 0;
 		velocity = screenX / 15;
@@ -388,7 +388,7 @@ public class Pacman //implements Collision
 
 		//loc.setNewLoc(spawnLoc.getX(), spawnLoc.getY());
 		gridLocation.setNewLoc(13, 23); // TODO: Hard coded spawn, change later.
-		direction = 'l';
+		direction = ' ';
 		powerTimer = 0;
 		powerState = false;
 		isDead = false;
