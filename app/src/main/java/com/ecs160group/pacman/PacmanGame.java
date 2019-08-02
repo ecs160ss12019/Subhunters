@@ -147,7 +147,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 
 		graveyard = new ArrayBlockingQueue<>(4);
 		addAllGhostsToGY();
-		deathGhostTimer = 60; // Death Timer for Ghost
+		deathGhostTimer = 40; // Death Timer for Ghost
 
 		mFakeJoy = new FakeJoy(200, 100, blockSize, fakePosition);
 		//bitmap
@@ -306,12 +306,12 @@ public class PacmanGame extends SurfaceView implements Runnable
 			if (!mPaused) {
 				//Boolean updateGhost = mGhost.wallDetection(mMaze);
 
-				if (frameCount % 5 == 0 || frameCount == 0) {
+				if (frameCount % 7 == 0 || frameCount == 0) {
 					//Log.d("run: ", "frameStartTime: " + frameCount);
 
 					mPacman.updateNextDirection(mFakeJoy.direction);
 					updatePacman = mPacman.wallDetection();
-					update(updatePacman);
+					update(updatePacman, frameCount);
 					//detectCollisions();
 					mBitmapDrawer.updatePac = updatePacman;
 					//Determines powerup state of pacman powerTimer decrements on every frame.
@@ -327,10 +327,9 @@ public class PacmanGame extends SurfaceView implements Runnable
 
 				}
 			}
-			detectCollisions();
 			//redraw grid/ghosts/pacman/pellets
 			draw();
-
+			detectCollisions();
 			//time of loop/frame
 			long frameTime = System.currentTimeMillis() - frameStartTime;
 
@@ -350,7 +349,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 	 *
 	 * @param updatePacman Determines if pacman is moving to a valid location. if so update position/draw
 	 */
-	private void update(boolean updatePacman)
+	private void update(boolean updatePacman, int frameC)
 	{
 
 		//Log.d("update: ", "Updating pacmman/ghost: ");
@@ -369,12 +368,13 @@ public class PacmanGame extends SurfaceView implements Runnable
 		mClyde.update(mFPS);
 */
 
-
-		mBlinky.move();
-		mPinky.move();
-		mInky.move();
-		mClyde.move();
-
+		if(frameC % 4 == 0 && mPacman.isSuper()) {
+		}else {
+			mBlinky.move();
+			mPinky.move();
+			mInky.move();
+			mClyde.move();
+		}
 
 	}
 
@@ -396,7 +396,8 @@ public class PacmanGame extends SurfaceView implements Runnable
 		// Eventually, must use Location to detect collion not screen position.
 		//if (mPacman.detectCollision(mGhost.loc, mScreenX, mScreenY)) {
 
-		mPacman.collisionInteraction(mInky, mPinky, mBlinky, mClyde, mMaze, mScore);
+
+		mPacman.collisionInteraction(mMaze, mScore);
 		// Check interactions, then win condition.
 		if (mPacman.hasWon(mMaze) == true) {
 			//Log.d("Debugging", "In Collision Interact: PELLET, STAGE COMPLETE");
@@ -409,11 +410,14 @@ public class PacmanGame extends SurfaceView implements Runnable
 
 		} // Win condition reached. All pellets cleared.
 
-		if (mPacman.ghostCollision(mInky, mScore) ||
+		Log.d("Pacman-ghostCollision: ", "pacValues: " + "Location: " + mPacman.gridLocation.getX() + "," + mPacman.gridLocation.getY());
+
+		if (mPacman.ghostCollision(mBlinky, mScore) ||
 				mPacman.ghostCollision(mPinky, mScore) ||
-				mPacman.ghostCollision(mBlinky, mScore) ||
+				mPacman.ghostCollision(mInky, mScore) ||
 				mPacman.ghostCollision(mClyde, mScore)) {
 			if (mPacman.getIsDead()) {
+				Log.d("Pacman-getIsDead: ", "IS DEAD" );
 				draw();
 				pauseStartDeath(3000);
 				mFakeJoy.setCenter();
