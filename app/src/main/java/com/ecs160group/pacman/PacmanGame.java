@@ -104,7 +104,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 		super(context);
 		activityContext = context;
 
-		fakePosition = new PointF(200, 700);
+		fakePosition = new PointF(275, 700);
 		blockSize = new PointF();
 		blockSize.x = (float) x / 55;
 		blockSize.y = (float) x / 55;
