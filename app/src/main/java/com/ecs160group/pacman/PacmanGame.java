@@ -265,7 +265,6 @@ public class PacmanGame extends SurfaceView implements Runnable
 		//initialize the position of pacman and ghosts, also resets timers and states
 		mPaused = true; // Resume on user touch
 		actorReset();
-
 		//TODO: ADD ghost back to GraveYard Queue
 
 		//resetting /States/Direction
@@ -368,7 +367,7 @@ public class PacmanGame extends SurfaceView implements Runnable
 		mClyde.update(mFPS);
 */
 
-		if(frameC % 4 == 0 && mPacman.isSuper()) {
+		if(frameC % 2 == 0 && mPacman.isSuper()) {
 		}else {
 			mBlinky.move();
 			mPinky.move();
