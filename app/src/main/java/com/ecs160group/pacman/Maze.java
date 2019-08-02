@@ -139,16 +139,16 @@ class Maze
 		mPaint.setColor(Color.argb(255, 0, 0, 255));
 
 		mCanvas.drawLine(blockSize.y * 25, blockSize.y * 1,
-				blockSize.y * 25, blockSize.y * 30,
+				blockSize.y * 25, blockSize.y * 29,
 				mPaint);
-		mCanvas.drawLine(blockSize.y * 53, blockSize.y * 1,
-				blockSize.y * 53, blockSize.y * 30,
+		mCanvas.drawLine(blockSize.y * 52, blockSize.y * 1,
+				blockSize.y * 52, blockSize.y * 29,
 				mPaint);
 		mCanvas.drawLine(blockSize.x * 25, blockSize.x * 1,
-				blockSize.x * 53, blockSize.x * 1,
+				blockSize.x * 52, blockSize.x * 1,
 				mPaint);
-		mCanvas.drawLine(blockSize.x * 25, blockSize.x * 30,
-				blockSize.x * 53, blockSize.x * 30,
+		mCanvas.drawLine(blockSize.x * 25, blockSize.x * 29,
+				blockSize.x * 52, blockSize.x * 29,
 				mPaint);
 
 	}
