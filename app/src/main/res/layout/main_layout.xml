@@ -13,10 +13,10 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp" >
 
-        <com.ecs160group.pacman.Joystick
-            android:id="@+id/PacmanActivity"
-            android:layout_width="261dp"
-            android:layout_height="421dp"
-            android:layout_weight="1" />
+        <!--<com.ecs160group.pacman.Joystick-->
+            <!--android:id="@+id/PacmanActivity"-->
+            <!--android:layout_width="261dp"-->
+            <!--android:layout_height="421dp"-->
+            <!--android:layout_weight="1" />-->
 
 </LinearLayout>
