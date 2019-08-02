@@ -400,9 +400,9 @@ public class Ghost// implements Collision
 		if (next == null) { // next could be null so just turn a random direction
 			direction = rand.nextBoolean() ? 'r' : 'l';
 		} else {
-			if (next.isRight(direction)) { // if next is right, change direction to right
+			if (gridLocation.isRight(direction, next)) { // if next is right, change direction to right
 				direction = getNewDir(direction, 'r');
-			} else if (next.isLeft(direction)) { // if next is left, change direction to left
+			} else if (gridLocation.isLeft(direction, next)) { // if next is left, change direction to left
 				direction = getNewDir(direction, 'l');
 			}
 		}

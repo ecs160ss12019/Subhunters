@@ -282,10 +282,10 @@ public class Location
 	 * @param dirFacing direction the object is facing
 	 * @return if the location is to the right of the object
 	 */
-	public boolean isRight(char dirFacing)
+	public boolean isRight(char dirFacing, Location next)
 	{
 		Location right = getRight(dirFacing);
-		return right.getX() == x && right.getY() == y;
+		return right.getX() == next.x && right.getY() == next.y;
 	}
 
 	/**
@@ -294,10 +294,10 @@ public class Location
 	 * @param dirFacing direction the object is facing
 	 * @return if the location is to the left of the object
 	 */
-	public boolean isLeft(char dirFacing)
+	public boolean isLeft(char dirFacing, Location next)
 	{
 		Location left = getLeft(dirFacing);
-		return left.getX() == x && left.getY() == y;
+		return left.getX() == next.x && left.getY() == next.y;
 	}
 
 
