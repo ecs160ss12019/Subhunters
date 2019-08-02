@@ -183,6 +183,47 @@ public class Location
 	}
 
 	/**
+	 * Checks if the location contains a Ghost
+	 *
+	 * @return if the location contains a Ghost
+	 */
+	public boolean isGhost()
+	{
+		return block == Block.BLINKY || block == Block.INKY
+				|| block == Block.PINKY || block == Block.CLYDE || block == Block.GHOST;
+	}
+
+	/**
+	 * Checks if the location is a fruit
+	 *
+	 * @return if the location is a fruit
+	 */
+	public boolean isFruit()
+	{
+		return block == Block.FRUIT;
+	}
+
+	/**
+	 * Checks if the location is a warp space
+	 *
+	 * @return if the location is a warp space
+	 */
+	public boolean isWarp()
+	{
+		return block == Block.WARP_SPACE;
+	}
+
+	/**
+	 * CHecks if the location is a spawn location
+	 *
+	 * @return if the location is a spawn location
+	 */
+	public boolean isSpawn()
+	{
+		return block == Block.FRUIT_SPAWN || block == Block.GHOST_SPAWN || block == Block.PAC_SPAWN;
+	}
+
+	/**
 	 * Gets the location in front of the direction facing
 	 *
 	 * @param dirFacing Direction the object is facing
@@ -262,6 +303,7 @@ public class Location
 
 	/**
 	 * Checks if a location is in bounds
+	 *
 	 * @param l location to check
 	 * @return if location is in bounds
 	 */
@@ -272,6 +314,7 @@ public class Location
 
 	/**
 	 * To String function for a location
+	 *
 	 * @return string representation of a Location
 	 */
 	@Override

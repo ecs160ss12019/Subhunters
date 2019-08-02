@@ -26,7 +26,6 @@ public class Ghost// implements Collision
 	protected Maze maze;
 
 	//ghost coords//directions
-	//private int direction;
 	private char direction;
 
 	// TODO: add explanations for these two vars here
@@ -87,10 +86,10 @@ public class Ghost// implements Collision
 	 *
 	 * @return location of the ghost
 	 */
-//	public Location getLoc()
-//	{
-//		return loc;
-//	}
+	public Location getLoc()
+	{
+		return loc;
+	}
 
 
 
