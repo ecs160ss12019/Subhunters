@@ -143,9 +143,11 @@ public class PacmanGame extends SurfaceView implements Runnable
 		mInky = new Inky(mBlinky, mScreenX, mMaze.ghostSpawn, mMaze, mPacman);
 		mPinky = new Pinky(mScreenX,mMaze.ghostSpawn, mMaze, mPacman);
 		mClyde = new Clyde(mScreenX,mMaze.ghostSpawn, mMaze, mPacman);
+
 		graveyard = new ArrayBlockingQueue<>(4);
 		addAllGhostsToGY();
-		deathGhostTimer = 200; // Death Timer for Ghost
+		deathGhostTimer = 60; // Death Timer for Ghost
+
 		mFakeJoy = new FakeJoy(200, 100, blockSize, fakePosition);
 		//bitmap
 		bitmap = Bitmap.createBitmap(mScreenX, mScreenY, Bitmap.Config.ARGB_8888);
@@ -192,11 +194,11 @@ public class PacmanGame extends SurfaceView implements Runnable
 		Ghost temp;
 		if (!graveyard.isEmpty() && graveyard.peek().isInGYard() == false) { // Not empty, a ghost exists in GY
 			temp = graveyard.poll(); // Retrieve and removes head of queue
-			Log.d("ghost-removeGhostGY: ", "OLD! x: " + temp.gridLocation.getX() + "y: " + temp.gridLocation.getY());
+			//Log.d("ghost-removeGhostGY: ", "OLD! x: " + temp.gridLocation.getX() + "y: " + temp.gridLocation.getY());
 			temp.gridLocation.setNewLoc(13, 11); // Take head out of graveyard. Place at entrance.
-			//temp.setInGYard(false);
+			//temp.setInGYard(true);
 			temp.setDeathState(0, false);
-			Log.d("ghost-removeGhostGY: ", "NEW! x: " + temp.gridLocation.getX() + "y: " + temp.gridLocation.getY());
+			//Log.d("ghost-removeGhostGY: ", "NEW! x: " + temp.gridLocation.getX() + "y: " + temp.gridLocation.getY());
 			if(!graveyard.isEmpty() ) {
                 temp = graveyard.peek();
                 temp.setDeathState(deathGhostTimer, true);

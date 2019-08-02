@@ -304,10 +304,9 @@ public class Pacman //implements Collision
 		if(gridLocation.getX() == mGhost.gridLocation.getX() && gridLocation.getY() == mGhost.gridLocation.getY()){
 			if(isSuper())
 			{
-				mGhost.setDeathState(200, true);
+				mGhost.setDeathState(75, true);
 				PacmanSounds.pacmanEatGhost();
-
-				mGhost.gridLocation.setNewLoc(13, 7); // TODO: remove hardcoded values.
+				mGhost.gridLocation.setNewLoc(13, 14); // TODO: remove hardcoded values.
 				mScore.ateGhost();
 				pauseStartDeath(500);
 				return true;
@@ -343,7 +342,7 @@ public class Pacman //implements Collision
 				//Log.d("Debugging", "In Collision Interact: POWER_PELLET");
 				mMaze.getMaze()[pacGridX][pacGridY].updateLoc(pacGridX, pacGridY, block.EMPTY);
 				PacmanSounds.pacmanPowerup();
-				setPowerUpState(280,true);// 540 is amount of frames time to be decremented EVERY FRAME
+				setPowerUpState(75,true);// 540 is amount of frames time to be decremented EVERY FRAME
 				mScore.atePowerPellet();
 				break;
 			case FRUIT: // Adjust for different fruits.
